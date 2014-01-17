@@ -1,6 +1,13 @@
 require 'artifactory/version'
 
 module Artifactory
+  #
+  # A value that represents an unset value.
+  #
+  # @return [Object]
+  #
+  UNSET_VALUE = Object.new
+
   autoload :Connection, 'artifactory/connection'
   autoload :Error,      'artifactory/errors'
   autoload :Util,       'artifactory/util'

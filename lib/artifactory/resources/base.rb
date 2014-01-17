@@ -31,10 +31,21 @@ module Artifactory
       #
       #     @param [Object] value
       #       the value to set for $1
+      #     @param [Object] default
+      #       the default value for this attribute
       #
-      def attribute(key)
+      def attribute(key, default = nil)
         define_method(key) do
-          instance_variable_get("@#{key}")
+          value = instance_variable_get("@#{key}")
+          return value unless value.nil?
+
+          if default.nil?
+            value
+          elsif default.is_a?(Proc)
+            default.call(self)
+          else
+            default
+          end
         end
 
         define_method("#{key}=") do |value|

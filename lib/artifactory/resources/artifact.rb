@@ -25,17 +25,19 @@ module Artifactory
           instance.download_path = hash['downloadUri']
           instance.last_modified = Time.parse(hash['lastModified'])
           instance.last_updated  = Time.parse(hash['lastUpdated'])
+          instance.mime_type     = hash['mimeType']
           instance.size          = hash['size']
         end
       end
     end
 
-    attribute :api_path
+    attribute :api_path, ->{ raise 'API path missing!' }
     attribute :created
-    attribute :download_path
+    attribute :download_path, ->{ raise 'Remote path missing!' }
     attribute :last_modified
     attribute :last_updated
-    attribute :local_path
+    attribute :local_path, ->{ raise 'Local destination missing!' }
+    attribute :mime_type
     attribute :md5
     attribute :sha1
     attribute :size
@@ -45,6 +47,32 @@ module Artifactory
     #
     def initialize
 
+    end
+
+    #
+    # Delete this artifact from repository, suppressing any +ResourceNotFound+
+    # exceptions might occur.
+    #
+    # @return (see Artifact#delete!)
+    #
+    def delete
+      delete!
+    rescue Error::NotFound
+      true
+    end
+
+    #
+    # @example Delete an artifact
+    #   artifact.delete! #=> true
+    #
+    # @raise [Error::NotFound]
+    #   if the resource does not exist on the remote server
+    #
+    # @return [true]
+    #
+    def delete!
+      _delete(download_path).body
+      true
     end
 
     #
@@ -89,8 +117,8 @@ module Artifactory
     #   the path where the file was downloaded on disk
     #
     def download(options = {})
-      options[:to]   ||= local_path    || raise('Local destination must be set!')
-      options[:from] ||= download_path || raise('Remote path must be given!')
+      options[:to]   ||= local_path
+      options[:from] ||= download_path
 
       destination = File.expand_path(options[:to])
 

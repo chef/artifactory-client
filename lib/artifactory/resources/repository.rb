@@ -91,17 +91,6 @@ module Artifactory
     end
 
     #
-    # Delete a file in this current repository by it's path.
-    #
-    # @example Delete a file in the current repository
-    #   repo = Repository.new('libs-release-local')
-    #   repo.delete('/remote/path/to/file')
-    #
-    def delete(path)
-      _delete(File.join(url_safe_key, path))
-    end
-
-    #
     #
     #
     def artifacts
