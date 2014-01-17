@@ -50,29 +50,30 @@ module Artifactory
     end
 
     #
-    # Delete this artifact from repository, suppressing any +ResourceNotFound+
-    # exceptions might occur.
+    # @see {Artifact#copy_or_move_to}
     #
-    # @return (see Artifact#delete!)
-    #
-    def delete
-      delete!
-    rescue Error::NotFound
-      true
+    def copy_to(options = {})
+      copy_or_move_to(:copy, options)
     end
 
     #
-    # @example Delete an artifact
-    #   artifact.delete! #=> true
+    # Delete this artifact from repository, suppressing any +ResourceNotFound+
+    # exceptions might occur.
     #
-    # @raise [Error::NotFound]
-    #   if the resource does not exist on the remote server
+    # @return [Boolean]
+    #   true if the object was deleted successfully, false otherwise
     #
-    # @return [true]
-    #
-    def delete!
+    def delete
       _delete(download_path).body
-      true
+    rescue Error::NotFound
+      false
+    end
+
+    #
+    # @see {Artifact#copy_or_move_to}
+    #
+    def move_to(options = {})
+      copy_or_move_to(:move, options)
     end
 
     #
@@ -132,6 +133,56 @@ module Artifactory
       end
 
       destination
+    end
+
+    private
+
+    #
+    # Copy or move current artifact to a new destination.
+    #
+    # @example Move the current artifact to +ext-releases-local+
+    #   artifact.move(to: '/ext-releaes-local/org/acme')
+    # @example Copy the current artifact to +ext-releases-local+
+    #   artifact.move(to: '/ext-releaes-local/org/acme')
+    #
+    # @param [Hash] options
+    #   the list of options to pass
+    #
+    # @option options [Boolean] :fail_fast (default: +false+)
+    #   fail on the first failure
+    # @option options [Boolean] :suppress_layouts (default: +false+)
+    #   suppress cross-layout module path translation during copying or moving
+    # @option options [Boolean] :dry_run (default: +false+)
+    #   pretend to do the copy or move
+    #
+    # @return [Hash]
+    #   the parsed JSON response from the server
+    #
+    def copy_or_move_to(action, options = {})
+      params = {}.tap do |param|
+        param[:failFast]        = 1 if options[:fail_fast]
+        param[:suppressLayouts] = 1 if options[:suppress_layouts]
+        param[:dry]             = 1 if options[:dry_run]
+        param[:to]              = options[:to] || raise(':to option missing!')
+      end
+
+      # /artifactory/api/storage/libs-release-local/org/acme/artifact.deb #=> libs-release-local/org/acme/artifact.deb
+      path = api_path.split('/api/storage/', 2).last
+
+      # Okay, seriously, WTF Artifactory? Are you fucking serious? You want me
+      # to make a POST request, but you don't actually read the contents of the
+      # POST request, you read the URL-params. Sigh, whoever claimed this was a
+      # RESTful API should seriously consider a new occupation.
+      params = params.map do |k, v|
+        key   = URI.escape(k.to_s)
+        value = URI.escape(v.to_s)
+
+        "#{key}=#{value}"
+      end
+
+      endpoint = File.join('api', action.to_s, path.to_s) + '?' + params.join('&')
+
+      _post(endpoint).json
     end
   end
 end
