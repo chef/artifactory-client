@@ -21,5 +21,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'httpclient', '~> 2.3'
   spec.add_dependency 'i18n',       '~> 0.5'
 
+  spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rake'
 end
