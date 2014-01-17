@@ -50,10 +50,10 @@ module Artifactory
     end
 
     #
-    # @see {Artifact#copy_or_move_to}
+    # @see {Artifact#copy_or_move}
     #
-    def copy_to(options = {})
-      copy_or_move_to(:copy, options)
+    def copy(destination, options = {})
+      copy_or_move(:copy, destination, options)
     end
 
     #
@@ -70,10 +70,10 @@ module Artifactory
     end
 
     #
-    # @see {Artifact#copy_or_move_to}
+    # @see {Artifact#copy_or_move}
     #
-    def move_to(options = {})
-      copy_or_move_to(:move, options)
+    def move(destination, options = {})
+      copy_or_move(:move, destination, options)
     end
 
     #
@@ -90,46 +90,40 @@ module Artifactory
     end
 
     #
-    # Download the artifact onto the local disk. If the local path already
-    # exists on the object, it will be used; othwerise, +:to+ is a required
-    # option. If the remote_path already exists on the object, it is used;
-    # otherwise +:from+ is a required option.
+    # Download the artifact onto the local disk.
     #
-    # @example Download a remote artifact locally
-    #   artifact.download(to: '~/Desktop/artifact.deb')
+    # @example Download an artifact
+    #   artifact.download #=> /tmp/cache/000adad0-bac/artifact.deb
     #
-    # @example Download an artifact into a folder
-    #   # If a folder is given, the basename of the file is used
-    #   artifact.download(to: '~/Desktop') #=> ~/Desktop/artifact.deb
+    # @example Download a remote artifact into a specific target
+    #   artifact.download('~/Desktop') #=> ~/Desktop/artifact.deb
     #
-    # @example Download a local artifact from the remote
-    #   artifact.download(from: '/libs-release-local/org/acme/artifact.deb')
-    #
-    # @example Download an artifact with pre-populated fields
-    #   artifact.download #=> `to` and `from` are pulled from the object
-    #
+    # @param [String] target
+    #   the target directory where the artifact should be downloaded to
+    #   (defaults to a temporary directory). **It is the user's responsibility
+    #   to cleanup the temporary directory when finished!**
     # @param [Hash] options
-    # @option options [String] to
-    #   the path to download the artifact to disk
-    # @option options [String] from
-    #   the remote path on artifactory to download the artifact from
+    # @option options [String] filename
+    #   the name of the file when downloaded to disk (defaults to the basename
+    #   of the file on the server)
     #
     # @return [String]
     #   the path where the file was downloaded on disk
     #
-    def download(options = {})
-      options[:to]   ||= local_path
-      options[:from] ||= download_path
+    def download(target = Dir.mktmpdir, options = {})
+      target = File.expand_path(target)
 
-      destination = File.expand_path(options[:to])
+      # Make the directory if it doesn't yet exist
+      FileUtils.mkdir_p(target) unless File.exists?(target)
 
-      # If they gave us a folder, use the object's filename
-      if File.directory?(destination)
-        destination = File.join(destination, File.basename(options[:from]))
-      end
+      # Use the server artifact's filename if one wasn't given
+      filename = options[:filename] || File.basename(download_path)
 
-      File.open(destination, 'wb') do |file|
-        file.write(_get(options[:from]).body)
+      # Construct the full path for the file
+      destination = File.join(targer, filename)
+
+      File.open(File.join(destination, filename), 'wb') do |file|
+        file.write(_get(download_path).body)
       end
 
       destination
@@ -145,6 +139,10 @@ module Artifactory
     # @example Copy the current artifact to +ext-releases-local+
     #   artifact.move(to: '/ext-releaes-local/org/acme')
     #
+    # @param [Symbol] action
+    #   the action (+:move+ or +:copy+)
+    # @param [String] destination
+    #   the server-side destination to move or copy the artifact
     # @param [Hash] options
     #   the list of options to pass
     #
@@ -158,12 +156,12 @@ module Artifactory
     # @return [Hash]
     #   the parsed JSON response from the server
     #
-    def copy_or_move_to(action, options = {})
+    def copy_or_move(action, destination, options = {})
       params = {}.tap do |param|
+        param[:to]              = destination
         param[:failFast]        = 1 if options[:fail_fast]
         param[:suppressLayouts] = 1 if options[:suppress_layouts]
         param[:dry]             = 1 if options[:dry_run]
-        param[:to]              = options[:to] || raise(':to option missing!')
       end
 
       # /artifactory/api/storage/libs-release-local/org/acme/artifact.deb #=> libs-release-local/org/acme/artifact.deb
