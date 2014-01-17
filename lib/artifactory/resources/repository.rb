@@ -56,7 +56,7 @@ module Artifactory
       matrix   = to_matrix_properties(properties)
       endpoint = File.join("#{url_safe_key}#{matrix}", path)
 
-      put(endpoint, { file: file }, headers).json
+      _put(endpoint, { file: file }, headers).json
     end
 
     #
@@ -88,6 +88,17 @@ module Artifactory
       upload(path_or_io, path, properties,
         'X-Explode-Archive' => true,
       )
+    end
+
+    #
+    # Delete a file in this current repository by it's path.
+    #
+    # @example Delete a file in the current repository
+    #   repo = Repository.new('libs-release-local')
+    #   repo.delete('/remote/path/to/file')
+    #
+    def delete(path)
+      _delete(File.join(url_safe_key, path))
     end
 
     #

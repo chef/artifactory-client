@@ -7,13 +7,13 @@ module Artifactory
           h[:repos] = Array(options[:repos]).join(',') if options[:repos]
         end
 
-        get('/api/search/artifact', query).json['results'].map do |artifact|
+        _get('/api/search/artifact', query).json['results'].map do |artifact|
           from_url(artifact['uri'])
         end
       end
 
       def from_url(url)
-        from_hash(get(url).json)
+        from_hash(_get(url).json)
       end
 
       def from_hash(hash)
@@ -57,7 +57,7 @@ module Artifactory
     #   the list of properties
     #
     def properties
-      @properties ||= get(api_path, properties: nil).json['properties']
+      @properties ||= _get(api_path, properties: nil).json['properties']
     end
 
     #
@@ -68,6 +68,10 @@ module Artifactory
     #
     # @example Download a remote artifact locally
     #   artifact.download(to: '~/Desktop/artifact.deb')
+    #
+    # @example Download an artifact into a folder
+    #   # If a folder is given, the basename of the file is used
+    #   artifact.download(to: '~/Desktop') #=> ~/Desktop/artifact.deb
     #
     # @example Download a local artifact from the remote
     #   artifact.download(from: '/libs-release-local/org/acme/artifact.deb')
@@ -90,8 +94,13 @@ module Artifactory
 
       destination = File.expand_path(options[:to])
 
+      # If they gave us a folder, use the object's filename
+      if File.directory?(destination)
+        destination = File.join(destination, File.basename(options[:from]))
+      end
+
       File.open(destination, 'wb') do |file|
-        file.write(get(options[:from]).body)
+        file.write(_get(options[:from]).body)
       end
 
       destination

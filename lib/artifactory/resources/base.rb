@@ -1,16 +1,22 @@
 module Artifactory
   class Resource::Base
     #
-    # Dynamically define shortcut delegators to the connection object.
+    # Dynamically define shortcut delegators to the connection object. The
+    # methods all begin with an underscore, to separate them from actual method
+    # that might exist, like +delete+.
     #
     Connection::HTTP_VERBS.each do |verb|
-      define_singleton_method(verb) do |*args|
+      key = "_#{verb}".to_sym
+
+      define_singleton_method(key) do |*args|
         Artifactory.connection.send(verb, *args)
       end
 
-      define_method(verb) do |*args|
-        self.class.send(verb, *args)
+      define_method(key) do |*args|
+        self.class.send(key, *args)
       end
+
+      private key
     end
 
     class << self
