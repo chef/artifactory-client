@@ -56,6 +56,23 @@ module Artifactory
     end
 
     #
+    # Rename a list of keys to the given map.
+    #
+    # @example Rename the given keys
+    #   rename_keys(hash, foo: :bar, zip: :zap)
+    #
+    # @param [Hash] options
+    #   the options to map
+    # @param [Hash] map
+    #   the map of keys to map
+    #
+    # @return [Hash]
+    #
+    def rename_keys(options, map = {})
+      Hash[options.map { |k, v| [map[k] || k, v] }]
+    end
+
+    #
     # Slice the given list of options with the given keys.
     #
     # @param [Hash] options
