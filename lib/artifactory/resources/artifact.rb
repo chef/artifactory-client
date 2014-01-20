@@ -90,6 +90,21 @@ module Artifactory
     end
 
     #
+    # Get compliance info for a given artifact path. The result includes
+    # license and vulnerabilities, if any.
+    #
+    # **This requires the Black Duck addon to be enabled!**
+    #
+    # @example Get compliance info for an artifact
+    #   artifact.compliance #=> { 'licenses' => [{ 'name' => 'LGPL v3' }] }
+    #
+    # @return [Hash<String, Array<Hash>>]
+    #
+    def compliance
+      @compliance ||= _get(File.join('api/compliance', relative_path)).json
+    end
+
+    #
     # Download the artifact onto the local disk.
     #
     # @example Download an artifact
@@ -132,6 +147,19 @@ module Artifactory
     private
 
     #
+    # Helper method for extracting the relative (repo) path, since it's not
+    # returned as part of the API.
+    #
+    # @example Get the relative URI from the resource
+    #   /libs-release-local/org/acme/artifact.deb
+    #
+    # @return [String]
+    #
+    def relative_path
+      @relative_path ||= api_path.split('/api/storage', 2).last
+    end
+
+    #
     # Copy or move current artifact to a new destination.
     #
     # @example Move the current artifact to +ext-releases-local+
@@ -164,9 +192,6 @@ module Artifactory
         param[:dry]             = 1 if options[:dry_run]
       end
 
-      # /artifactory/api/storage/libs-release-local/org/acme/artifact.deb #=> libs-release-local/org/acme/artifact.deb
-      path = api_path.split('/api/storage/', 2).last
-
       # Okay, seriously, WTF Artifactory? Are you fucking serious? You want me
       # to make a POST request, but you don't actually read the contents of the
       # POST request, you read the URL-params. Sigh, whoever claimed this was a
@@ -178,7 +203,7 @@ module Artifactory
         "#{key}=#{value}"
       end
 
-      endpoint = File.join('api', action.to_s, path.to_s) + '?' + params.join('&')
+      endpoint = File.join('api', action.to_s, relative_path) + '?' + params.join('&')
 
       _post(endpoint).json
     end
