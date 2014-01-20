@@ -149,6 +149,36 @@ module Artifactory
         end
       end
 
+      #
+      # @example Get all versions of a given artifact
+      #   Artifact.versions(name: 'artifact')
+      # @example Get all versions of a given artifact in a specific repo
+      #   Artifact.versions(name: 'artifact', repos: 'libs-release-local')
+      #
+      # @param [Hash] options
+      #   the list of options to search with
+      #
+      # @option options [String] :group
+      #   the
+      # @option options [String] :sha1
+      #   the SHA1 checksum of the artifact to search for
+      # @option options [String, Array<String>] :repos
+      #   the list of repos to search
+      #
+      def versions(options = {})
+        options = Util.rename_keys(options,
+          :group      => :g,
+          :name       => :a,
+          :version    => :v,
+        )
+        params = Util.slice(options, :g, :a, :v, :repos)
+        format_repos!(params)
+
+        _get('/api/search/versions', params).json['results']
+      rescue Error::NotFound
+        []
+      end
+
       def from_url(url)
         from_hash(_get(url).json)
       end
