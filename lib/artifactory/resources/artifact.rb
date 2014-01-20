@@ -69,6 +69,12 @@ module Artifactory
       #   a list of artifacts that match the query
       #
       def gavc_search(options = {})
+        options = Util.rename_keys(options,
+          :group      => :g,
+          :name       => :a,
+          :version    => :v,
+          :classifier => :c,
+        )
         params = Util.slice(options, :g, :a, :v, :c, :repos)
         format_repos!(params)
 
