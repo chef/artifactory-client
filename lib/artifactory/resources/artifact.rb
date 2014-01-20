@@ -1,13 +1,150 @@
 module Artifactory
   class Resource::Artifact < Resource::Base
     class << self
-      def search(name, options = {})
-        query = {}.tap do |h|
-          h[:name]  = name || '.*'
-          h[:repos] = Array(options[:repos]).join(',') if options[:repos]
-        end
+      #
+      # Search for an artifact by the full or partial filename.
+      #
+      # @example Search for all repositories with the name "artifact"
+      #   Artifact.search(name: 'artifact')
+      #
+      # @example Search for all artifacts named "artifact" in a specific repo
+      #   Artifact.search(name: 'artifact', repos: 'libs-release-local')
+      #
+      # @param [Hash] options
+      #   the list of options to search with
+      #
+      # @option options [String] :name
+      #   the name of the artifact to search (it can be a regular expression)
+      # @option options [String, Array<String>] :repos
+      #   the list of repos to search
+      #
+      # @return [Array<Resource::Artifact>]
+      #   a list of artifacts that match the query
+      #
+      def search(options = {})
+        params = Util.slice(options, :name, :repos)
+        format_repos!(params)
 
-        _get('/api/search/artifact', query).json['results'].map do |artifact|
+        _get('/api/search/artifact', params).json['results'].map do |artifact|
+          from_url(artifact['uri'])
+        end
+      end
+
+      #
+      # Search for an artifact by Maven coordinates: +Group ID+, +Artifact ID+,
+      # +Version+ and +Classifier+.
+      #
+      # @example Search for all repositories with the given gavc
+      #   Artifact.gavc_search(
+      #     g: 'org.acme',
+      #     a: 'artifact',
+      #     v: '1.0',
+      #     c: 'sources',
+      #   )
+      #
+      # @example Search for all artifacts with the given gavc in a specific repo
+      #   Artifact.gavc_search(
+      #     g: 'org.acme',
+      #     a: 'artifact',
+      #     v: '1.0',
+      #     c: 'sources',
+      #     repos: 'libs-release-local',
+      #   )
+      #
+      # @param [Hash] options
+      #   the list of options to search with
+      #
+      # @option options [String] :g
+      #   the group id to search for
+      # @option options [String] :a
+      #   the artifact id to search for
+      # @option options [String] :v
+      #   the version of the artifact to search for
+      # @option options [String] :c
+      #   the classifer to search for
+      # @option options [String, Array<String>] :repos
+      #   the list of repos to search
+      #
+      # @return [Array<Resource::Artifact>]
+      #   a list of artifacts that match the query
+      #
+      def gavc_search(options = {})
+        params = Util.slice(options, :g, :a, :v, :c, :repos)
+        format_repos!(params)
+
+        _get('/api/search/gavc', params).json['results'].map do |artifact|
+          from_url(artifact['uri'])
+        end
+      end
+
+      #
+      # Search for an artifact by the given properties. These are arbitrary
+      # properties defined by the user on artifact, so the search uses a free-
+      # form schema.
+      #
+      # @example Search for all repositories with the given properties
+      #   Artifact.property_search(
+      #     branch: 'master',
+      #     author: 'sethvargo',
+      #   )
+      #
+      # @example Search for all artifacts with the given gavc in a specific repo
+      #   Artifact.property_search(
+      #     branch: 'master',
+      #     author: 'sethvargo',
+      #     repos: 'libs-release-local',
+      #   )
+      #
+      # @param [Hash] options
+      #   the free-form list of options to search with
+      #
+      # @option options [String, Array<String>] :repos
+      #   the list of repos to search
+      #
+      # @return [Array<Resource::Artifact>]
+      #   a list of artifacts that match the query
+      #
+      def property_search(options = {})
+        params = options.dup
+        format_repos!(params)
+
+        _get('/api/search/prop', params).json['results'].map do |artifact|
+          from_url(artifact['uri'])
+        end
+      end
+
+      #
+      # Search for an artifact by its checksum
+      #
+      # @example Search for all repositories with the given MD5 checksum
+      #   Artifact.checksum_search(
+      #     md5: 'abcd1234...',
+      #   )
+      #
+      # @example Search for all artifacts with the given SHA1 checksum in a repo
+      #   Artifact.checksum_search(
+      #     sha1: 'abcdef123456....',
+      #     repos: 'libs-release-local',
+      #   )
+      #
+      # @param [Hash] options
+      #   the list of options to search with
+      #
+      # @option options [String] :md5
+      #   the MD5 checksum of the artifact to search for
+      # @option options [String] :sha1
+      #   the SHA1 checksum of the artifact to search for
+      # @option options [String, Array<String>] :repos
+      #   the list of repos to search
+      #
+      # @return [Array<Resource::Artifact>]
+      #   a list of artifacts that match the query
+      #
+      def checksum_search(options = {})
+        params = Util.slice(options, :md5, :sha1, :repos)
+        format_repos!(params)
+
+        _get('/api/search/checksum', params).json['results'].map do |artifact|
           from_url(artifact['uri'])
         end
       end
@@ -28,6 +165,18 @@ module Artifactory
           instance.mime_type     = hash['mimeType']
           instance.size          = hash['size']
         end
+      end
+
+      private
+
+      #
+      # Format the repos list from the given options. This method will modify
+      # the given Hash parameter!
+      #
+      def format_repos!(options)
+        return options if options[:repos].nil? || options[:repos].empty?
+        options[:repos] = Array(options[:repos]).compact.join(',')
+        options
       end
     end
 

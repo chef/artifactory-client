@@ -12,6 +12,11 @@ module Artifactory
   autoload :Error,      'artifactory/errors'
   autoload :Util,       'artifactory/util'
 
+  module Collection
+    autoload :Artifact, 'artifactory/collections/artifact'
+    autoload :Base,     'artifactory/collections/base'
+  end
+
   module Resource
     autoload :Artifact,   'artifactory/resources/artifact'
     autoload :Base,       'artifactory/resources/base'

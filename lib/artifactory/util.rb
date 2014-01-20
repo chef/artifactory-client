@@ -54,5 +54,23 @@ module Artifactory
         string
       end
     end
+
+    #
+    # Slice the given list of options with the given keys.
+    #
+    # @param [Hash] options
+    #   the list of options to slice
+    # @param [Array<Object>] keys
+    #   the keys to slice
+    #
+    # @return [Hash]
+    #   the sliced hash
+    #
+    def slice(options, *keys)
+      keys.inject({}) do |hash, key|
+        hash[key] = options[key] if options[key]
+        hash
+      end
+    end
   end
 end

@@ -94,7 +94,9 @@ module Artifactory
     #
     #
     def artifacts
-      Resource::Artifact.search('.*', repos: key)
+      @artifacts ||= Collection::Artifact.new(self, repos: key) do
+        Resource::Artifact.search(name: '.*', repos: key)
+      end
     end
 
     #
