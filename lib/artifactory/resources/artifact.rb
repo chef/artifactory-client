@@ -36,31 +36,31 @@ module Artifactory
       #
       # @example Search for all repositories with the given gavc
       #   Artifact.gavc_search(
-      #     g: 'org.acme',
-      #     a: 'artifact',
-      #     v: '1.0',
-      #     c: 'sources',
+      #     group:      'org.acme',
+      #     name:       'artifact',
+      #     version:    '1.0',
+      #     classifier: 'sources',
       #   )
       #
       # @example Search for all artifacts with the given gavc in a specific repo
       #   Artifact.gavc_search(
-      #     g: 'org.acme',
-      #     a: 'artifact',
-      #     v: '1.0',
-      #     c: 'sources',
-      #     repos: 'libs-release-local',
+      #     group:      'org.acme',
+      #     name:       'artifact',
+      #     version:    '1.0',
+      #     classifier: 'sources',
+      #     repos:      'libs-release-local',
       #   )
       #
       # @param [Hash] options
       #   the list of options to search with
       #
-      # @option options [String] :g
+      # @option options [String] :group
       #   the group id to search for
-      # @option options [String] :a
+      # @option options [String] :name
       #   the artifact id to search for
-      # @option options [String] :v
+      # @option options [String] :version
       #   the version of the artifact to search for
-      # @option options [String] :c
+      # @option options [String] :classifier
       #   the classifer to search for
       # @option options [String, Array<String>] :repos
       #   the list of repos to search
