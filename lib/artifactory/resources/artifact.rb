@@ -156,6 +156,8 @@ module Artifactory
       end
 
       #
+      # Get all versions of an artifact.
+      #
       # @example Get all versions of a given artifact
       #   Artifact.versions(name: 'artifact')
       # @example Get all versions of a given artifact in a specific repo
@@ -183,6 +185,57 @@ module Artifactory
         _get('/api/search/versions', params).json['results']
       rescue Error::NotFound
         []
+      end
+
+      #
+      # Get the latest version of an artifact.
+      #
+      # @example Find the latest version of an artifact
+      #   Artifact.latest_version(name: 'artifact')
+      # @example Find the latest version of an artifact in a repo
+      #   Artifact.latest_version(
+      #     name: 'artifact',
+      #     repo: 'libs-release-local',
+      #   )
+      # @example Find the latest snapshot version of an artifact
+      #   Artifact.latest_version(name: 'artifact', version: '1.0-SNAPSHOT')
+      # @example Find the latest version of an artifact in a group
+      #   Artifact.latest_version(name: 'artifact', group: 'org.acme')
+      #
+      # @param [Hash] options
+      #   the list of options to search with
+      #
+      # @option options [String] :group
+      #   the group id to search for
+      # @option options [String] :name
+      #   the artifact id to search for
+      # @option options [String] :version
+      #   the version of the artifact to search for
+      # @option options [Boolean] :remote
+      #   search remote repos (default: +false+)
+      # @option options [String, Array<String>] :repos
+      #   the list of repos to search
+      #
+      # @return [String, nil]
+      #   the latest version as a string (e.g. +1.0-201203131455-2+), or +nil+
+      #   if no artifact matches the given query
+      #
+      def latest_version(options = {})
+        options = Util.rename_keys(options,
+          :group      => :g,
+          :name       => :a,
+          :version    => :v,
+        )
+        params = Util.slice(options, :g, :a, :v, :repos, :remote)
+        format_repos!(params)
+
+        # For whatever reason, Artifactory won't accept "true" - they want a
+        # literal "1"...
+        params[:remote] = 1 if options[:remote]
+
+        _get('/api/search/latestVersion', params).body
+      rescue Error::NotFound
+        nil
       end
 
       def from_url(url)
