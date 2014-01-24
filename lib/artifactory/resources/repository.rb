@@ -1,14 +1,101 @@
 module Artifactory
   class Resource::Repository < Resource::Base
-    def self.all
-      get('repositories').json
+    class << self
+      #
+      # Get a list of all repositories in the system.
+      #
+      # @param [Hash] options
+      #   the list of options
+      #
+      # @option options [Artifactory::Client] :client
+      #   the client object to make the request with
+      #
+      # @return [Array<Resource::Repository>]
+      #   the list of builds
+      #
+      def all(options = {})
+        client = extract_client!(options)
+        client.get('/api/repositories').json
+      end
+
+      #
+      # Find (fetch) a repository by name.
+      #
+      # @example Find a respository by named key
+      #   Repository.find(name: 'libs-release-local') #=> #<Resource::Artifact>
+      #
+      # @param [Hash] options
+      #   the list of options
+      #
+      # @option options [String] :name
+      #   the name of the repository to find
+      # @option options [Artifactory::Client] :client
+      #   the client object to make the request with
+      #
+      # @return [Resource::Repository, nil]
+      #   an instance of the repository that matches the given name, or +nil+
+      #   if one does not exist
+      #
+      def find(options = {})
+        client = extract_client!(options)
+        name   = options[:name]
+
+        result = client.get("/api/repositories/#{url_safe(name)}").json
+        from_hash(result, client: client)
+      rescue Error::NotFound
+        nil
+      end
+
+      #
+      # Create a instance from the given Hash. This method extracts the "safe"
+      # information from the hash and adds them to the instance.
+      #
+      # @example Create a new resource from a hash
+      #   Repository.from_hash('downloadUri' => '...', 'size' => '...')
+      #
+      # @param [Artifactory::Client] client
+      #   the client object to make the request with
+      # @param [Hash] hash
+      #   the hash to create the instance from
+      #
+      # @return [Resource::Repository]
+      #
+      def from_hash(hash, options = {})
+        client = extract_client!(options)
+
+        new.tap do |instance|
+          instance.blacked_out               = hash['blackedOut']
+          instance.description               = hash['description']
+          instance.checksum_policy           = hash['checksumPolicyType']
+          instance.excludes_pattern          = hash['excludesPattern']
+          instance.handle_releases           = hash['handleReleases']
+          instance.handle_snapshots          = hash['handleSnapshots']
+          instance.includes_pattern          = hash['includesPattern']
+          instance.key                       = hash['key']
+          instance.maximum_unique_snapshots  = hash['maxUniqueSnapshots']
+          instance.notes                     = hash['notes']
+          instance.property_sets             = hash['propertySets']
+          instance.snapshot_version_behavior = hash['snapshotVersionBehavior']
+          instance.suppress_pom_checks       = hash['suppressPomConsistencyChecks']
+          instance.type                      = hash['rclass']
+        end
+      end
     end
 
-    attr_reader :key
-
-    def initialize(key)
-      @key = key
-    end
+    attribute :blacked_out, false
+    attribute :description
+    attribute :checksum_policy, 'client-checksums'
+    attribute :excludes_pattern, ''
+    attribute :handle_releases, true
+    attribute :handle_snapshots, true
+    attribute :includes_pattern, '**/*'
+    attribute :key, ->{ raise 'Key is missing!' }
+    attribute :maximum_unique_snapshots, 0
+    attribute :notes
+    attribute :property_sets, []
+    attribute :snapshot_version_behavior, 'non-unique'
+    attribute :suppress_pom_checks, false
+    attribute :type
 
     #
     # Upload an artifact into the repository. If the first parameter is a File

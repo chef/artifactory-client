@@ -1,0 +1,88 @@
+require 'spec_helper'
+
+module Artifactory
+  describe Resource::System do
+    let(:client) { double(:client) }
+
+    before(:each) do
+      Artifactory.stub(:client).and_return(client)
+      client.stub(:get).and_return(response) if defined?(response)
+    end
+
+    describe '.info' do
+      let(:response) { double(body: 'This is the response...') }
+
+      it 'calls /api/system' do
+        expect(client).to receive(:get).with('/api/system').once
+        described_class.info
+      end
+
+      it 'returns the plan-text body' do
+        expect(described_class.info).to eq(response.body)
+      end
+    end
+
+    describe '.ping' do
+      let(:response) { double(ok?: true) }
+
+      it 'gets /api/system/ping' do
+        expect(client).to receive(:get).with('/api/system/ping').once
+        described_class.ping
+      end
+
+      context 'when the system is ok' do
+        it 'returns true' do
+          expect(described_class.ping).to be_true
+        end
+      end
+
+      context 'when the system is not running' do
+        it 'returns false' do
+          client.stub(:get).and_raise(Error::ConnectionError)
+          expect(described_class.ping).to be_false
+        end
+      end
+    end
+
+    describe '.configuration' do
+      let(:response) { double(xml: '<?xml>') }
+
+      it 'gets /api/system/configuration' do
+        expect(client).to receive(:get).with('/api/system/configuration').once
+        described_class.configuration
+      end
+
+      it 'returns the xml' do
+        expect(described_class.configuration).to eq(response.xml)
+      end
+    end
+
+    describe '.update_configuration' do
+      let(:xml) { double(:xml) }
+      let(:response) { double(body: '...') }
+      before { client.stub(:post).and_return(response) }
+
+      it 'posts /api/system/configuration' do
+        expect(client).to receive(:post).with('/api/system/configuration', xml).once
+        described_class.update_configuration(xml)
+      end
+
+      it 'returns the body of the response' do
+        expect(described_class.update_configuration(xml)).to eq(response.body)
+      end
+    end
+
+    describe '.version' do
+      let(:response) { double(json: { 'foo' => 'bar' }) }
+
+      it 'gets /api/system/version' do
+        expect(client).to receive(:get).with('/api/system/version').once
+        described_class.version
+      end
+
+      it 'returns the parsed JSON of the response' do
+        expect(described_class.version).to eq(response.json)
+      end
+    end
+  end
+end

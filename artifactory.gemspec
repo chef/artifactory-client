@@ -22,5 +22,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'i18n',       '~> 0.5'
 
   spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'sinatra',   '~> 1.4'
   spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'simplecov', '~> 0.8'
+  spec.add_development_dependency 'rspec',     '~> 2.14'
+  spec.add_development_dependency 'webmock',   '~> 1.17'
 end

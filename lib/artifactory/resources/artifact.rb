@@ -13,6 +13,8 @@ module Artifactory
       # @param [Hash] options
       #   the list of options to search with
       #
+      # @option options [Artifactory::Client] :client
+      #   the client object to make the request with
       # @option options [String] :name
       #   the name of the artifact to search (it can be a regular expression)
       # @option options [String, Array<String>] :repos
@@ -22,11 +24,12 @@ module Artifactory
       #   a list of artifacts that match the query
       #
       def search(options = {})
+        client = extract_client!(options)
         params = Util.slice(options, :name, :repos)
         format_repos!(params)
 
-        _get('/api/search/artifact', params).json['results'].map do |artifact|
-          from_url(artifact['uri'])
+        client.get('/api/search/artifact', params).json['results'].map do |artifact|
+          from_url(artifact['uri'], client: client)
         end
       end
 
@@ -54,6 +57,8 @@ module Artifactory
       # @param [Hash] options
       #   the list of options to search with
       #
+      # @option options [Artifactory::Client] :client
+      #   the client object to make the request with
       # @option options [String] :group
       #   the group id to search for
       # @option options [String] :name
@@ -69,6 +74,7 @@ module Artifactory
       #   a list of artifacts that match the query
       #
       def gavc_search(options = {})
+        client = extract_client!(options)
         options = Util.rename_keys(options,
           :group      => :g,
           :name       => :a,
@@ -78,8 +84,8 @@ module Artifactory
         params = Util.slice(options, :g, :a, :v, :c, :repos)
         format_repos!(params)
 
-        _get('/api/search/gavc', params).json['results'].map do |artifact|
-          from_url(artifact['uri'])
+        client.get('/api/search/gavc', params).json['results'].map do |artifact|
+          from_url(artifact['uri'], client: client)
         end
       end
 
@@ -104,6 +110,8 @@ module Artifactory
       # @param [Hash] options
       #   the free-form list of options to search with
       #
+      # @option options [Artifactory::Client] :client
+      #   the client object to make the request with
       # @option options [String, Array<String>] :repos
       #   the list of repos to search
       #
@@ -111,11 +119,12 @@ module Artifactory
       #   a list of artifacts that match the query
       #
       def property_search(options = {})
+        client = extract_client!(options)
         params = options.dup
         format_repos!(params)
 
-        _get('/api/search/prop', params).json['results'].map do |artifact|
-          from_url(artifact['uri'])
+        client.get('/api/search/prop', params).json['results'].map do |artifact|
+          from_url(artifact['uri'], client: client)
         end
       end
 
@@ -136,6 +145,8 @@ module Artifactory
       # @param [Hash] options
       #   the list of options to search with
       #
+      # @option options [Artifactory::Client] :client
+      #   the client object to make the request with
       # @option options [String] :md5
       #   the MD5 checksum of the artifact to search for
       # @option options [String] :sha1
@@ -147,11 +158,12 @@ module Artifactory
       #   a list of artifacts that match the query
       #
       def checksum_search(options = {})
+        client = extract_client!(options)
         params = Util.slice(options, :md5, :sha1, :repos)
         format_repos!(params)
 
-        _get('/api/search/checksum', params).json['results'].map do |artifact|
-          from_url(artifact['uri'])
+        client.get('/api/search/checksum', params).json['results'].map do |artifact|
+          from_url(artifact['uri'], client: client)
         end
       end
 
@@ -166,6 +178,8 @@ module Artifactory
       # @param [Hash] options
       #   the list of options to search with
       #
+      # @option options [Artifactory::Client] :client
+      #   the client object to make the request with
       # @option options [String] :group
       #   the
       # @option options [String] :sha1
@@ -174,15 +188,16 @@ module Artifactory
       #   the list of repos to search
       #
       def versions(options = {})
+        client  = extract_client!(options)
         options = Util.rename_keys(options,
-          :group      => :g,
-          :name       => :a,
-          :version    => :v,
+          :group   => :g,
+          :name    => :a,
+          :version => :v,
         )
         params = Util.slice(options, :g, :a, :v, :repos)
         format_repos!(params)
 
-        _get('/api/search/versions', params).json['results']
+        client.get('/api/search/versions', params).json['results']
       rescue Error::NotFound
         []
       end
@@ -205,6 +220,8 @@ module Artifactory
       # @param [Hash] options
       #   the list of options to search with
       #
+      # @option options [Artifactory::Client] :client
+      #   the client object to make the request with
       # @option options [String] :group
       #   the group id to search for
       # @option options [String] :name
@@ -221,10 +238,11 @@ module Artifactory
       #   if no artifact matches the given query
       #
       def latest_version(options = {})
+        client = extract_client!(options)
         options = Util.rename_keys(options,
-          :group      => :g,
-          :name       => :a,
-          :version    => :v,
+          :group   => :g,
+          :name    => :a,
+          :version => :v,
         )
         params = Util.slice(options, :g, :a, :v, :repos, :remote)
         format_repos!(params)
@@ -233,39 +251,59 @@ module Artifactory
         # literal "1"...
         params[:remote] = 1 if options[:remote]
 
-        _get('/api/search/latestVersion', params).body
+        client.get('/api/search/latestVersion', params).body
       rescue Error::NotFound
         nil
       end
 
-      def from_url(url)
-        from_hash(_get(url).json)
+      #
+      # Construct an artifact from the given URL.
+      #
+      # @example Create an artifact object from the given URL
+      #   Artifact.from_url('/path/to/some.deb') #=> #<Resource::Artifact>
+      #
+      # @param [Artifactory::Client] client
+      #   the client object to make the request with
+      # @param [String] url
+      #   the URL to find the artifact from
+      #
+      # @return [Resource::Artifact]
+      #
+      def from_url(url, options = {})
+        client = extract_client!(options)
+        from_hash(client.get(url).json, client: client)
       end
 
-      def from_hash(hash)
+      #
+      # Create a instance from the given Hash. This method extracts the "safe"
+      # information from the hash and adds them to the instance.
+      #
+      # @example Create a new resource from a hash
+      #   Artifact.from_hash('downloadUri' => '...', 'size' => '...')
+      #
+      # @param [Artifactory::Client] client
+      #   the client object to make the request with
+      # @param [Hash] hash
+      #   the hash to create the instance from
+      #
+      # @return [Resource::Artifact]
+      #
+      def from_hash(hash, options = {})
+        client = extract_client!(options)
+
         new.tap do |instance|
           instance.api_path      = hash['uri']
-          instance.md5           = hash['checksums']['md5']
-          instance.sha1          = hash['checksums']['sha1']
+          instance.client        = client
           instance.created       = Time.parse(hash['created'])
           instance.download_path = hash['downloadUri']
           instance.last_modified = Time.parse(hash['lastModified'])
           instance.last_updated  = Time.parse(hash['lastUpdated'])
+          instance.md5           = hash['checksums']['md5']
           instance.mime_type     = hash['mimeType']
-          instance.size          = hash['size']
+          instance.repo          = hash['repo']
+          instance.sha1          = hash['checksums']['sha1']
+          instance.size          = hash['size'].to_i
         end
-      end
-
-      private
-
-      #
-      # Format the repos list from the given options. This method will modify
-      # the given Hash parameter!
-      #
-      def format_repos!(options)
-        return options if options[:repos].nil? || options[:repos].empty?
-        options[:repos] = Array(options[:repos]).compact.join(',')
-        options
       end
     end
 
@@ -277,18 +315,12 @@ module Artifactory
     attribute :local_path, ->{ raise 'Local destination missing!' }
     attribute :mime_type
     attribute :md5
+    attribute :repo
     attribute :sha1
     attribute :size
 
     #
-    #
-    #
-    def initialize
-
-    end
-
-    #
-    # @see {Artifact#copy_or_move}
+    # @see Artifact#copy_or_move
     #
     def copy(destination, options = {})
       copy_or_move(:copy, destination, options)
