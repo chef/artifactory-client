@@ -257,5 +257,121 @@ module Artifactory
         expect(instance.size).to eq(1024)
       end
     end
+
+    describe '#copy' do
+      let(:destination) { '/to/here' }
+      let(:options)     { Hash.new }
+      before { subject.stub(:copy_or_move) }
+
+      it 'delegates to #copy_or_move' do
+        expect(subject).to receive(:copy_or_move).with(:copy, destination, options)
+        subject.copy(destination, options)
+      end
+    end
+
+    describe '#delete' do
+      let(:client) { double }
+
+      it 'sends DELETE to the client' do
+        subject.client = client
+        subject.download_path = '/artifact.deb'
+
+        expect(client).to receive(:delete)
+        subject.delete
+      end
+    end
+
+    describe '#move' do
+      let(:destination) { '/to/here' }
+      let(:options)     { Hash.new }
+      before { subject.stub(:copy_or_move) }
+
+      it 'delegates to #copy_or_move' do
+        expect(subject).to receive(:copy_or_move).with(:move, destination, options)
+        subject.move(destination, options)
+      end
+    end
+
+    describe '#properties' do
+      let(:properties) do
+        { 'artifactory.licenses' => ['Apache-2.0'] }
+      end
+      let(:response) do
+        { 'properties' => properties }
+      end
+      let(:client) { double(get: response) }
+      let(:api_path) { '/artifact.deb' }
+
+      before do
+        subject.client   = client
+        subject.api_path = api_path
+      end
+
+      it 'gets the properties from the server' do
+        expect(client).to receive(:get).with(api_path, properties: nil).once
+        expect(subject.properties).to eq(properties)
+      end
+
+      it 'caches the response' do
+        subject.properties
+        expect(subject.instance_variable_get(:@properties)).to eq(properties)
+      end
+    end
+
+    describe '#compliance' do
+      let(:compliance) do
+        { 'licenses' => [{ 'name' => 'LGPL v3' }] }
+      end
+      let(:client) { double(get: compliance) }
+      let(:api_path) { '/artifact.deb' }
+
+      before do
+        subject.client   = client
+        subject.api_path = api_path
+      end
+
+      it 'gets the compliance from the server' do
+        expect(client).to receive(:get).with('/api/compliance/artifact.deb').once
+        expect(subject.compliance).to eq(compliance)
+      end
+
+      it 'caches the response' do
+        subject.compliance
+        expect(subject.instance_variable_get(:@compliance)).to eq(compliance)
+      end
+    end
+
+    describe '#download' do
+      it
+    end
+
+    describe '#relative_path' do
+      before { described_class.send(:public, :relative_path) }
+
+      it 'parses the relative path' do
+        subject.api_path = '/api/storage/foo/bar/zip'
+        expect(subject.relative_path).to eq('/foo/bar/zip')
+      end
+    end
+
+    describe '#copy_or_move' do
+      let(:client) { double }
+      before do
+        described_class.send(:public, :copy_or_move)
+
+        subject.client   = client
+        subject.api_path = '/api/storage/foo/bar/artifact.deb'
+      end
+
+      it 'sends POST to the client with parsed params' do
+        expect(client).to receive(:post).with('/api/move/foo/bar/artifact.deb?to=/to/path')
+        subject.copy_or_move(:move, '/to/path')
+      end
+
+      it 'adds the correct parameters to the request' do
+        expect(client).to receive(:post).with('/api/move/foo/bar/artifact.deb?to=/to/path&failFast=1&dry=1')
+        subject.copy_or_move(:move, '/to/path', fail_fast: true, dry_run: true)
+      end
+    end
   end
 end
