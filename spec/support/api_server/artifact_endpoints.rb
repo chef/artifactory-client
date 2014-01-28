@@ -2,22 +2,44 @@ module Artifactory
   module APIServer::ArtifactEndpoints
     def self.registered(app)
       app.get('/api/search/artifact') do
-        if params['name'] == 'artifact.deb'
-          if params['repos'] == 'libs-release-local'
-            JSON.fast_generate(
-              'results' => [
-                { 'uri' => "#{Artifactory.endpoint}/api/storage/libs-release-local/org/acme/artifact.deb" },
-              ]
-            )
-          else
-            JSON.fast_generate(
-              'results' => [
-                { 'uri' => "#{Artifactory.endpoint}/api/storage/libs-release-local/org/acme/artifact.deb" },
-                { 'uri' => "#{Artifactory.endpoint}/api/storage/ext-release-local/org/acme/artifact.deb" },
-              ]
-            )
-          end
+        artifacts_for_conditions do
+          params['name'] == 'artifact.deb'
         end
+      end
+
+      app.get('/api/search/gavc') do
+        artifacts_for_conditions do
+          params['g'] == 'org.acme' &&
+          params['a'] == 'artifact.deb' &&
+          params['v'] == '1.0' &&
+          params['c'] == 'sources'
+        end
+      end
+
+      app.get('/api/search/prop') do
+        artifacts_for_conditions do
+          params['branch'] == 'master' && params['committer'] == 'Seth Vargo'
+        end
+      end
+
+      app.get('/api/search/checksum') do
+        artifacts_for_conditions do
+          params['md5'] == 'abcd1234'
+        end
+      end
+
+      app.get('/api/search/versions') do
+        JSON.fast_generate(
+          'results' => [
+            { 'version' => '1.2',          'integration' => false },
+            { 'version' => '1.0-SNAPSHOT', 'integration' => true  },
+            { 'version' => '1.0',          'integration' => false },
+          ]
+        )
+      end
+
+      app.get('/api/search/latestVersion') do
+        '1.0-201203131455-2'
       end
 
       app.get('/api/storage/libs-release-local/org/acme/artifact.deb') do
@@ -66,6 +88,27 @@ module Artifactory
             'sha' => 'SHA101'
           }
         )
+      end
+
+      app.class_eval do
+        def artifacts_for_conditions(&block)
+          if block.call
+            if params['repos'] == 'libs-release-local'
+              JSON.fast_generate(
+                'results' => [
+                  { 'uri' => "#{Artifactory.endpoint}/api/storage/libs-release-local/org/acme/artifact.deb" },
+                ]
+              )
+            else
+              JSON.fast_generate(
+                'results' => [
+                  { 'uri' => "#{Artifactory.endpoint}/api/storage/libs-release-local/org/acme/artifact.deb" },
+                  { 'uri' => "#{Artifactory.endpoint}/api/storage/ext-release-local/org/acme/artifact.deb" },
+                ]
+              )
+            end
+          end
+        end
       end
     end
   end
