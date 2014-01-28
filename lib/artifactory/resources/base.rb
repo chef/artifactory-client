@@ -30,7 +30,7 @@ module Artifactory
           if default.nil?
             value
           elsif default.is_a?(Proc)
-            default.call(self)
+            default.call
           else
             default
           end

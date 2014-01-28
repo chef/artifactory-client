@@ -309,7 +309,7 @@ module Artifactory
 
     attribute :api_path, ->{ raise 'API path missing!' }
     attribute :created
-    attribute :download_path, ->{ raise 'Remote path missing!' }
+    attribute :download_path, ->{ raise 'Download path missing!' }
     attribute :last_modified
     attribute :last_updated
     attribute :local_path, ->{ raise 'Local destination missing!' }
@@ -334,7 +334,7 @@ module Artifactory
     #   true if the object was deleted successfully, false otherwise
     #
     def delete
-      _delete(download_path).body
+      client.delete(download_path)
     rescue Error::NotFound
       false
     end
@@ -356,7 +356,7 @@ module Artifactory
     #   the list of properties
     #
     def properties
-      @properties ||= _get(api_path, properties: nil).json['properties']
+      @properties ||= client.get(api_path, properties: nil)['properties']
     end
 
     #
@@ -371,7 +371,7 @@ module Artifactory
     # @return [Hash<String, Array<Hash>>]
     #
     def compliance
-      @compliance ||= _get(File.join('api/compliance', relative_path)).json
+      @compliance ||= client.get(File.join('/api/compliance', relative_path))
     end
 
     #
@@ -473,9 +473,9 @@ module Artifactory
         "#{key}=#{value}"
       end
 
-      endpoint = File.join('api', action.to_s, relative_path) + '?' + params.join('&')
+      endpoint = File.join('/api', action.to_s, relative_path) + '?' + params.join('&')
 
-      _post(endpoint).json
+      client.post(endpoint)
     end
   end
 end
