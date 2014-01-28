@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Artifactory
-  describe Resource::Artifact, :integration, :focus do
+  describe Resource::Artifact, :integration do
     shared_examples 'an artifact search endpoint' do |name, options = {}|
       it "finds artifacts by #{name}" do
         response = described_class.send(name, options)
