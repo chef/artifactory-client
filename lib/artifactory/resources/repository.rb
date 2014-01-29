@@ -169,9 +169,18 @@ module Artifactory
     end
 
     #
+    # Upload an artifact with the given archive. Consult the artifactory
+    # documentation for the format of the archive to upload.
     #
+    # @see Repository#upload More syntax examples
     #
-    def upload_from_archive(path_or_io, path, properties = {}, headers = {})
+    # @example Upload an artifact with a checksum
+    #   repo = Repositor.new('libs-release-local')
+    #   repo.upload_from_archive('/local/archive', '/remote/path')#
+    #
+    # @param (see Repository#upload)
+    #
+    def upload_from_archive(path_or_io, path, properties = {})
       upload(path_or_io, path, properties,
         'X-Explode-Archive' => true,
       )
