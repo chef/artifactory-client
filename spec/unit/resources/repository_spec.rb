@@ -125,5 +125,23 @@ module Artifactory
         end
       end
     end
+
+    describe '#upload_with_checksum' do
+      it 'delegates to #upload' do
+        expect(subject).to receive(:upload).with(
+          '/local/file',
+          '/remote/path',
+          { branch: 'master' },
+          {
+            'X-Checksum-Deploy' => true,
+            'X-Checksum-Sha1'   => 'ABCD1234',
+          },
+        )
+        subject.upload_with_checksum('/local/file', '/remote/path',
+          'ABCD1234',
+          { branch: 'master' },
+        )
+      end
+    end
   end
 end
