@@ -75,5 +75,55 @@ module Artifactory
         expect(instance.type).to eq('local')
       end
     end
+
+    describe '#upload' do
+      let(:client) { double }
+      before do
+        subject.client = client
+        subject.key    = 'libs-release-local'
+      end
+
+      context 'when the artifact is a File' do
+        it 'PUTs the file to the server' do
+          file = double(:file, is_a?: true)
+          expect(client).to receive(:put).with('libs-release-local/remote/path', { file: file }, {})
+
+          subject.upload(file, '/remote/path')
+        end
+      end
+
+      context 'when the artifact is a file path' do
+        it 'PUTs the file at the path to the server' do
+          file = double(:file)
+          path = '/fake/path'
+          File.stub(:new).with('/fake/path').and_return(file)
+          expect(client).to receive(:put).with('libs-release-local/remote/path', { file: file }, {})
+
+          subject.upload(path, '/remote/path')
+        end
+      end
+
+      context 'when matrix properties are given' do
+        it 'converts the hash into matrix properties' do
+          file = double(:file, is_a?: true)
+          expect(client).to receive(:put).with('libs-release-local;branch=master;user=Seth%20Vargo/remote/path', { file: file }, {})
+
+          subject.upload(file, '/remote/path',
+            branch: 'master',
+            user: 'Seth Vargo',
+          )
+        end
+      end
+
+      context 'when custom headers are given' do
+        it 'passes the headers to the client' do
+          headers = { 'Content-Type' => 'text/plain' }
+          file = double(:file, is_a?: true)
+          expect(client).to receive(:put).with('libs-release-local/remote/path', { file: file }, headers)
+
+          subject.upload(file, '/remote/path', {}, headers)
+        end
+      end
+    end
   end
 end

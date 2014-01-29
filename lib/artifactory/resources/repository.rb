@@ -143,7 +143,7 @@ module Artifactory
       matrix   = to_matrix_properties(properties)
       endpoint = File.join("#{url_safe_key}#{matrix}", path)
 
-      _put(endpoint, { file: file }, headers)
+      client.put(endpoint, { file: file }, headers)
     end
 
     #
