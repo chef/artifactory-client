@@ -187,7 +187,17 @@ module Artifactory
     end
 
     #
+    # The list of artifacts in this repository on the remote artifactory
+    # server.
     #
+    # @see Artifact.search Search syntax examples
+    #
+    # @example Get the list of artifacts for a repository
+    #   repo = Repository.new('libs-release-local')
+    #   repo.artifacts #=> [#<Resource::Artifacts>, ...]
+    #
+    # @return [Collection::Artifact]
+    #   the list of artifacts
     #
     def artifacts
       @artifacts ||= Collection::Artifact.new(self, repos: key) do
