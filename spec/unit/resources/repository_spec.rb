@@ -157,5 +157,13 @@ module Artifactory
         subject.upload_from_archive('/local/file', '/remote/path')
       end
     end
+
+    describe '#artifacts' do
+      before { subject.key = 'libs-release-local' }
+
+      it 'returns an artifact collection' do
+        expect(subject.artifacts).to be_a(Collection::Artifact)
+      end
+    end
   end
 end
