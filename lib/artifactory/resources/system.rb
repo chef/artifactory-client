@@ -18,7 +18,7 @@ module Artifactory
       #
       def info(options = {})
         client = extract_client!(options)
-        client.get('/api/system').body
+        client.get('/api/system')
       end
 
       #
@@ -43,7 +43,7 @@ module Artifactory
       #
       def ping(options = {})
         client = extract_client!(options)
-        client.get('/api/system/ping').ok?
+        !!client.get('/api/system/ping')
       rescue Error::ConnectionError
         false
       end
@@ -64,8 +64,10 @@ module Artifactory
       #   the parsed XML document
       #
       def configuration(options = {})
-        client = extract_client!(options)
-        client.get('/api/system/configuration').xml
+        client   = extract_client!(options)
+        response = client.get('/api/system/configuration')
+
+        REXML::Document.new(response)
       end
 
       #
@@ -85,7 +87,7 @@ module Artifactory
       #
       def update_configuration(xml, options = {})
         client = extract_client!(options)
-        client.post('/api/system/configuration', xml).body
+        client.post('/api/system/configuration', xml)
       end
 
       #
@@ -105,7 +107,7 @@ module Artifactory
       #
       def version(options = {})
         client = extract_client!(options)
-        client.get('/api/system/version').json
+        client.get('/api/system/version')
       end
     end
   end

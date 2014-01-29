@@ -10,7 +10,7 @@ module Artifactory
     end
 
     describe '.all' do
-      let(:response) { double(json: ['a', 'b', 'c']) }
+      let(:response) { ['a', 'b', 'c'] }
 
       it 'gets /api/repositories' do
         expect(client).to receive(:get).with('/api/repositories').once
@@ -23,7 +23,7 @@ module Artifactory
     end
 
     describe '.find' do
-      let(:response) { double(json: {}) }
+      let(:response) { {} }
 
       it 'gets /api/repositories/#{name}' do
         expect(client).to receive(:get).with('/api/repositories/libs-release-local').once

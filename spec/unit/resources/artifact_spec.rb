@@ -10,7 +10,7 @@ module Artifactory
     end
 
     describe '.search' do
-      let(:response) { double(json: { 'results' => [] }) }
+      let(:response) { { 'results' => [] } }
 
       it 'calls /api/search/artifact' do
         expect(client).to receive(:get).with('/api/search/artifact', {}).once
@@ -35,7 +35,7 @@ module Artifactory
     end
 
     describe '.gavc_search' do
-      let(:response) { double(json: { 'results' => [] }) }
+      let(:response) { { 'results' => [] } }
 
       it 'calls /api/search/gavc' do
         expect(client).to receive(:get).with('/api/search/gavc', {}).once
@@ -75,7 +75,7 @@ module Artifactory
     end
 
     describe '.property_search' do
-      let(:response) { double(json: { 'results' => [] }) }
+      let(:response) { { 'results' => [] } }
 
       it 'calls /api/search/prop' do
         expect(client).to receive(:get).with('/api/search/prop', {}).once
@@ -99,7 +99,7 @@ module Artifactory
     end
 
     describe '.checksum_search' do
-      let(:response) { double(json: { 'results' => [] }) }
+      let(:response) { { 'results' => [] } }
 
       it 'calls /api/search/checksum' do
         expect(client).to receive(:get).with('/api/search/checksum', {}).once
@@ -124,7 +124,7 @@ module Artifactory
     end
 
     describe '.versions' do
-      let(:response) { double(json: { 'results' => [] }) }
+      let(:response) { { 'results' => [] } }
 
       it 'calls /api/search/versions' do
         expect(client).to receive(:get).with('/api/search/versions', {}).once
@@ -170,7 +170,7 @@ module Artifactory
     end
 
     describe '.latest_version' do
-      let(:response) { double(body: '1.2-SNAPSHOT') }
+      let(:response) { '1.2-SNAPSHOT' }
 
       it 'calls /api/search/latestVersion' do
         expect(client).to receive(:get).with('/api/search/latestVersion', {}).once
@@ -214,7 +214,7 @@ module Artifactory
     end
 
     describe '.from_url' do
-      let(:response) { double(json: {}) }
+      let(:response) { {} }
 
       it 'constructs a new instance from the result' do
         expect(described_class).to receive(:from_hash).once

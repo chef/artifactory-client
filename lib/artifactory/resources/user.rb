@@ -5,7 +5,7 @@ module Artifactory
       #
       #
       def all(client)
-        client.get('/api/security/users').json.map do |hash|
+        client.get('/api/security/users').map do |hash|
           from_url(client, hash['uri'])
         end
       end
@@ -15,7 +15,7 @@ module Artifactory
       #
       def find(client, username)
         username = URI.escape(username)
-        from_hash(client, client.get("/api/security/users/#{username}").json)
+        from_hash(client, client.get("/api/security/users/#{username}"))
       rescue Error::NotFound
         nil
       end
@@ -24,7 +24,7 @@ module Artifactory
       #
       #
       def from_url(client, url)
-        from_hash(client, client.get(url).json)
+        from_hash(client, client.get(url))
       end
 
       #

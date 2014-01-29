@@ -10,7 +10,7 @@ module Artifactory
     end
 
     describe '.all' do
-      let(:response) { double(json: ['a', 'b', 'c']) }
+      let(:response) { ['a', 'b', 'c'] }
 
       it 'gets /api/plugins' do
         expect(client).to receive(:get).with('/api/plugins').once

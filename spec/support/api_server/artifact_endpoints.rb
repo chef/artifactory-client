@@ -2,12 +2,14 @@ module Artifactory
   module APIServer::ArtifactEndpoints
     def self.registered(app)
       app.get('/api/search/artifact') do
+        content_type 'application/vnd.org.jfrog.artifactory.search.ArtifactSearchResult+json'
         artifacts_for_conditions do
           params['name'] == 'artifact.deb'
         end
       end
 
       app.get('/api/search/gavc') do
+        content_type 'application/vnd.org.jfrog.artifactory.search.GavcSearchResult+json'
         artifacts_for_conditions do
           params['g'] == 'org.acme' &&
           params['a'] == 'artifact.deb' &&
@@ -17,18 +19,21 @@ module Artifactory
       end
 
       app.get('/api/search/prop') do
+        content_type 'application/vnd.org.jfrog.artifactory.search.MetadataSearchResult+json'
         artifacts_for_conditions do
           params['branch'] == 'master' && params['committer'] == 'Seth Vargo'
         end
       end
 
       app.get('/api/search/checksum') do
+        content_type 'application/vnd.org.jfrog.artifactory.search.ChecksumSearchResult+json'
         artifacts_for_conditions do
           params['md5'] == 'abcd1234'
         end
       end
 
       app.get('/api/search/versions') do
+        content_type 'application/vnd.org.jfrog.artifactory.search.ArtifactVersionsResult+json'
         JSON.fast_generate(
           'results' => [
             { 'version' => '1.2',          'integration' => false },
@@ -43,6 +48,7 @@ module Artifactory
       end
 
       app.get('/api/storage/libs-release-local/org/acme/artifact.deb') do
+        content_type 'application/vnd.org.jfrog.artifactory.storage.FileInfo+json'
         JSON.fast_generate(
           'uri'          => "#{Artifactory.endpoint}/api/storage/libs-release-local/org/acme/artifact.deb",
           'downloadUri'  => "#{Artifactory.endpoint}/artifactory/libs-release-local/org/acme/artifact.deb",
@@ -67,6 +73,7 @@ module Artifactory
       end
 
       app.get('/api/storage/ext-release-local/org/acme/artifact.deb') do
+        content_type 'application/vnd.org.jfrog.artifactory.storage.FileInfo+json'
         JSON.fast_generate(
           'uri'          => "#{Artifactory.endpoint}/api/storage/ext-release-local/org/acme/artifact.deb",
           'downloadUri'  => "#{Artifactory.endpoint}/artifactory/ext-release-local/org/acme/artifact.deb",

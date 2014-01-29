@@ -10,7 +10,7 @@ module Artifactory
     end
 
     describe '.info' do
-      let(:response) { double(body: 'This is the response...') }
+      let(:response) { 'This is the response...' }
 
       it 'calls /api/system' do
         expect(client).to receive(:get).with('/api/system').once
@@ -18,12 +18,12 @@ module Artifactory
       end
 
       it 'returns the plan-text body' do
-        expect(described_class.info).to eq(response.body)
+        expect(described_class.info).to eq(response)
       end
     end
 
     describe '.ping' do
-      let(:response) { double(ok?: true) }
+      let(:response) { '' }
 
       it 'gets /api/system/ping' do
         expect(client).to receive(:get).with('/api/system/ping').once
@@ -45,7 +45,7 @@ module Artifactory
     end
 
     describe '.configuration' do
-      let(:response) { double(xml: '<?xml>') }
+      let(:response) { '<config></config>' }
 
       it 'gets /api/system/configuration' do
         expect(client).to receive(:get).with('/api/system/configuration').once
@@ -53,7 +53,7 @@ module Artifactory
       end
 
       it 'returns the xml' do
-        expect(described_class.configuration).to eq(response.xml)
+        expect(described_class.configuration).to be_a(REXML::Document)
       end
     end
 
@@ -68,7 +68,7 @@ module Artifactory
       end
 
       it 'returns the body of the response' do
-        expect(described_class.update_configuration(xml)).to eq(response.body)
+        expect(described_class.update_configuration(xml)).to eq(response)
       end
     end
 
@@ -81,7 +81,7 @@ module Artifactory
       end
 
       it 'returns the parsed JSON of the response' do
-        expect(described_class.version).to eq(response.json)
+        expect(described_class.version).to eq(response)
       end
     end
   end

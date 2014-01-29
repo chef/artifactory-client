@@ -28,7 +28,7 @@ module Artifactory
         params = Util.slice(options, :name, :repos)
         format_repos!(params)
 
-        client.get('/api/search/artifact', params).json['results'].map do |artifact|
+        client.get('/api/search/artifact', params)['results'].map do |artifact|
           from_url(artifact['uri'], client: client)
         end
       end
@@ -84,7 +84,7 @@ module Artifactory
         params = Util.slice(options, :g, :a, :v, :c, :repos)
         format_repos!(params)
 
-        client.get('/api/search/gavc', params).json['results'].map do |artifact|
+        client.get('/api/search/gavc', params)['results'].map do |artifact|
           from_url(artifact['uri'], client: client)
         end
       end
@@ -123,7 +123,7 @@ module Artifactory
         params = options.dup
         format_repos!(params)
 
-        client.get('/api/search/prop', params).json['results'].map do |artifact|
+        client.get('/api/search/prop', params)['results'].map do |artifact|
           from_url(artifact['uri'], client: client)
         end
       end
@@ -162,7 +162,7 @@ module Artifactory
         params = Util.slice(options, :md5, :sha1, :repos)
         format_repos!(params)
 
-        client.get('/api/search/checksum', params).json['results'].map do |artifact|
+        client.get('/api/search/checksum', params)['results'].map do |artifact|
           from_url(artifact['uri'], client: client)
         end
       end
@@ -197,7 +197,7 @@ module Artifactory
         params = Util.slice(options, :g, :a, :v, :repos)
         format_repos!(params)
 
-        client.get('/api/search/versions', params).json['results']
+        client.get('/api/search/versions', params)['results']
       rescue Error::NotFound
         []
       end
@@ -251,7 +251,7 @@ module Artifactory
         # literal "1"...
         params[:remote] = 1 if options[:remote]
 
-        client.get('/api/search/latestVersion', params).body
+        client.get('/api/search/latestVersion', params)
       rescue Error::NotFound
         nil
       end
@@ -271,7 +271,7 @@ module Artifactory
       #
       def from_url(url, options = {})
         client = extract_client!(options)
-        from_hash(client.get(url).json, client: client)
+        from_hash(client.get(url), client: client)
       end
 
       #
@@ -334,7 +334,7 @@ module Artifactory
     #   true if the object was deleted successfully, false otherwise
     #
     def delete
-      client.delete(download_path)
+      !!client.delete(download_path)
     rescue Error::NotFound
       false
     end
@@ -408,7 +408,7 @@ module Artifactory
       destination = File.join(targer, filename)
 
       File.open(File.join(destination, filename), 'wb') do |file|
-        file.write(_get(download_path).body)
+        file.write(_get(download_path))
       end
 
       destination

@@ -15,7 +15,7 @@ module Artifactory
       #
       def all(options = {})
         client = extract_client!(options)
-        client.get('/api/plugins').json
+        client.get('/api/plugins')
       end
     end
   end

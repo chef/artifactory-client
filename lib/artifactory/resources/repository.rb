@@ -15,7 +15,7 @@ module Artifactory
       #
       def all(options = {})
         client = extract_client!(options)
-        client.get('/api/repositories').json
+        client.get('/api/repositories')
       end
 
       #
@@ -40,7 +40,7 @@ module Artifactory
         client = extract_client!(options)
         name   = options[:name]
 
-        result = client.get("/api/repositories/#{url_safe(name)}").json
+        result = client.get("/api/repositories/#{url_safe(name)}")
         from_hash(result, client: client)
       rescue Error::NotFound
         nil
@@ -143,7 +143,7 @@ module Artifactory
       matrix   = to_matrix_properties(properties)
       endpoint = File.join("#{url_safe_key}#{matrix}", path)
 
-      _put(endpoint, { file: file }, headers).json
+      _put(endpoint, { file: file }, headers)
     end
 
     #
@@ -197,7 +197,7 @@ module Artifactory
         includeRootPath: 0,
       })
 
-      response.json['children']
+      response['children']
     end
 
     private

@@ -10,6 +10,7 @@ module Artifactory
       end
 
       app.get('/api/system/configuration') do
+        content_type 'application/xml'
         <<-EOH.gsub(/^ {10}/, '')
           <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
           <config xsi:schemaLocation='http://www.jfrog.org/xsd/artifactory-v1_5_3.xsd'
@@ -27,6 +28,7 @@ module Artifactory
       end
 
       app.get('/api/system/version') do
+        content_type 'application/vnd.org.jfrog.artifactory.system.Version+json'
         JSON.generate({
           'version' => '3.1.0',
           'revision' => '30062',

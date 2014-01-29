@@ -6,7 +6,6 @@ module Artifactory
   autoload :Defaults,     'artifactory/defaults'
   autoload :Error,        'artifactory/errors'
   autoload :Proxy,        'artifactory/proxy'
-  autoload :Request,      'artifactory/request'
   autoload :Util,         'artifactory/util'
 
   module Collection

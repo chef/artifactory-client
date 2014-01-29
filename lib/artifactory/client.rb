@@ -38,7 +38,7 @@ module Artifactory
 
     include Artifactory::Configurable
 
-    proxy :artifacts, '   Resource::Artifact'
+    proxy :artifacts,    'Resource::Artifact'
     proxy :repositories, 'Resource::Repository'
     proxy :users,        'Resource::User'
     proxy :system,       'Resource::System'
@@ -167,17 +167,62 @@ module Artifactory
     # @param [String] path
     #   the absolute or relative URL to use, expanded relative to {Defaults.endpoint}
     #
-    # @return [Artifactory::RequestWrapper]
+    # @return [Object]
     #
     def request(verb, path, *args, &block)
       url = URI.parse(path)
 
       # Don't merge absolute URLs
       unless url.absolute?
-        path = URI.parse(File.join(endpoint, path)).to_s
+        url = URI.parse(File.join(endpoint, path)).to_s
       end
 
-      Request.new(verb, path) { agent.send(verb, path, *args, &block) }
+      # Covert the URL back into a string
+      url = url.to_s
+
+      # Make the actual request
+      response = agent.send(verb, url, *args, &block)
+
+      case response.status.to_i
+      when 200..399
+        parse_response(response)
+      when 400
+        raise Error::BadRequest.new(url: url, body: response.body)
+      when 401
+        raise Error::Unauthorized.new(url: url)
+      when 403
+        raise Error::Forbidden.new(url: url)
+      when 404
+        raise Error::NotFound.new(url: url)
+      when 405
+        raise Error::MethodNotAllowed.new(url: url)
+      when 500..600
+        raise Error::ConnectionError.new(url: url, body: response.body)
+      end
+    rescue SocketError, Errno::ECONNREFUSED, EOFError
+      raise Error::ConnectionError.new(url: url, body: <<-EOH.gsub(/^ {8}/, ''))
+        The server is not currently accepting connections.
+      EOH
+    end
+
+
+    #
+    # Parse the response object and manipulate the result based on the given
+    # +Content-Type+ header. For now, this method only parses JSON, but it
+    # could be expanded in the future to accept other content types.
+    #
+    # @param [HTTP::Message] response
+    #   the response object from the request
+    #
+    # @return [String, Hash]
+    #   the parsed response, as an object
+    #
+    def parse_response(response)
+      if response.headers['Content-Type'].include?('json')
+        JSON.parse(response.body)
+      else
+        response.body
+      end
     end
   end
 end
