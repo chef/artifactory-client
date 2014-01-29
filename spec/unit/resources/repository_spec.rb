@@ -143,5 +143,19 @@ module Artifactory
         )
       end
     end
+
+    describe '#upload_from_archive' do
+      it 'delegates to #upload' do
+        expect(subject).to receive(:upload).with(
+          '/local/file',
+          '/remote/path',
+          {},
+          {
+            'X-Explode-Archive' => true,
+          },
+        )
+        subject.upload_from_archive('/local/file', '/remote/path')
+      end
+    end
   end
 end
