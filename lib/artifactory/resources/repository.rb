@@ -15,7 +15,9 @@ module Artifactory
       #
       def all(options = {})
         client = extract_client!(options)
-        client.get('/api/repositories')
+        client.get('/api/repositories').map do |hash|
+          find(name: hash['key'], client: client)
+        end.compact
       end
 
       #
