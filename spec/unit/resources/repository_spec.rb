@@ -10,7 +10,18 @@ module Artifactory
     end
 
     describe '.all' do
-      let(:response) { ['a', 'b', 'c'] }
+      let(:response) do
+        [
+          { 'key' => 'a' },
+          { 'key' => 'b' },
+          { 'key' => 'c' },
+        ]
+      end
+      before do
+        described_class.stub(:find).with(name: 'a', client: client).and_return('a')
+        described_class.stub(:find).with(name: 'b', client: client).and_return('b')
+        described_class.stub(:find).with(name: 'c', client: client).and_return('c')
+      end
 
       it 'gets /api/repositories' do
         expect(client).to receive(:get).with('/api/repositories').once
