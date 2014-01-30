@@ -107,9 +107,9 @@ module Artifactory
       attributes.each { |key, value| send(:"#{key}=", value) }
     end
 
-    # @see {Resource::Base.extract_options!}
-    def extract_options!(options)
-      self.class.extract_options!(options)
+    # @see {Resource::Base.extract_client!}
+    def extract_client!(options)
+      self.class.extract_client!(options)
     end
 
     # @see {Resource::Base.format_repos!}
