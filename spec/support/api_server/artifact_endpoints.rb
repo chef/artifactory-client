@@ -50,8 +50,8 @@ module Artifactory
       app.get('/api/storage/libs-release-local/org/acme/artifact.deb') do
         content_type 'application/vnd.org.jfrog.artifactory.storage.FileInfo+json'
         JSON.fast_generate(
-          'uri'          => "#{Artifactory.endpoint}/api/storage/libs-release-local/org/acme/artifact.deb",
-          'downloadUri'  => "#{Artifactory.endpoint}/artifactory/libs-release-local/org/acme/artifact.deb",
+          'uri'          => server_url.join('/api/storage/libs-release-local/org/acme/artifact.deb'),
+          'downloadUri'  => server_url.join('/artifactory/libs-release-local/org/acme/artifact.deb'),
           'repo'         => 'libs-release-local',
           'path'         => '/org/acme/artifact.deb',
           'created'      => Time.parse('1991-07-23 12:07am'),
@@ -75,8 +75,8 @@ module Artifactory
       app.get('/api/storage/ext-release-local/org/acme/artifact.deb') do
         content_type 'application/vnd.org.jfrog.artifactory.storage.FileInfo+json'
         JSON.fast_generate(
-          'uri'          => "#{Artifactory.endpoint}/api/storage/ext-release-local/org/acme/artifact.deb",
-          'downloadUri'  => "#{Artifactory.endpoint}/artifactory/ext-release-local/org/acme/artifact.deb",
+          'uri'          => server_url.join('/api/storage/ext-release-local/org/acme/artifact.deb'),
+          'downloadUri'  => server_url.join('/artifactory/ext-release-local/org/acme/artifact.deb'),
           'repo'         => 'ext-release-local',
           'path'         => '/org/acme/artifact.deb',
           'created'      => Time.parse('1995-04-11 11:05am'),
@@ -103,14 +103,14 @@ module Artifactory
             if params['repos'] == 'libs-release-local'
               JSON.fast_generate(
                 'results' => [
-                  { 'uri' => "#{Artifactory.endpoint}/api/storage/libs-release-local/org/acme/artifact.deb" },
+                  { 'uri' => server_url.join('/api/storage/libs-release-local/org/acme/artifact.deb') },
                 ]
               )
             else
               JSON.fast_generate(
                 'results' => [
-                  { 'uri' => "#{Artifactory.endpoint}/api/storage/libs-release-local/org/acme/artifact.deb" },
-                  { 'uri' => "#{Artifactory.endpoint}/api/storage/ext-release-local/org/acme/artifact.deb" },
+                  { 'uri' => server_url.join('/api/storage/libs-release-local/org/acme/artifact.deb') },
+                  { 'uri' => server_url.join('/api/storage/ext-release-local/org/acme/artifact.deb') },
                 ]
               )
             end
