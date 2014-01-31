@@ -14,34 +14,28 @@ module Artifactory
       #
       # @private
       #
-      # @macro proxy
-      #   @method $1
-      #     Get a proxied collection for +$1+. The proxy automatically injects
-      #     the current client into the $2, providing a very Rubyesque way for
-      #     handling multiple connection objects.
-      #
-      #     @example Get the $1 from the client object
-      #       client = Artifactory::Client.new('...')
-      #       client.$1 #=> $2 (with the client object pre-populated)
-      #
-      #     @return [Artifactory::Proxy<$2>]
-      #       a collection proxy for the $2
-      #
-      def proxy(name, klass)
-        class_eval <<-EOH, __FILE__, __LINE__ + 1
-          def #{name}
-            @#{name} ||= Artifactory::Proxy.new(self, #{klass})
+      def proxy(klass)
+        namespace = klass.name.split('::').last.downcase
+        klass.singleton_methods(false).each do |name|
+          define_method("#{namespace}_#{name}") do |*args|
+            if args.last.is_a?(Hash)
+              args.last[:client] = self
+            else
+              args << { client: self }
+            end
+
+            klass.send(name, *args)
           end
-        EOH
+        end
       end
     end
 
     include Artifactory::Configurable
 
-    proxy :artifacts,    'Resource::Artifact'
-    proxy :repositories, 'Resource::Repository'
-    proxy :users,        'Resource::User'
-    proxy :system,       'Resource::System'
+    proxy Resource::Artifact
+    proxy Resource::Repository
+    proxy Resource::User
+    proxy Resource::System
 
     #
     # Create a new Artifactory Client with the given options. Any options

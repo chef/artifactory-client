@@ -4,14 +4,6 @@ module Artifactory
   describe Client do
     let(:client) { subject }
 
-    context 'resource proxies' do
-      [:users, :system].each do |name|
-        it "has a proxy for #{name}" do
-          expect(described_class).to be_method_defined(name)
-        end
-      end
-    end
-
     context 'configuration' do
       it 'is a configurable object' do
         expect(client).to be_a(Configurable)
@@ -36,19 +28,16 @@ module Artifactory
     end
 
     describe '.proxy' do
-      before { described_class.proxy(:items, Resource::Base) }
+      before { described_class.proxy(Resource::Artifact) }
 
       it 'defines a new method' do
-        expect(described_class).to be_method_defined(:items)
+        expect(described_class).to be_method_defined(:artifact_search)
       end
 
-      it 'creates a new proxy object' do
-        expect(subject.items).to be(Resource::Base)
-      end
-
-      it 'caches the result as an instance variable' do
-        subject.items
-        expect(subject).to be_instance_variable_defined(:@items)
+      it 'delegates to the class, injecting the client' do
+        Resource::Artifact.stub(:search)
+        expect(Resource::Artifact).to receive(:search).with(client: subject)
+        subject.artifact_search
       end
     end
 
