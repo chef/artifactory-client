@@ -4,18 +4,21 @@ module Artifactory
       #
       #
       #
-      def all(client)
+      def all(options = {})
+        client = extract_client!(options)
         client.get('/api/security/users').map do |hash|
-          from_url(client, hash['uri'])
+          from_url(hash['uri'], client: client)
         end
       end
 
       #
       #
       #
-      def find(client, username)
-        username = URI.escape(username)
-        from_hash(client, client.get("/api/security/users/#{username}"))
+      def find(options = {})
+        client   = extract_client!(options)
+        username = URI.escape(options[:username])
+        response = client.get("/api/security/users/#{username}")
+        from_hash(response, client: client)
       rescue Error::NotFound
         nil
       end
@@ -23,14 +26,17 @@ module Artifactory
       #
       #
       #
-      def from_url(client, url)
-        from_hash(client, client.get(url))
+      def from_url(url, options = {})
+        client = extract_client!(options)
+        from_hash(client.get(url), client: client)
       end
 
       #
       #
       #
-      def from_hash(client, hash)
+      def from_hash(hash, options = {})
+        client = extract_client!(options)
+
         new(client).tap do |instance|
           instance.admin      = hash['admin']
           instance.email      = hash['email']
@@ -47,14 +53,5 @@ module Artifactory
     attribute :name, ->{ raise 'Name missing!' }
     attribute :password
     attribute :realm
-
-    #
-    # Create a new user object.
-    #
-    def initialize(client, attributes = {})
-      attributes.each do |key, value|
-        send("#{key}=", value)
-      end
-    end
   end
 end
