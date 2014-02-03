@@ -5,7 +5,6 @@ module Artifactory
   autoload :Configurable, 'artifactory/configurable'
   autoload :Defaults,     'artifactory/defaults'
   autoload :Error,        'artifactory/errors'
-  autoload :Proxy,        'artifactory/proxy'
   autoload :Util,         'artifactory/util'
 
   module Collection
