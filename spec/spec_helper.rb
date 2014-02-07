@@ -2,12 +2,6 @@ require 'bundler/setup'
 require 'rspec'
 require 'webmock/rspec'
 
-# SimpleCov configuration
-require 'simplecov'
-SimpleCov.start do
-  add_filter '/spec/'
-end
-
 # Require our main library
 require 'artifactory'
 
