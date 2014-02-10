@@ -22,5 +22,6 @@ Gemfile.lock
 bin/
 coverage/
 doc/
+pkg/
 tmp/
 vendor/
