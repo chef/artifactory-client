@@ -1,5 +1,7 @@
 Artifactory Client
 ==================
+[![Build Status](https://secure.travis-ci.org/opscode/artifactory-client.png?branch=master)](http://travis-ci.org/opscode/artifactory-client)
+
 A Ruby client and interface to the Artifactory API. **The majority of API endpoints are only exposed for Artifactory Pro customers!** As such, many of the resources and actions exposed by this gem also require Artifactory Pro.
 
 The Artifactory gem offers a convienent interface for managing various parts of the Artifactory API. It is not a complete API implementation, and should still be considered a work in progress.
