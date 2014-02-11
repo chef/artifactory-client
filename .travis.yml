@@ -7,6 +7,11 @@ rvm:
 # Setup parallel downloaders
 bundler_args: --jobs 7
 
+# Only test master (PRs are still tested)
+branches:
+  only:
+    - master
+
 # Notifications
 notifications:
   hipchat:

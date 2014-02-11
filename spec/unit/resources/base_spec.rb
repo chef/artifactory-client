@@ -126,14 +126,17 @@ module Artifactory
 
     describe '#to_s' do
       it 'returns the name of the class' do
-        expect(subject.to_s).to eq('#<Artifactory::Resource::Base>')
+        expect(subject.to_s).to eq('#<Base>')
       end
     end
 
     describe '#inspect' do
-      it 'includes all the instance variables' do
-        subject.instance_variable_set(:@foo, 'bar')
-        expect(subject.inspect).to eq(%q|#<Artifactory::Resource::Base foo: "bar">|)
+      it 'includes all the attributes' do
+        subject.stub(:attributes) do
+          { foo: 'bar' }
+        end
+
+        expect(subject.inspect).to eq(%q|#<Base foo: "bar">|)
       end
     end
   end

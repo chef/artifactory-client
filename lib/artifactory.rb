@@ -16,6 +16,7 @@ module Artifactory
     autoload :Artifact,   'artifactory/resources/artifact'
     autoload :Base,       'artifactory/resources/base'
     autoload :Build,      'artifactory/resources/build'
+    autoload :Group,      'artifactory/resources/group'
     autoload :Plugin,     'artifactory/resources/plugin'
     autoload :Repository, 'artifactory/resources/repository'
     autoload :System,     'artifactory/resources/system'

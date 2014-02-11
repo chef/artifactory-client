@@ -1,3 +1,5 @@
+require 'json'
+
 module Artifactory
   class Resource::Base
     class << self
@@ -23,8 +25,10 @@ module Artifactory
       #     @return [Boolean]
       #
       def attribute(key, default = nil)
+        key = key.to_sym unless key.is_a?(Symbol)
+
         define_method(key) do
-          value = instance_variable_get("@#{key}")
+          value = attributes[key]
           return value unless value.nil?
 
           if default.nil?
@@ -37,11 +41,11 @@ module Artifactory
         end
 
         define_method("#{key}?") do
-          !!send(key)
+          !!attributes[key]
         end
 
         define_method("#{key}=") do |value|
-          instance_variable_set("@#{key}", value)
+          set(key, value)
         end
       end
 
@@ -104,42 +108,68 @@ module Artifactory
     # Create a new instance
     #
     def initialize(attributes = {})
-      attributes.each { |key, value| send(:"#{key}=", value) }
+      attributes.each do |key, value|
+        set(key, value)
+      end
     end
 
-    # @see {Resource::Base.extract_client!}
+    #
+    # The list of attributes for this resource.
+    #
+    # @return [hash]
+    #
+    def attributes
+      @attributes ||= {}
+    end
+
+    #
+    # Set a given attribute on this resource.
+    #
+    # @param [#to_sym] key
+    #   the attribute to set
+    # @param [Object] value
+    #   the value to set
+    #
+    # @return [Object]
+    #   the set value
+    #
+    def set(key, value)
+      attributes[key.to_sym] = value
+    end
+
+    # @see Resource::Base.extract_client!
     def extract_client!(options)
       self.class.extract_client!(options)
     end
 
-    # @see {Resource::Base.format_repos!}
+    # @see Resource::Base.format_repos!
     def format_repos!(options)
       self.class.format_repos!(options)
     end
 
-    # @see {Resource::Base.url_safe}
+    # @see Resource::Base.url_safe
     def url_safe(value)
       self.class.url_safe(value)
     end
 
+    # @private
     def to_s
-      "#<#{self.class.name}>"
+      "#<#{short_classname}>"
     end
 
+    # @private
     def inspect
-      map = instance_variables.map do |k|
-        unless k == :@client
-          value = instance_variable_get(k)
-
-          if !value.nil?
-            "#{k.to_s.gsub(/^@/, '')}: #{value.inspect}"
-          else
-            nil
-          end
-        end
+      list = attributes.collect do |key, value|
+        "#{key}: #{value.inspect}" unless key == :client
       end.compact
 
-      "#<#{self.class.name} #{map.join(', ')}>"
+      "#<#{short_classname} #{list.join(', ')}>"
+    end
+
+    private
+
+    def short_classname
+      @short_classname ||= self.class.name.split('::').last
     end
   end
 end

@@ -8,12 +8,14 @@ module Artifactory
   class APIServer < Sinatra::Base
     require_relative 'api_server/artifact_endpoints'
     require_relative 'api_server/build_endpoints'
+    require_relative 'api_server/group_endpoints'
     require_relative 'api_server/repository_endpoints'
     require_relative 'api_server/status_endpoints'
     require_relative 'api_server/system_endpoints'
 
     register APIServer::ArtifactEndpoints
     register APIServer::BuildEndpoints
+    register APIServer::GroupEndpoints
     register APIServer::RepositoryEndpoints
     register APIServer::StatusEndpoints
     register APIServer::SystemEndpoints
