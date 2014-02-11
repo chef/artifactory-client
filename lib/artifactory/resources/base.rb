@@ -1,3 +1,5 @@
+require 'json'
+
 module Artifactory
   class Resource::Base
     class << self
