@@ -212,7 +212,9 @@ module Artifactory
     #   the parsed response, as an object
     #
     def parse_response(response)
-      if response.headers['Content-Type'].include?('json')
+      content_type = response.headers['Content-Type']
+
+      if content_type && content_type.include?('json')
         JSON.parse(response.body)
       else
         response.body
