@@ -190,7 +190,7 @@ module Artifactory
         raise Error::NotFound.new(url: url)
       when 405
         raise Error::MethodNotAllowed.new(url: url)
-      when 500..600
+      else
         raise Error::ConnectionError.new(url: url, body: response.body)
       end
     rescue SocketError, Errno::ECONNREFUSED, EOFError
