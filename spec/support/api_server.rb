@@ -12,6 +12,7 @@ module Artifactory
     require_relative 'api_server/repository_endpoints'
     require_relative 'api_server/status_endpoints'
     require_relative 'api_server/system_endpoints'
+    require_relative 'api_server/user_endpoints'
 
     register APIServer::ArtifactEndpoints
     register APIServer::BuildEndpoints
@@ -19,6 +20,7 @@ module Artifactory
     register APIServer::RepositoryEndpoints
     register APIServer::StatusEndpoints
     register APIServer::SystemEndpoints
+    register APIServer::UserEndpoints
 
     private
 

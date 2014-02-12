@@ -27,6 +27,9 @@ module Artifactory
       def attribute(key, default = nil)
         key = key.to_sym unless key.is_a?(Symbol)
 
+        # Set the key on the top attributes, mostly for asthetic purposes
+        attributes[key] = nil
+
         define_method(key) do
           value = attributes[key]
           return value unless value.nil?
@@ -100,6 +103,10 @@ module Artifactory
       def url_safe(value)
         URI.escape(value.to_s)
       end
+
+      def attributes
+        @attributes ||= {}
+      end
     end
 
     attribute :client, ->{ Artifactory.client }
@@ -119,7 +126,7 @@ module Artifactory
     # @return [hash]
     #
     def attributes
-      @attributes ||= {}
+      @attributes ||= self.class.attributes.dup
     end
 
     #
