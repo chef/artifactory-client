@@ -27,7 +27,7 @@ module Artifactory
       def attribute(key, default = nil)
         key = key.to_sym unless key.is_a?(Symbol)
 
-        # Set the key on the top attributes, mostly for asthetic purposes
+        # Set this attribute in the top-level hash
         attributes[key] = nil
 
         define_method(key) do
@@ -49,6 +49,73 @@ module Artifactory
 
         define_method("#{key}=") do |value|
           set(key, value)
+        end
+      end
+
+      #
+      # The list of attributes defined by this class.
+      #
+      # @return [Array<Symbol>]
+      #
+      def attributes
+        @attributes ||= {}
+      end
+
+      #
+      # Determine if this class has a given attribute.
+      #
+      # @param [#to_sym] key
+      #   the key to check as an attribute
+      #
+      # @return [true, false]
+      #
+      def has_attribute?(key)
+        attributes.has_key?(key.to_sym)
+      end
+
+      #
+      # Construct a new object from the given URL.
+      #
+      # @param [String] url
+      #   the URL to find the user from
+      # @param [Hash] options
+      #   the list of options
+      #
+      # @option options [Artifactory::Client] :client
+      #   the client object to make the request with
+      #
+      # @return [~Resource::Base]
+      #
+      def from_url(url, options = {})
+        client = extract_client!(options)
+        from_hash(client.get(url), client: client)
+      end
+
+      #
+      # Construct a new object from the hash.
+      #
+      # @param [Hash] hash
+      #   the hash to create the object with
+      # @param [Hash] options
+      #   the list options
+      #
+      # @option options [Artifactory::Client] :client
+      #   the client object to make the request with
+      #
+      # @return [~Resource::Base]
+      #
+      def from_hash(hash, options = {})
+        instance = new
+        instance.client = extract_client!(options)
+
+        hash.inject(instance) do |instance, (key, value)|
+          method = :"#{Util.underscore(key)}="
+
+          if instance.respond_to?(method)
+            instance.send(method, value)
+          end
+
+          instance
         end
       end
 
@@ -103,10 +170,6 @@ module Artifactory
       def url_safe(value)
         URI.escape(value.to_s)
       end
-
-      def attributes
-        @attributes ||= {}
-      end
     end
 
     attribute :client, ->{ Artifactory.client }
@@ -159,6 +222,35 @@ module Artifactory
       self.class.url_safe(value)
     end
 
+    #
+    # The hash representation
+    #
+    # @example An example hash response
+    #   { 'key' => 'local-repo1', 'includesPattern' => '**/*' }
+    #
+    # @return [Hash]
+    #
+    def to_hash
+      attributes.inject({}) do |hash, (key, value)|
+        unless Resource::Base.has_attribute?(key)
+          hash[Util.camelize(key, true)] = value
+        end
+
+        hash
+      end
+    end
+
+    #
+    # The JSON representation of this object.
+    #
+    # @see Artifactory::Resource::Base#to_json
+    #
+    # @return [String]
+    #
+    def to_json
+      JSON.fast_generate(to_hash)
+    end
+
     # @private
     def to_s
       "#<#{short_classname}>"
@@ -167,7 +259,9 @@ module Artifactory
     # @private
     def inspect
       list = attributes.collect do |key, value|
-        "#{key}: #{value.inspect}" unless key == :client
+        unless Resource::Base.has_attribute?(key)
+          "#{key}: #{value.inspect}"
+        end
       end.compact
 
       "#<#{short_classname} #{list.join(', ')}>"

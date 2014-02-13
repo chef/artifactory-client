@@ -46,51 +46,6 @@ module Artifactory
       rescue Error::NotFound
         nil
       end
-
-      #
-      # Construct a group from the given URL.
-      #
-      # @example Create an group object from the given URL
-      #   Group.from_url('/security/groups/readers') #=> #<Resource::Group>
-      #
-      # @param [Artifactory::Client] client
-      #   the client object to make the request with
-      # @param [String] url
-      #   the URL to find the group from
-      #
-      # @return [Resource::Group]
-      #
-      def from_url(url, options = {})
-        client = extract_client!(options)
-        from_hash(client.get(url), client: client)
-      end
-
-      #
-      # Create a instance from the given Hash. This method extracts the "safe"
-      # information from the hash and adds them to the instance.
-      #
-      # @example Create a new group from a hash
-      #   Group.from_hash('realmAttributes' => '...', 'name' => '...')
-      #
-      # @param [Artifactory::Client] client
-      #   the client object to make the request with
-      # @param [Hash] hash
-      #   the hash to create the instance from
-      #
-      # @return [Resource::Group]
-      #
-      def from_hash(hash, options = {})
-        client = extract_client!(options)
-
-        new.tap do |instance|
-          instance.auto_join        = hash['autoJoin']
-          instance.client           = client
-          instance.description      = hash['description']
-          instance.name             = hash['name']
-          instance.realm            = hash['realm']
-          instance.realm_attributes = hash['realmAttributes']
-        end
-      end
     end
 
     attribute :auto_join
@@ -120,30 +75,6 @@ module Artifactory
     def save
       client.put(api_path, to_json, headers)
       true
-    end
-
-    #
-    # The hash format for this group.
-    #
-    # @return [Hash]
-    #
-    def to_hash
-      {
-        'autoJoin'        => auto_join,
-        'description'     => description,
-        'name'            => name,
-        'realm'           => realm,
-        'realmAttributes' => realm_attributes,
-      }
-    end
-
-    #
-    # The JSON representation of this resource.
-    #
-    # @return [String]
-    #
-    def to_json
-      JSON.fast_generate(to_hash)
     end
 
     private

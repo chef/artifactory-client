@@ -46,54 +46,6 @@ module Artifactory
       rescue Error::NotFound
         nil
       end
-
-      #
-      # Construct a user from the given URL.
-      #
-      # @example Create an user object from the given URL
-      #   User.from_url('/security/users/readers') #=> #<Resource::User>
-      #
-      # @param [Artifactory::Client] client
-      #   the client object to make the request with
-      # @param [String] url
-      #   the URL to find the user from
-      #
-      # @return [Resource::User]
-      #
-      def from_url(url, options = {})
-        client = extract_client!(options)
-        from_hash(client.get(url), client: client)
-      end
-
-      #
-      # Create a instance from the given Hash. This method extracts the "safe"
-      # information from the hash and adds them to the instance.
-      #
-      # @example Create a new user from a hash
-      #   User.from_hash('realmAttributes' => '...', 'name' => '...')
-      #
-      # @param [Artifactory::Client] client
-      #   the client object to make the request with
-      # @param [Hash] hash
-      #   the hash to create the instance from
-      #
-      # @return [Resource::User]
-      #
-      def from_hash(hash, options = {})
-        client = extract_client!(options)
-
-        new.tap do |instance|
-          instance.admin                      = !!hash['admin']
-          instance.email                      = hash['email']
-          instance.groups                     = Array(hash['groups'])
-          instance.internal_password_disabled = hash['internalPasswordDisabled']
-          instance.last_logged_in             = hash['lastLoggedIn']
-          instance.name                       = hash['name']
-          instance.password                   = hash['password']
-          instance.profile_updatable          = !!hash['profileUpdatable']
-          instance.realm                      = hash['realm']
-        end
-      end
     end
 
     attribute :admin, false
@@ -127,34 +79,6 @@ module Artifactory
     def save
       client.put(api_path, to_json, headers)
       true
-    end
-
-    #
-    # The hash format for this user.
-    #
-    # @return [Hash]
-    #
-    def to_hash
-      {
-        'admin'                    => admin,
-        'email'                    => email,
-        'groups'                   => groups,
-        'internalPasswordDisabled' => internal_password_disabled,
-        'lastLoggedIn'             => last_logged_in,
-        'name'                     => name,
-        'password'                 => password,
-        'profileUpdatable'         => profile_updatable,
-        'realm'                    => realm,
-      }
-    end
-
-    #
-    # The JSON representation of this resource.
-    #
-    # @return [String]
-    #
-    def to_json
-      JSON.fast_generate(to_hash)
     end
 
     private

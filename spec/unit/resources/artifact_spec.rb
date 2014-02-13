@@ -245,10 +245,10 @@ module Artifactory
       it 'creates a new instnace' do
         instance = described_class.from_hash(hash)
         expect(instance).to be_a(described_class)
-        expect(instance.api_path).to eq('http://localhost:8080/artifactory/api/storage/libs-release-local/org/acme/lib/ver/lib-ver.pom')
+        expect(instance.uri).to eq('http://localhost:8080/artifactory/api/storage/libs-release-local/org/acme/lib/ver/lib-ver.pom')
         expect(instance.client).to be(client)
         expect(instance.created).to eq(Time.parse('2014-01-01 10:00 UTC'))
-        expect(instance.download_path).to eq('http://localhost:8080/artifactory/libs-release-local/org/acme/lib/ver/lib-ver.pom')
+        expect(instance.download_uri).to eq('http://localhost:8080/artifactory/libs-release-local/org/acme/lib/ver/lib-ver.pom')
         expect(instance.last_modified).to eq(Time.parse('2014-01-01 11:00 UTC'))
         expect(instance.last_updated).to eq(Time.parse('2014-01-01 12:00 UTC'))
         expect(instance.md5).to eq('MD5123')
@@ -274,7 +274,7 @@ module Artifactory
 
       it 'sends DELETE to the client' do
         subject.client = client
-        subject.download_path = '/artifact.deb'
+        subject.download_uri = '/artifact.deb'
 
         expect(client).to receive(:delete)
         subject.delete
@@ -300,15 +300,15 @@ module Artifactory
         { 'properties' => properties }
       end
       let(:client) { double(get: response) }
-      let(:api_path) { '/artifact.deb' }
+      let(:uri) { '/artifact.deb' }
 
       before do
         subject.client   = client
-        subject.api_path = api_path
+        subject.uri = uri
       end
 
       it 'gets the properties from the server' do
-        expect(client).to receive(:get).with(api_path, properties: nil).once
+        expect(client).to receive(:get).with(uri, properties: nil).once
         expect(subject.properties).to eq(properties)
       end
 
@@ -323,11 +323,11 @@ module Artifactory
         { 'licenses' => [{ 'name' => 'LGPL v3' }] }
       end
       let(:client) { double(get: compliance) }
-      let(:api_path) { '/artifact.deb' }
+      let(:uri) { '/artifact.deb' }
 
       before do
         subject.client   = client
-        subject.api_path = api_path
+        subject.uri = uri
       end
 
       it 'gets the compliance from the server' do
@@ -349,7 +349,7 @@ module Artifactory
       before { described_class.send(:public, :relative_path) }
 
       it 'parses the relative path' do
-        subject.api_path = '/api/storage/foo/bar/zip'
+        subject.uri = '/api/storage/foo/bar/zip'
         expect(subject.relative_path).to eq('/foo/bar/zip')
       end
     end
@@ -360,7 +360,7 @@ module Artifactory
         described_class.send(:public, :copy_or_move)
 
         subject.client   = client
-        subject.api_path = '/api/storage/foo/bar/artifact.deb'
+        subject.uri = '/api/storage/foo/bar/artifact.deb'
       end
 
       it 'sends POST to the client with parsed params' do

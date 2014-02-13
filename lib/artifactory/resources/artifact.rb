@@ -257,67 +257,46 @@ module Artifactory
       end
 
       #
-      # Construct an artifact from the given URL.
-      #
-      # @example Create an artifact object from the given URL
-      #   Artifact.from_url('/path/to/some.deb') #=> #<Resource::Artifact>
-      #
-      # @param [Artifactory::Client] client
-      #   the client object to make the request with
-      # @param [String] url
-      #   the URL to find the artifact from
-      #
-      # @return [Resource::Artifact]
-      #
-      def from_url(url, options = {})
-        client = extract_client!(options)
-        from_hash(client.get(url), client: client)
-      end
-
-      #
-      # Create a instance from the given Hash. This method extracts the "safe"
-      # information from the hash and adds them to the instance.
-      #
-      # @example Create a new resource from a hash
-      #   Artifact.from_hash('downloadUri' => '...', 'size' => '...')
-      #
-      # @param [Artifactory::Client] client
-      #   the client object to make the request with
-      # @param [Hash] hash
-      #   the hash to create the instance from
-      #
-      # @return [Resource::Artifact]
+      # @see Artifactory::Resource::Base.from_hash
       #
       def from_hash(hash, options = {})
-        client = extract_client!(options)
-
-        new.tap do |instance|
-          instance.api_path      = hash['uri']
-          instance.client        = client
-          instance.created       = Time.parse(hash['created'])
-          instance.download_path = hash['downloadUri']
-          instance.last_modified = Time.parse(hash['lastModified'])
-          instance.last_updated  = Time.parse(hash['lastUpdated'])
-          instance.md5           = hash['checksums']['md5']
-          instance.mime_type     = hash['mimeType']
-          instance.repo          = hash['repo']
-          instance.sha1          = hash['checksums']['sha1']
-          instance.size          = hash['size'].to_i
+        super.tap do |instance|
+          instance.created       = Time.parse(instance.created) rescue nil
+          instance.last_modified = Time.parse(instance.last_modified) rescue nil
+          instance.last_updated  = Time.parse(instance.last_updated)  rescue nil
+          instance.size          = instance.size.to_i
         end
       end
     end
 
-    attribute :api_path, ->{ raise 'API path missing!' }
+    attribute :uri, ->{ raise 'API path missing!' }
+    attribute :checksums
     attribute :created
-    attribute :download_path, ->{ raise 'Download path missing!' }
+    attribute :download_uri, ->{ raise 'Download URI missing!' }
     attribute :last_modified
     attribute :last_updated
     attribute :local_path, ->{ raise 'Local destination missing!' }
     attribute :mime_type
-    attribute :md5
     attribute :repo
-    attribute :sha1
     attribute :size
+
+    #
+    # The SHA of this artifact.
+    #
+    # @return [String]
+    #
+    def sha1
+      checksums && checksums['sha1']
+    end
+
+    #
+    # The MD5 of this artifact.
+    #
+    # @return [String]
+    #
+    def md5
+      checksums && checksums['md5']
+    end
 
     #
     # @see Artifact#copy_or_move
@@ -334,7 +313,7 @@ module Artifactory
     #   true if the object was deleted successfully, false otherwise
     #
     def delete
-      !!client.delete(download_path)
+      !!client.delete(download_uri)
     rescue Error::NotFound
       false
     end
@@ -356,7 +335,7 @@ module Artifactory
     #   the list of properties
     #
     def properties
-      @properties ||= client.get(api_path, properties: nil)['properties']
+      @properties ||= client.get(uri, properties: nil)['properties']
     end
 
     #
@@ -402,13 +381,13 @@ module Artifactory
       FileUtils.mkdir_p(target) unless File.exists?(target)
 
       # Use the server artifact's filename if one wasn't given
-      filename = options[:filename] || File.basename(download_path)
+      filename = options[:filename] || File.basename(download_uri)
 
       # Construct the full path for the file
       destination = File.join(targer, filename)
 
       File.open(File.join(destination, filename), 'wb') do |file|
-        file.write(_get(download_path))
+        file.write(client.get(download_uri))
       end
 
       destination
@@ -426,7 +405,7 @@ module Artifactory
     # @return [String]
     #
     def relative_path
-      @relative_path ||= api_path.split('/api/storage', 2).last
+      @relative_path ||= uri.split('/api/storage', 2).last
     end
 
     #
