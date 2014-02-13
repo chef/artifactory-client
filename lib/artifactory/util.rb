@@ -29,12 +29,18 @@ module Artifactory
     #
     # @return [String]
     #
-    def camelize(string)
-      string
+    def camelize(string, lowercase = false)
+      result = string
         .to_s
         .split('_')
         .map { |e| e.capitalize }
         .join
+
+      if lowercase
+        result[0,1].downcase + result[1..-1]
+      else
+        result
+      end
     end
 
     #
