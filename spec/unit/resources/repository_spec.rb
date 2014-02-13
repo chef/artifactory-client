@@ -87,6 +87,19 @@ module Artifactory
       end
     end
 
+    describe '#save' do
+      let(:client) { double }
+      before do
+        subject.client = client
+        subject.key = 'libs-release-local'
+      end
+
+      it 'PUTS the file to the server' do
+        expect(client).to receive(:put).with('/api/repositories/libs-release-local', kind_of(String), kind_of(Hash))
+        subject.save
+      end
+    end
+
     describe '#upload' do
       let(:client) { double }
       before do

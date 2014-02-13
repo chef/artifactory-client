@@ -9,5 +9,12 @@ module Artifactory
         expect(results.first).to be_a(described_class)
       end
     end
+
+    describe '#save' do
+      it 'saves the repository to the server' do
+        repository = described_class.new(key: 'libs-testing-local')
+        expect(repository.save).to be_true
+      end
+    end
   end
 end

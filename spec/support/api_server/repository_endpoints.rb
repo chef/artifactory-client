@@ -70,6 +70,11 @@ module Artifactory
           'rclass'                       => 'local'
         })
       end
+
+      app.put('/api/repositories/libs-testing-local') do
+        content_type 'text/plain'
+        "Repository libs-resting-local created successfully!\n"
+      end
     end
   end
 end
