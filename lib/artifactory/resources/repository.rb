@@ -64,7 +64,8 @@ module Artifactory
     attribute :suppress_pom_checks, false
 
     def save
-      # client.put(api_path, to_json, headers)
+      client.put(api_path, to_json, headers)
+      true
     end
 
     #
@@ -197,7 +198,7 @@ module Artifactory
     # @return [String]
     #
     def api_path
-      @api_path ||= "/api/repositories/#{url_safe(name)}"
+      "/api/repositories/#{url_safe(key)}"
     end
 
     #

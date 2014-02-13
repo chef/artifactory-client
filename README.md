@@ -123,6 +123,10 @@ repo #=> #<Artifactory::Resource::Repository ...>
 # Get information about the repository
 repo.description => "The default storage mechanism for..."
 
+# Change the repository
+repo.description = "This is a new description"
+repo.save
+
 # Upload an artifact to the repo
 repo.upload('/local/path/to/file', param_1: 'foo', param_2: 'bar')
 
