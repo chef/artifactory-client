@@ -18,9 +18,9 @@ module Artifactory
         ]
       end
       before do
-        described_class.stub(:find).with(name: 'a', client: client).and_return('a')
-        described_class.stub(:find).with(name: 'b', client: client).and_return('b')
-        described_class.stub(:find).with(name: 'c', client: client).and_return('c')
+        described_class.stub(:find).with('a', client: client).and_return('a')
+        described_class.stub(:find).with('b', client: client).and_return('b')
+        described_class.stub(:find).with('c', client: client).and_return('c')
       end
 
       it 'gets /api/repositories' do
@@ -38,7 +38,7 @@ module Artifactory
 
       it 'gets /api/repositories/#{name}' do
         expect(client).to receive(:get).with('/api/repositories/libs-release-local').once
-        described_class.find(name: 'libs-release-local')
+        described_class.find('libs-release-local')
       end
     end
 
@@ -81,9 +81,9 @@ module Artifactory
         expect(instance.maximum_unique_snapshots).to eq(0)
         expect(instance.notes).to eq('')
         expect(instance.property_sets).to eq(['artifactory'])
+        expect(instance.rclass).to eq('local')
         expect(instance.snapshot_version_behavior).to eq('unique')
         expect(instance.suppress_pom_checks).to be_false
-        expect(instance.type).to eq('local')
       end
     end
 

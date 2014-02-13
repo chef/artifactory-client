@@ -16,7 +16,7 @@ module Artifactory
       def all(options = {})
         client = extract_client!(options)
         client.get('/api/repositories').map do |hash|
-          find(name: hash['key'], client: client)
+          find(hash['key'], client: client)
         end.compact
       end
 
@@ -38,12 +38,11 @@ module Artifactory
       #   an instance of the repository that matches the given name, or +nil+
       #   if one does not exist
       #
-      def find(options = {})
+      def find(name, options = {})
         client = extract_client!(options)
-        name   = options[:name]
 
-        result = client.get("/api/repositories/#{url_safe(name)}")
-        from_hash(result, client: client)
+        response = client.get("/api/repositories/#{url_safe(name)}")
+        from_hash(response, client: client)
       rescue Error::NotFound
         nil
       end
