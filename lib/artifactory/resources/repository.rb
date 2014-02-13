@@ -192,7 +192,7 @@ module Artifactory
     private
 
     #
-    # The path to this user on the server.
+    # The path to this repository on the server.
     #
     # @return [String]
     #
