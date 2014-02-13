@@ -46,41 +46,6 @@ module Artifactory
       rescue Error::NotFound
         nil
       end
-
-      #
-      # Create a instance from the given Hash. This method extracts the "safe"
-      # information from the hash and adds them to the instance.
-      #
-      # @example Create a new resource from a hash
-      #   Repository.from_hash('downloadUri' => '...', 'size' => '...')
-      #
-      # @param [Artifactory::Client] client
-      #   the client object to make the request with
-      # @param [Hash] hash
-      #   the hash to create the instance from
-      #
-      # @return [Resource::Repository]
-      #
-      def from_hash(hash, options = {})
-        client = extract_client!(options)
-
-        new.tap do |instance|
-          instance.blacked_out               = hash['blackedOut']
-          instance.description               = hash['description']
-          instance.checksum_policy           = hash['checksumPolicyType']
-          instance.excludes_pattern          = hash['excludesPattern']
-          instance.handle_releases           = hash['handleReleases']
-          instance.handle_snapshots          = hash['handleSnapshots']
-          instance.includes_pattern          = hash['includesPattern']
-          instance.key                       = hash['key']
-          instance.maximum_unique_snapshots  = hash['maxUniqueSnapshots']
-          instance.notes                     = hash['notes']
-          instance.property_sets             = hash['propertySets']
-          instance.snapshot_version_behavior = hash['snapshotVersionBehavior']
-          instance.suppress_pom_checks       = hash['suppressPomConsistencyChecks']
-          instance.type                      = hash['rclass']
-        end
-      end
     end
 
     attribute :blacked_out, false
@@ -94,9 +59,13 @@ module Artifactory
     attribute :maximum_unique_snapshots, 0
     attribute :notes
     attribute :property_sets, []
+    attribute :rclass, 'local'
     attribute :snapshot_version_behavior, 'non-unique'
     attribute :suppress_pom_checks, false
-    attribute :type
+
+    def save
+      # client.put(api_path, to_json, headers)
+    end
 
     #
     # Upload an artifact into the repository. If the first parameter is a File
@@ -142,7 +111,7 @@ module Artifactory
              end
 
       matrix   = to_matrix_properties(properties)
-      endpoint = File.join("#{url_safe_key}#{matrix}", path)
+      endpoint = File.join("#{url_safe(key)}#{matrix}", path)
 
       client.put(endpoint, { file: file }, headers)
     end
@@ -210,7 +179,7 @@ module Artifactory
     #
     #
     def files
-      response = get("/api/storage/#{url_safe_key}", {
+      response = get("/api/storage/#{url_safe(key)}", {
         deep:            0,
         listFolders:     0,
         mdTimestamps:    0,
@@ -223,10 +192,12 @@ module Artifactory
     private
 
     #
+    # The path to this user on the server.
     #
+    # @return [String]
     #
-    def url_safe_key
-      @url_safe_key ||= URI.escape(key.to_s)
+    def api_path
+      @api_path ||= "/api/repositories/#{url_safe(name)}"
     end
 
     #
@@ -244,6 +215,36 @@ module Artifactory
         nil
       else
         ";#{properties.join(';')}"
+      end
+    end
+
+    #
+    # The default headers for this object. This includes the +Content-Type+.
+    #
+    # @return [Hash]
+    #
+    def headers
+      @headers ||= {
+        'Content-Type' => content_type
+      }
+    end
+
+    #
+    # The default Content-Type for this repository. It varies based on the
+    # repository type.
+    #
+    # @return [String]
+    #
+    def content_type
+      case rclass.to_s.downcase
+      when 'local'
+        'application/vnd.org.jfrog.artifactory.repositories.LocalRepositoryConfiguration+json'
+      when 'remote'
+        'application/vnd.org.jfrog.artifactory.repositories.RemoteRepositoryConfiguration+json'
+      when 'virtual'
+        'application/vnd.org.jfrog.artifactory.repositories.VirtualRepositoryConfiguration+json'
+      else
+        raise "Unknown Repository type `#{rclass}'!"
       end
     end
   end
