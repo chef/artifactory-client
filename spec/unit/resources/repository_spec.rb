@@ -101,7 +101,7 @@ module Artifactory
     end
 
     describe '#upload' do
-      let(:client) { double }
+      let(:client) { double(put: {}) }
       before do
         subject.client = client
         subject.key    = 'libs-release-local'

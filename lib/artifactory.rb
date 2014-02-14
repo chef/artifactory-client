@@ -70,9 +70,5 @@ module Artifactory
   end
 end
 
-require 'i18n'
-I18n.enforce_available_locales = false
-I18n.load_path << Dir[Artifactory.root.join('locales', '*.yml').to_s]
-
 # Load the initial default values
 Artifactory.setup

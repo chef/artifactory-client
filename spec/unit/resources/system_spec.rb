@@ -38,7 +38,8 @@ module Artifactory
 
       context 'when the system is not running' do
         it 'returns false' do
-          client.stub(:get).and_raise(Error::ConnectionError)
+          client.stub(:get)
+            .and_raise(Error::ConnectionError.new(Artifactory.endpoint))
           expect(described_class.ping).to be_false
         end
       end

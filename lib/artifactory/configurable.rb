@@ -15,7 +15,12 @@ module Artifactory
           :endpoint,
           :username,
           :password,
-          :proxy,
+          :proxy_address,
+          :proxy_password,
+          :proxy_port,
+          :proxy_username,
+          :ssl_pem_file,
+          :ssl_verify,
           :user_agent,
         ]
       end

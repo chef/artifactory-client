@@ -1,6 +1,5 @@
-require 'httpclient'
 require 'json'
-require 'rexml/document'
+require 'net/http'
 require 'uri'
 
 module Artifactory
@@ -68,137 +67,245 @@ module Artifactory
     #
     # Make a HTTP GET request
     #
-    # @param [String] path
-    #   the path to get, relative to {Defaults.endpoint}
+    # @param path (see Client#request)
+    # @param [Hash] params
+    #   the list of query params
+    # @param headers (see Client#request)
     #
-    def get(path, *args, &block)
-      request(:get, path, *args, &block)
+    # @raise (see Client#request)
+    # @return (see Client#request)
+    #
+    def get(path, params = {}, headers = {})
+      request(:get, path, params, headers)
     end
 
     #
     # Make a HTTP POST request
     #
-    # @param [String] path
-    #   the path to post, relative to {Defaults.endpoint}
+    # @param path (see Client#request)
+    # @param [String, #read] data
+    #   the body to use for the request
+    # @param headers (see Client#request)
     #
-    def post(path, *args, &block)
-      request(:post, path, *args, &block)
+    # @raise (see Client#request)
+    # @return (see Client#request)
+    #
+    def post(path, data, headers = {})
+      request(:post, path, data, headers)
     end
 
     #
     # Make a HTTP PUT request
     #
-    # @param [String] path
-    #   the path to put, relative to {Defaults.endpoint}
+    # @param path (see Client#request)
+    # @param data (see Client#post)
+    # @param headers (see Client#request)
     #
-    def put(path, *args, &block)
-      request(:put, path, *args, &block)
+    # @raise (see Client#request)
+    # @return (see Client#request)
+    #
+    def put(path, data, headers = {})
+      request(:put, path, data, headers)
     end
 
     #
     # Make a HTTP PATCH request
     #
-    # @param [String] path
-    #   the path to patch, relative to {Defaults.endpoint}
+    # @param path (see Client#request)
+    # @param data (see Client#post)
+    # @param headers (see Client#request)
     #
-    def patch(path, *args, &block)
-      request(:patch, path, *args, &block)
+    # @raise (see Client#request)
+    # @return (see Client#request)
+    #
+    def patch(path, data, headers = {})
+      request(:patch, path, data, headers)
     end
 
     #
     # Make a HTTP DELETE request
     #
-    # @param [String] path
-    #   the path to delete, relative to {Defaults.endpoint}
+    # @param path (see Client#request)
+    # @param params (see Client#get)
+    # @param headers (see Client#request)
     #
-    def delete(path, *args, &block)
-      request(:delete, path, *args, &block)
+    # @raise (see Client#request)
+    # @return (see Client#request)
+    #
+    def delete(path, params = {}, headers = {})
+      request(:delete, path, params, headers)
     end
 
     #
-    # Make a HTTP HEAD request
+    # Make an HTTP request with the given verb, data, params, and headers. If
+    # the response has a return type of JSON, the JSON is automatically parsed
+    # and returned as a hash; otherwise it is returned as a string.
     #
+    # @raise [Error::HTTPError]
+    #   if the request is not an HTTP 200 OK
+    #
+    # @param [Symbol] verb
+    #   the lowercase symbol of the HTTP verb (e.g. :get, :delete)
     # @param [String] path
-    #   the path to head, relative to {Defaults.endpoint}
+    #   the absolute or relative path from {Defaults.endpoint} to make the
+    #   request against
+    # @param [#read, Hash, nil] data
+    #   the data to use (varies based on the +verb+)
+    # @param [Hash] headers
+    #   the list of headers to use
     #
-    def head(path, *args, &block)
-      request(:head, path, *args, &block)
-    end
-
+    # @return [String, Hash]
+    #   the response body
     #
-    # The actually HTTPClient agent.
-    #
-    # @return [HTTPClient]
-    #
-    def agent
-      @agent ||= begin
-        agent = HTTPClient.new(endpoint)
+    def request(verb, path, data = {}, headers = {})
+      # Build the URI and request object from the given information
+      uri = build_uri(verb, path, data)
+      request = class_for_request(verb).new(uri.request_uri)
 
-        agent.agent_name = user_agent
-
-        # Check if authentication was given
-        if username && password
-          agent.set_auth(endpoint, username, password)
-
-          # https://github.com/nahi/httpclient/issues/63#issuecomment-2377919
-          agent.www_auth.basic_auth.challenge(endpoint)
-        end
-
-        # Check if proxy settings were given
-        if proxy
-          agent.proxy = proxy
-        end
-
-        agent
-      end
-    end
-
-    #
-    # Make an HTTP reequest with the given verb and path.
-    #
-    # @param [String, Symbol] verb
-    #   the HTTP verb to use
-    # @param [String] path
-    #   the absolute or relative URL to use, expanded relative to {Defaults.endpoint}
-    #
-    # @return [Object]
-    #
-    def request(verb, path, *args, &block)
-      url = URI.parse(path)
-
-      # Don't merge absolute URLs
-      unless url.absolute?
-        url = URI.parse(File.join(endpoint, path)).to_s
+      # Add headers
+      default_headers.merge(headers).each do |key, value|
+        request.add_field(key, value)
       end
 
-      # Covert the URL back into a string
-      url = url.to_s
+      # Add basic authentication
+      if username && password
+        request.basic_auth(username, password)
+      end
 
-      # Make the actual request
-      response = agent.send(verb, url, *args, &block)
+      # Setup PATCH/POST/PUT
+      if [:patch, :post, :put].include?(verb)
+        if data.respond_to?(:read)
+          request.body_stream = data
+        elsif data.is_a?(Hash)
+          request.form_data = data
+        else
+          request.body = data
+        end
+      end
 
-      case response.status.to_i
-      when 200..399
-        parse_response(response)
-      when 400
-        raise Error::BadRequest.new(url: url, body: response.body)
-      when 401
-        raise Error::Unauthorized.new(url: url)
-      when 403
-        raise Error::Forbidden.new(url: url)
-      when 404
-        raise Error::NotFound.new(url: url)
-      when 405
-        raise Error::MethodNotAllowed.new(url: url)
-      else
-        raise Error::ConnectionError.new(url: url, body: response.body)
+      # Create the HTTP connection object - since the proxy information defaults
+      # to +nil+, we can just pass it to the initializer method instead of doing
+      # crazy strange conditionals.
+      connection = Net::HTTP.new(uri.host, uri.port,
+        proxy_address, proxy_port, proxy_username, proxy_password)
+
+      # Apply SSL, if applicable
+      if uri.scheme == 'https'
+        require 'net/https' unless defined?(Net::HTTPS)
+
+        # Turn on SSL
+        connection.use_ssl = true
+
+        # Custom pem files, no problem!
+        if ssl_pem_file
+          pem = File.read(ssl_pem_file)
+          connection.cert = OpenSSL::X509::Certificate.new(pem)
+          connection.key = OpenSSL::PKey::RSA.new(pem)
+          connection.verify_mode = OpenSSL::SSL::VERIFY_PEER
+        end
+
+        # Naughty, naughty, naughty! Don't blame when when someone hops in
+        # and executes a MITM attack!
+        unless ssl_verify
+          connection.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
+      end
+
+      # Create a connection using the block form, which will ensure the socket
+      # is properly closed in the event of an error.
+      connection.start do |http|
+        response = http.request(request)
+
+        case response
+        when Net::HTTPRedirection
+          redirect = URI.parse(response['location'])
+          request(verb, redirect, params, headers)
+        when Net::HTTPSuccess
+          success(response)
+        else
+          error(response)
+        end
       end
     rescue SocketError, Errno::ECONNREFUSED, EOFError
-      raise Error::ConnectionError.new(url: url, body: <<-EOH.gsub(/^ {8}/, ''))
-        The server is not currently accepting connections.
-      EOH
+      raise Error::ConnectionError.new(endpoint)
     end
 
+    #
+    # The list of default headers (such as Keep-Alive and User-Agent) for the
+    # client object.
+    #
+    # @return [Hash]
+    #
+    def default_headers
+      {
+        'Connection' => 'keep-alive',
+        'Keep-Alive' => '30',
+        'User-Agent' => user_agent,
+      }
+    end
+
+    #
+    # Construct a URL from the given verb and path. If the request is a GET or
+    # DELETE request, the params are assumed to be query params are are
+    # converted as such using {Client#to_query_string}.
+    #
+    # If the path is relative, it is merged with the {Defaults.endpoint}
+    # attribute. If the path is absolute, it is converted to a URI object and
+    # returned.
+    #
+    # @param [Symbol] verb
+    #   the lowercase HTTP verb (e.g. :+get+)
+    # @param [String] path
+    #   the absolute or relative HTTP path (url) to get
+    # @param [Hash] params
+    #   the list of params to build the URI with (for GET and DELETE requests)
+    #
+    # @return [URI]
+    #
+    def build_uri(verb, path, params = {})
+      # Add any query string parameters
+      if [:delete, :get].include?(verb)
+        path = [path, to_query_string(params)].compact.join('?')
+      end
+
+      # Parse the URI
+      uri = URI.parse(path)
+
+      # Don't merge absolute URLs
+      uri = URI.parse(File.join(endpoint, path)) unless uri.absolute?
+
+      # Return the URI object
+      uri
+    end
+
+    #
+    # Helper method to get the corresponding {Net::HTTP} class from the given
+    # HTTP verb.
+    #
+    # @param [#to_s] verb
+    #   the HTTP verb to create a class from
+    #
+    # @return [Class]
+    #
+    def class_for_request(verb)
+      Net::HTTP.const_get(verb.to_s.capitalize)
+    end
+
+    #
+    # Convert the given hash to a list of query string parameters. Each key and
+    # value in the hash is URI-escaped for safety.
+    #
+    # @param [Hash] hash
+    #   the hash to create the query string from
+    #
+    # @return [String, nil]
+    #   the query string as a string, or +nil+ if there are no params
+    #
+    def to_query_string(hash)
+      hash.map do |key, value|
+        "#{URI.escape(key.to_s)}=#{URI.escape(value.to_s)}"
+      end.join('&')[/.+/]
+    end
 
     #
     # Parse the response object and manipulate the result based on the given
@@ -211,14 +318,31 @@ module Artifactory
     # @return [String, Hash]
     #   the parsed response, as an object
     #
-    def parse_response(response)
-      content_type = response.headers['Content-Type']
-
-      if content_type && content_type.include?('json')
+    def success(response)
+      if (response.content_type || '').include?('json')
         JSON.parse(response.body)
       else
         response.body
       end
+    end
+
+    #
+    # Raise a response error, extracting as much information from the server's
+    # response as possible.
+    #
+    # @raise [Error::HTTPError]
+    #
+    # @param [HTTP::Message] response
+    #   the response object from the request
+    #
+    def error(response)
+      error = JSON.parse(response.body)['errors'].first
+      raise Error::HTTPError.new(error)
+    rescue JSON::ParserError
+      raise Error::HTTPError.new(
+        'status'  => response.code,
+        'message' => response.body,
+      )
     end
   end
 end
