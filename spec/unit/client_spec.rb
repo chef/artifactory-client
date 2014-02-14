@@ -43,43 +43,42 @@ module Artifactory
 
     describe '#get' do
       it 'delegates to the #request method' do
-        expect(subject).to receive(:request).with(:get, '/foo')
+        expect(subject).to receive(:request).with(:get, '/foo', {}, {})
         subject.get('/foo')
       end
     end
 
     describe '#post' do
+      let(:data) { double }
+
       it 'delegates to the #request method' do
-        expect(subject).to receive(:request).with(:post, '/foo')
-        subject.post('/foo')
+        expect(subject).to receive(:request).with(:post, '/foo', data, {})
+        subject.post('/foo', data)
       end
     end
 
     describe '#put' do
+      let(:data) { double }
+
       it 'delegates to the #request method' do
-        expect(subject).to receive(:request).with(:put, '/foo')
-        subject.put('/foo')
+        expect(subject).to receive(:request).with(:put, '/foo', data, {})
+        subject.put('/foo', data)
       end
     end
 
     describe '#patch' do
+      let(:data) { double }
+
       it 'delegates to the #request method' do
-        expect(subject).to receive(:request).with(:patch, '/foo')
-        subject.patch('/foo')
+        expect(subject).to receive(:request).with(:patch, '/foo', data, {})
+        subject.patch('/foo', data)
       end
     end
 
     describe '#delete' do
       it 'delegates to the #request method' do
-        expect(subject).to receive(:request).with(:delete, '/foo')
+        expect(subject).to receive(:request).with(:delete, '/foo', {}, {})
         subject.delete('/foo')
-      end
-    end
-
-    describe '#head' do
-      it 'delegates to the #request method' do
-        expect(subject).to receive(:request).with(:head, '/foo')
-        subject.head('/foo')
       end
     end
 
