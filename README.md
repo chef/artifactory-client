@@ -56,7 +56,10 @@ Artifactory.configure do |config|
 
   # You can specify any proxy information, including any authentication
   # information in the URL.
-  config.proxy = 'https://user:password@my.proxy.server'
+  config.proxy_username = 'user'
+  config.proxy_password = 'password;
+  config.proxy_address  = 'my.proxy.server'
+  config.proxy_port     = 8080
 end
 ```
 

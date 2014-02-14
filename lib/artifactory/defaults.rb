@@ -55,12 +55,39 @@ module Artifactory
       end
 
       #
-      # The HTTP Proxy information as a string
+      # The HTTP Proxy server address as a string
       #
       # @return [String, nil]
       #
-      def proxy
-        ENV['ARTIFACTORY_PROXY']
+      def proxy_address
+        ENV['ARTIFACTORY_PROXY_ADDRESS']
+      end
+
+      #
+      # The HTTP Proxy user password as a string
+      #
+      # @return [String, nil]
+      #
+      def proxy_password
+        ENV['ARTIFACTORY_PROXY_PASSWORD']
+      end
+
+      #
+      # The HTTP Proxy server port as a string
+      #
+      # @return [String, nil]
+      #
+      def proxy_port
+        ENV['ARTIFACTORY_PROXY_PORT']
+      end
+
+      #
+      # The HTTP Proxy server username as a string
+      #
+      # @return [String, nil]
+      #
+      def proxy_username
+        ENV['ARTIFACTORY_PROXY_USERNAME']
       end
     end
   end
