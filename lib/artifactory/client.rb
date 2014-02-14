@@ -179,6 +179,8 @@ module Artifactory
         end
       end
 
+      # Create a connection using the block form, which will ensure the socket
+      # is properly closed in the event of an error.
       connection.start do |http|
         response = http.request(request)
 
@@ -196,6 +198,12 @@ module Artifactory
       raise Error::ConnectionError.new(endpoint)
     end
 
+    #
+    # The list of default headers (such as Keep-Alive and User-Agent) for the
+    # client object.
+    #
+    # @return [Hash]
+    #
     def default_headers
       {
         'Connection' => 'keep-alive',
@@ -204,6 +212,23 @@ module Artifactory
       }
     end
 
+    #
+    # Construct a URL from the given verb and path. If the request is a GET or
+    # DELETE request, the params are assumed to be query params are are
+    # converted as such using {to_query_string}.
+    #
+    # If the path is relative, it is merged with the {endpoint} attribute. If
+    # the path is absolute, it is converted to a URI object and returned.
+    #
+    # @param [Symbol] verb
+    #   the lowercase HTTP verb (e.g. :+get+)
+    # @param [String] path
+    #   the absolute or relative HTTP path (url) to get
+    # @param [Hash] params
+    #   the list of params to build the URI with (for GET and DELETE requests)
+    #
+    # @return [URI]
+    #
     def build_uri(verb, path, params = {})
       # Add any query string parameters
       if [:delete, :get].include?(verb)
@@ -220,10 +245,29 @@ module Artifactory
       uri
     end
 
+    #
+    # Helper method to get the corresponding {Net::HTTP} class from the given
+    # HTTP verb.
+    #
+    # @param [#to_s] verb
+    #   the HTTP verb to create a class from
+    #
+    # @return [Class]
+    #
     def class_for_request(verb)
       Net::HTTP.const_get(verb.to_s.capitalize)
     end
 
+    #
+    # Convert the given hash to a list of query string parameters. Each key and
+    # value in the hash is URI-escaped for safety.
+    #
+    # @param [Hash] hash
+    #   the hash to create the query string from
+    #
+    # @return [String, nil]
+    #   the query string as a string, or +nil+ if there are no params
+    #
     def to_query_string(hash)
       hash.map do |key, value|
         "#{URI.escape(key.to_s)}=#{URI.escape(value.to_s)}"
@@ -250,7 +294,13 @@ module Artifactory
     end
 
     #
+    # Raise a response error, extracting as much information from the server's
+    # response as possible.
     #
+    # @raise [Error::HTTPError]
+    #
+    # @param [HTTP::Message] response
+    #   the response object from the request
     #
     def error(response)
       error = JSON.parse(response.body)['errors'].first
