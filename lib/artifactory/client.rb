@@ -127,9 +127,9 @@ module Artifactory
     #
     #
     #
-    def request(verb, path, params = {}, headers = {})
+    def request(verb, path, data = {}, headers = {})
       # Build the URI and request object from the given information
-      uri = build_uri(verb, path, params)
+      uri = build_uri(verb, path, data)
       request = class_for_request(verb).new(uri.request_uri)
 
       # Add headers
@@ -144,10 +144,12 @@ module Artifactory
 
       # Setup PATCH/POST/PUT
       if [:patch, :post, :put].include?(verb)
-        if params.is_a?(Hash)
-          request.form_data = params
+        if data.respond_to?(:read)
+          request.body_stream = data
+        elsif data.is_a?(Hash)
+          request.form_data = data
         else
-          request.body = params
+          request.body = data
         end
       end
 
