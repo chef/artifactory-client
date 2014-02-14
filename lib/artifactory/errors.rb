@@ -1,11 +1,8 @@
 module Artifactory
   module Error
-    class ArtifactoryError < StandardError
-      def initialize(options = {})
-        class_name = self.class.to_s.split('::').last
-        error_key  = Util.underscore(class_name)
+    # Base class for all errors
+    class ArtifactoryError < StandardError; end
 
-        super I18n.t("artifactory.errors.#{error_key}", options)
       end
     end
 
