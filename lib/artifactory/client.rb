@@ -67,65 +67,95 @@ module Artifactory
     #
     # Make a HTTP GET request
     #
-    # @param [String] path
-    #   the path to get, relative to {Defaults.endpoint}
+    # @param path (see Client#request)
+    # @param [Hash] params
+    #   the list of query params
+    # @param headers (see Client#request)
     #
-    def get(path, *args, &block)
-      request(:get, path, *args, &block)
+    # @raise (see Client#request)
+    # @return (see Client#request)
+    #
+    def get(path, params = {}, headers = {})
+      request(:get, path, params, headers)
     end
 
     #
     # Make a HTTP POST request
     #
-    # @param [String] path
-    #   the path to post, relative to {Defaults.endpoint}
+    # @param path (see Client#request)
+    # @param [String, #read] data
+    #   the body to use for the request
+    # @param headers (see Client#request)
     #
-    def post(path, *args, &block)
-      request(:post, path, *args, &block)
+    # @raise (see Client#request)
+    # @return (see Client#request)
+    #
+    def post(path, data, headers = {})
+      request(:post, path, data, headers)
     end
 
     #
     # Make a HTTP PUT request
     #
-    # @param [String] path
-    #   the path to put, relative to {Defaults.endpoint}
+    # @param path (see Client#request)
+    # @param data (see Client#post)
+    # @param headers (see Client#request)
     #
-    def put(path, *args, &block)
-      request(:put, path, *args, &block)
+    # @raise (see Client#request)
+    # @return (see Client#request)
+    #
+    def put(path, data, headers = {})
+      request(:put, path, data, headers)
     end
 
     #
     # Make a HTTP PATCH request
     #
-    # @param [String] path
-    #   the path to patch, relative to {Defaults.endpoint}
+    # @param path (see Client#request)
+    # @param data (see Client#post)
+    # @param headers (see Client#request)
     #
-    def patch(path, *args, &block)
-      request(:patch, path, *args, &block)
+    # @raise (see Client#request)
+    # @return (see Client#request)
+    #
+    def patch(path, data, headers = {})
+      request(:patch, path, data, headers)
     end
 
     #
     # Make a HTTP DELETE request
     #
-    # @param [String] path
-    #   the path to delete, relative to {Defaults.endpoint}
+    # @param path (see Client#request)
+    # @param params (see Client#get)
+    # @param headers (see Client#request)
     #
-    def delete(path, *args, &block)
-      request(:delete, path, *args, &block)
+    # @raise (see Client#request)
+    # @return (see Client#request)
+    #
+    def delete(path, params = {}, headers = {})
+      request(:delete, path, params, headers)
     end
 
     #
-    # Make a HTTP HEAD request
+    # Make an HTTP request with the given verb, data, params, and headers. If
+    # the response has a return type of JSON, the JSON is automatically parsed
+    # and returned as a hash; otherwise it is returned as a string.
     #
+    # @raise [Error::HTTPError]
+    #   if the request is not an HTTP 200 OK
+    #
+    # @param [Symbol] verb
+    #   the lowercase symbol of the HTTP verb (e.g. :get, :delete)
     # @param [String] path
-    #   the path to head, relative to {Defaults.endpoint}
+    #   the absolute or relative path from {Defaults.endpoint} to make the
+    #   request against
+    # @param [#read, Hash, nil] data
+    #   the data to use (varies based on the +verb+)
+    # @param [Hash] headers
+    #   the list of headers to use
     #
-    def head(path, *args, &block)
-      request(:head, path, *args, &block)
-    end
-
-    #
-    #
+    # @return [String, Hash]
+    #   the response body
     #
     def request(verb, path, data = {}, headers = {})
       # Build the URI and request object from the given information
@@ -217,10 +247,11 @@ module Artifactory
     #
     # Construct a URL from the given verb and path. If the request is a GET or
     # DELETE request, the params are assumed to be query params are are
-    # converted as such using {to_query_string}.
+    # converted as such using {Client#to_query_string}.
     #
-    # If the path is relative, it is merged with the {endpoint} attribute. If
-    # the path is absolute, it is converted to a URI object and returned.
+    # If the path is relative, it is merged with the {Defaults.endpoint}
+    # attribute. If the path is absolute, it is converted to a URI object and
+    # returned.
     #
     # @param [Symbol] verb
     #   the lowercase HTTP verb (e.g. :+get+)
