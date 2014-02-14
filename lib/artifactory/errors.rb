@@ -9,7 +9,6 @@ module Artifactory
       attr_reader :message
 
       def initialize(hash = {})
-        super("motherfucker")
         @code = hash['status'].to_i
         @http = hash['message'].to_s
 
