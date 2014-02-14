@@ -184,7 +184,7 @@ module Artifactory
     #
     #
     def files
-      response = get("/api/storage/#{url_safe(key)}", {
+      response = client.get("/api/storage/#{url_safe(key)}", {
         deep:            0,
         listFolders:     0,
         mdTimestamps:    0,
