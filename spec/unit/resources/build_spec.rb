@@ -25,7 +25,7 @@ module Artifactory
 
       context 'when the system has no builds' do
         it 'returns an empty array' do
-          client.stub(:get).and_raise(Error::NotFound)
+          client.stub(:get).and_raise(Error::HTTPError.new('status' => 404))
           expect(described_class.all).to be_empty
         end
       end

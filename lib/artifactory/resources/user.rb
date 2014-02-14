@@ -43,7 +43,8 @@ module Artifactory
 
         response = client.get("/api/security/users/#{url_safe(name)}")
         from_hash(response, client: client)
-      rescue Error::NotFound
+      rescue Error::HTTPError => e
+        raise unless e.code == 404
         nil
       end
     end
@@ -66,8 +67,9 @@ module Artifactory
     #   true if the object was deleted successfully, false otherwise
     #
     def delete
-      !!client.delete(api_path)
-    rescue Error::NotFound
+      client.delete(api_path)
+      true
+    rescue Error::HTTPError => e
       false
     end
 

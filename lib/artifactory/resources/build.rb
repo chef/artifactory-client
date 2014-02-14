@@ -16,10 +16,11 @@ module Artifactory
       def all(options = {})
         client = extract_client!(options)
         client.get('/api/build')
-      rescue Error::NotFound
+      rescue Error::HTTPError => e
         # Artifactory returns a 404 instead of an empty list when there are no
         # builds. Whoever decided that was a good idea clearly doesn't
         # understand the point of REST interfaces...
+        raise unless e.code == 404
         []
       end
     end

@@ -198,7 +198,8 @@ module Artifactory
         format_repos!(params)
 
         client.get('/api/search/versions', params)['results']
-      rescue Error::NotFound
+      rescue Error::HTTPError => e
+        raise unless e.code == 404
         []
       end
 
@@ -252,7 +253,8 @@ module Artifactory
         params[:remote] = 1 if options[:remote]
 
         client.get('/api/search/latestVersion', params)
-      rescue Error::NotFound
+      rescue Error::HTTPError => e
+        raise unless e.code == 404
         nil
       end
 
@@ -314,7 +316,7 @@ module Artifactory
     #
     def delete
       !!client.delete(download_uri)
-    rescue Error::NotFound
+    rescue Error::HTTPError
       false
     end
 

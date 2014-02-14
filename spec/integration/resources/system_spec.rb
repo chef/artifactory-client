@@ -23,10 +23,10 @@ module Artifactory
     describe '.update_configuration' do
       let(:tempfile) { Tempfile.new(['config', 'xml']) }
       let(:content) do
-        """.strip.gsub(/^ {8}/, '')
-        <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-        <newConfig>true</newConfig>
-        """
+        <<-EOH.strip.gsub(/^ {10}/, '')
+          <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+          <newConfig>true</newConfig>
+        EOH
       end
 
       after do

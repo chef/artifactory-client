@@ -1,6 +1,5 @@
-require 'httpclient'
 require 'json'
-require 'rexml/document'
+require 'net/http'
 require 'uri'
 
 module Artifactory
@@ -126,79 +125,97 @@ module Artifactory
     end
 
     #
-    # The actually HTTPClient agent.
     #
-    # @return [HTTPClient]
     #
-    def agent
-      @agent ||= begin
-        agent = HTTPClient.new(endpoint)
+    def request(verb, path, params = {}, headers = {})
+      # Build the URI and request object from the given information
+      uri = build_uri(verb, path, params)
+      request = class_for_request(verb).new(uri.request_uri)
 
-        agent.agent_name = user_agent
-
-        # Check if authentication was given
-        if username && password
-          agent.set_auth(endpoint, username, password)
-
-          # https://github.com/nahi/httpclient/issues/63#issuecomment-2377919
-          agent.www_auth.basic_auth.challenge(endpoint)
-        end
-
-        # Check if proxy settings were given
-        if proxy
-          agent.proxy = proxy
-        end
-
-        agent
-      end
-    end
-
-    #
-    # Make an HTTP reequest with the given verb and path.
-    #
-    # @param [String, Symbol] verb
-    #   the HTTP verb to use
-    # @param [String] path
-    #   the absolute or relative URL to use, expanded relative to {Defaults.endpoint}
-    #
-    # @return [Object]
-    #
-    def request(verb, path, *args, &block)
-      url = URI.parse(path)
-
-      # Don't merge absolute URLs
-      unless url.absolute?
-        url = URI.parse(File.join(endpoint, path)).to_s
+      # Add headers
+      default_headers.merge(headers).each do |key, value|
+        request.add_field(key, value)
       end
 
-      # Covert the URL back into a string
-      url = url.to_s
+      # Add basic authentication
+      if username && password
+        request.basic_auth(username, password)
+      end
 
-      # Make the actual request
-      response = agent.send(verb, url, *args, &block)
+      # Setup PATCH/POST/PUT
+      if [:patch, :post, :put].include?(verb)
+        if params.is_a?(Hash)
+          request.form_data = params
+        else
+          request.body = params
+        end
+      end
 
-      case response.status.to_i
-      when 200..399
-        parse_response(response)
-      when 400
-        raise Error::BadRequest.new(url: url, body: response.body)
-      when 401
-        raise Error::Unauthorized.new(url: url)
-      when 403
-        raise Error::Forbidden.new(url: url)
-      when 404
-        raise Error::NotFound.new(url: url)
-      when 405
-        raise Error::MethodNotAllowed.new(url: url)
-      else
-        raise Error::ConnectionError.new(url: url, body: response.body)
+      # Create the HTTP connection object - since the proxy information defaults
+      # to +nil+, we can just pass it to the initializer method instead of doing
+      # crazy strange conditionals.
+      connection = Net::HTTP.new(uri.host, uri.port,
+        proxy_address, proxy_port, proxy_username, proxy_password)
+
+      # Apply SSL, if applicable
+      if uri.scheme == 'https'
+        require 'net/https' unless defined?(Net::HTTPS)
+
+        connection.use_ssl = true
+        # TODO - make this not suck
+        connection.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
+
+      connection.start do |http|
+        response = http.request(request)
+
+        case response
+        when Net::HTTPRedirection
+          redirect = URI.parse(response['location'])
+          request(verb, redirect, params, headers)
+        when Net::HTTPSuccess
+          success(response)
+        else
+          error(response)
+        end
       end
     rescue SocketError, Errno::ECONNREFUSED, EOFError
-      raise Error::ConnectionError.new(url: url, body: <<-EOH.gsub(/^ {8}/, ''))
-        The server is not currently accepting connections.
-      EOH
+      raise Error::ConnectionError.new(endpoint)
     end
 
+    def default_headers
+      {
+        'Connection' => 'keep-alive',
+        'Keep-Alive' => '30',
+        'User-Agent' => user_agent,
+      }
+    end
+
+    def build_uri(verb, path, params = {})
+      # Add any query string parameters
+      if [:delete, :get].include?(verb)
+        path = [path, to_query_string(params)].compact.join('?')
+      end
+
+      # Parse the URI
+      uri = URI.parse(path)
+
+      # Don't merge absolute URLs
+      uri = URI.parse(File.join(endpoint, path)) unless uri.absolute?
+
+      # Return the URI object
+      uri
+    end
+
+    def class_for_request(verb)
+      Net::HTTP.const_get(verb.to_s.capitalize)
+    end
+
+    def to_query_string(hash)
+      hash.map do |key, value|
+        "#{URI.escape(key.to_s)}=#{URI.escape(value.to_s)}"
+      end.join('&')[/.+/]
+    end
 
     #
     # Parse the response object and manipulate the result based on the given
@@ -211,14 +228,25 @@ module Artifactory
     # @return [String, Hash]
     #   the parsed response, as an object
     #
-    def parse_response(response)
-      content_type = response.headers['Content-Type']
-
-      if content_type && content_type.include?('json')
+    def success(response)
+      if (response.content_type || '').include?('json')
         JSON.parse(response.body)
       else
         response.body
       end
+    end
+
+    #
+    #
+    #
+    def error(response)
+      error = JSON.parse(response.body)['errors'].first
+      raise Error::HTTPError.new(error)
+    rescue JSON::ParserError
+      raise Error::HTTPError.new(
+        'status'  => response.code,
+        'message' => response.body,
+      )
     end
   end
 end

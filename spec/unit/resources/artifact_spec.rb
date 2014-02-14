@@ -161,7 +161,7 @@ module Artifactory
       end
 
       it 'returns an empty array when the server responses with a 404' do
-        client.stub(:get).and_raise(Error::NotFound)
+        client.stub(:get).and_raise(Error::HTTPError.new('status' => 404))
 
         result = described_class.versions
         expect(result).to be_a(Array)
@@ -207,7 +207,7 @@ module Artifactory
       end
 
       it 'returns an nil when the server responses with a 404' do
-        client.stub(:get).and_raise(Error::NotFound)
+        client.stub(:get).and_raise(Error::HTTPError.new('status' => 404))
 
         expect(described_class.latest_version).to be_nil
       end
