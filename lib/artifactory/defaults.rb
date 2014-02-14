@@ -89,6 +89,28 @@ module Artifactory
       def proxy_username
         ENV['ARTIFACTORY_PROXY_USERNAME']
       end
+
+      #
+      # The path to a pem file on disk for use with a custom SSL verification
+      #
+      # @return [String, nil]
+      #
+      def ssl_pem_file
+        ENV['ARTIFACTORY_SSL_PEM_FILE']
+      end
+
+      #
+      # Verify SSL requests (default: true)
+      #
+      # @return [true, false]
+      #
+      def ssl_verify
+        if ENV['ARTIFACTORY_SSL_VERIFY'].nil?
+          true
+        else
+          %w[t y].include?(ENV['ARTIFACTORY_SSL_VERIFY'].downcase[0])
+        end
+      end
     end
   end
 end

@@ -161,9 +161,22 @@ module Artifactory
       if uri.scheme == 'https'
         require 'net/https' unless defined?(Net::HTTPS)
 
+        # Turn on SSL
         connection.use_ssl = true
-        # TODO - make this not suck
-        connection.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+        # Custom pem files, no problem!
+        if ssl_pem_file
+          pem = File.read(ssl_pem_file)
+          connection.cert = OpenSSL::X509::Certificate.new(pem)
+          connection.key = OpenSSL::PKey::RSA.new(pem)
+          connection.verify_mode = OpenSSL::SSL::VERIFY_PEER
+        end
+
+        # Naughty, naughty, naughty! Don't blame when when someone hops in
+        # and executes a MITM attack!
+        unless ssl_verify
+          connection.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
       end
 
       connection.start do |http|

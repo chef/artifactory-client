@@ -54,6 +54,14 @@ Artifactory.configure do |config|
   config.username = 'admin'
   config.password = 'password'
 
+  # Speaking of SSL, you can specify the path to a pem file with your custom
+  # certificates and the gem will wire it all up for you (NOTE: it must be a
+  # valid PEM file).
+  config.ssl_pem_file = '/path/to/my.pem'
+
+  # Or if you are feelying frisky, you can always disable SSL verification
+  config.ssl_verify = false
+
   # You can specify any proxy information, including any authentication
   # information in the URL.
   config.proxy_username = 'user'
@@ -76,6 +84,7 @@ Or, if you want to be really Unixy, these parameters are all configurable via en
 export ARTIFACTORY_ENDPOINT=http://my.storage.server/artifactory
 export ARTIFACTORY_USERNAME=admin
 export ARTIFACTORY_PASSWORD=password
+export ARTIFACTORY_SSL_PEM_FILE=/path/to/my.pem
 ```
 
 You can also create a full `Client` object with hash parameters:
