@@ -105,6 +105,8 @@ module Artifactory
     # @param [Hash] properties
     #   a list of matrix properties
     #
+    # @return [Resource::Artifact]
+    #
     def upload(path_or_io, path, properties = {}, headers = {})
       file = if path_or_io.is_a?(File)
                path_or_io
@@ -115,7 +117,8 @@ module Artifactory
       matrix   = to_matrix_properties(properties)
       endpoint = File.join("#{url_safe(key)}#{matrix}", path)
 
-      client.put(endpoint, { file: file }, headers)
+      response = client.put(endpoint, { file: file }, headers)
+      Resource::Artifact.from_hash(response)
     end
 
     #
