@@ -44,7 +44,7 @@ module Artifactory
         response = client.get("/api/repositories/#{url_safe(name)}")
         from_hash(response, client: client)
       rescue Error::HTTPError => e
-        raise unless e.error == 400
+        raise unless e.code == 400
         nil
       end
     end
