@@ -1,3 +1,4 @@
+require 'pathname'
 require 'artifactory/version'
 
 module Artifactory
