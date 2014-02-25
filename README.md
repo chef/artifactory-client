@@ -6,6 +6,8 @@ A Ruby client and interface to the Artifactory API. **The majority of API endpoi
 
 The Artifactory gem offers a convienent interface for managing various parts of the Artifactory API. It is not a complete API implementation, and should still be considered a work in progress.
 
+This project is managed by the CHEF Release Engineering team. For more information on the Release Engineering team's contribution, triage, and release process, please consult the [CHEF Release Engineering OSS Management Guide](https://docs.google.com/a/opscode.com/document/d/1oJB0vZb_3bl7_ZU2YMDBkMFdL-EWplW1BJv_FXTUOzg/edit).
+
 
 Quick start
 -----------
