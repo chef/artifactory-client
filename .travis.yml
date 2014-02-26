@@ -1,20 +1,18 @@
-# Test on modern rubies
 rvm:
   - 1.9.3
   - 2.0.0
   - 2.1.0
 
-# Setup parallel downloaders
 bundler_args: --jobs 7
 
-# Only test master (PRs are still tested)
 branches:
   only:
     - master
 
-# Notifications
+script: bundle exec rake travis:ci
+
 notifications:
   hipchat:
     rooms:
-      - secure: eUtMt0CeB2bbIcTeQA3rUJsTtBkq/Ng5AnM59NOCzutcPTnNDeM4kNQEfgJ5QEZZkx08IXyiPJ14gEQUaV0bF0s0FLyzFxjlX9p2jem99FmEA404KJ7axoUiGGxgATbq9V7tUOrp1zG+a8xVQTahZASKadPlC9TSRgKqjUL+Dvg= # Release Engineering
       - secure: fQEeBZSIV9mKpM5XeKxmvcgUb19skv3+qW6TiyvuPReB4B/mc5vf3AABWhbdnnHzjsKnq2iQtcppXVG0eJwuRM5D1werMO91zwSRNBU/ClOLHaYBp5l4tVkuHzAd3eo/Z67vxE0BAV9lGWeWv7r3y/BLgJ265nQMyfgZSyz1i44= # Build Statuses
+      - secure: eUtMt0CeB2bbIcTeQA3rUJsTtBkq/Ng5AnM59NOCzutcPTnNDeM4kNQEfgJ5QEZZkx08IXyiPJ14gEQUaV0bF0s0FLyzFxjlX9p2jem99FmEA404KJ7axoUiGGxgATbq9V7tUOrp1zG+a8xVQTahZASKadPlC9TSRgKqjUL+Dvg= # Release Engineering
