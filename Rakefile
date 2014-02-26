@@ -1,6 +1,9 @@
 require 'bundler/gem_tasks'
 
 require 'rspec/core/rake_task'
-RSpec::Core::RakeTask.new(:spec)
+RSpec::Core::RakeTask.new(:unit)
 
-task default: :spec
+namespace :travis do
+  desc 'Run tests on Travis'
+  task :ci => [:unit]
+end
