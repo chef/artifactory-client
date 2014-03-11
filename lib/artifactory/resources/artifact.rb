@@ -386,9 +386,9 @@ module Artifactory
       filename = options[:filename] || File.basename(download_uri)
 
       # Construct the full path for the file
-      destination = File.join(targer, filename)
+      destination = File.join(target, filename)
 
-      File.open(File.join(destination, filename), 'wb') do |file|
+      File.open(destination, 'wb') do |file|
         file.write(client.get(download_uri))
       end
 
