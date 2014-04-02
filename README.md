@@ -173,8 +173,8 @@ client.get('/some/special/path', param_1: 'foo', param_2: 'bar')
 
 For more information on the methods available, please see the [`Artifactory::Client` class](https://github.com/opscode/artifactory-client/blob/master/lib/artifactory/client.rb).
 
-### Threadsafey
-If you plan to use the Artifactory gem in a library, you should be aware that _certain_ pathways for accessing resources is **not** threadsafe. In order to deliver a "Rails-like" experience, accessing a resource without a client object uses a global shared state. Other threads may modify this state, and therefore we do **not** recommend using the Rails-like approach if you are concerned about threadsafety. The following code snippet may better explain the differences:
+### Threadsafety
+If you plan to use the Artifactory gem in a library, you should be aware that _certain_ pathways for accessing resources are **not** threadsafe. In order to deliver a "Rails-like" experience, accessing a resource without a client object uses a global shared state. Other threads may modify this state, and therefore we do **not** recommend using the Rails-like approach if you are concerned about threadsafety. The following code snippet may better explain the differences:
 
 ```ruby
 # In our current thread...
