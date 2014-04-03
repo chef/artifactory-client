@@ -118,7 +118,7 @@ module Artifactory
       matrix   = to_matrix_properties(properties)
       endpoint = File.join("#{url_safe(key)}#{matrix}", path)
 
-      response = client.put(endpoint, { file: file }, headers)
+      response = client.put(endpoint, file, headers)
       Resource::Artifact.from_hash(response)
     end
 

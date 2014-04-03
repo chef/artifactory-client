@@ -109,8 +109,9 @@ module Artifactory
 
       context 'when the artifact is a File' do
         it 'PUTs the file to the server' do
-          file = double(:file, is_a?: true)
-          expect(client).to receive(:put).with('libs-release-local/remote/path', { file: file }, {})
+          file = double(file)
+          File.stub(:new).and_return(file)
+          expect(client).to receive(:put).with('libs-release-local/remote/path', file, {})
 
           subject.upload(file, '/remote/path')
         end
@@ -118,10 +119,10 @@ module Artifactory
 
       context 'when the artifact is a file path' do
         it 'PUTs the file at the path to the server' do
-          file = double(:file)
+          file = double(file)
           path = '/fake/path'
           File.stub(:new).with('/fake/path').and_return(file)
-          expect(client).to receive(:put).with('libs-release-local/remote/path', { file: file }, {})
+          expect(client).to receive(:put).with('libs-release-local/remote/path', file, {})
 
           subject.upload(path, '/remote/path')
         end
@@ -129,8 +130,9 @@ module Artifactory
 
       context 'when matrix properties are given' do
         it 'converts the hash into matrix properties' do
-          file = double(:file, is_a?: true)
-          expect(client).to receive(:put).with('libs-release-local;branch=master;user=Seth%20Vargo/remote/path', { file: file }, {})
+          file = double(file)
+          File.stub(:new).and_return(file)
+          expect(client).to receive(:put).with('libs-release-local;branch=master;user=Seth%20Vargo/remote/path', file, {})
 
           subject.upload(file, '/remote/path',
             branch: 'master',
@@ -142,8 +144,9 @@ module Artifactory
       context 'when custom headers are given' do
         it 'passes the headers to the client' do
           headers = { 'Content-Type' => 'text/plain' }
-          file = double(:file, is_a?: true)
-          expect(client).to receive(:put).with('libs-release-local/remote/path', { file: file }, headers)
+          file = double(file)
+          File.stub(:new).and_return(file)
+          expect(client).to receive(:put).with('libs-release-local/remote/path', file, headers)
 
           subject.upload(file, '/remote/path', {}, headers)
         end
