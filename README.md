@@ -96,10 +96,13 @@ client = Artifactory::Client.new(endpoint: '...', username: '...')
 ```
 
 ### Making requests
-The Artifactory gem attempts to make the Artifactory API as object-oriented and Ruby-like as possible. All of the methods and API calls are heavily documented with examples inline using YARD. In order to keep the examples versioned with the code, the README only lists a few examples for using the Artifactory gem. Please see the inline documentation for the full API documentation.
+The Artifactory gem attempts to make the Artifactory API as object-oriented and Ruby-like as possible. All of the methods and API calls are heavily documented with examples inline using YARD. In order to keep the examples versioned with the code, the README only lists a few examples for using the Artifactory gem. Please see the inline documentation for the full API documentation.  The tests in the 'spec' directory are an additional source of examples.
 
 #### Artifacts
 ```ruby
+# Upload an artifact to a repository whose key is 'repo_key'
+artifact.upload('/local/path/to/file', 'repo_key', param_1: 'foo')
+
 # Search for an artifact by name
 artifact = Artifact.search(name: 'package.deb').first
 artifact #=> "#<Artifactory::Resource::Artifact md5: 'ABCD1234'>"
@@ -140,9 +143,6 @@ repo.description => "The default storage mechanism for..."
 # Change the repository
 repo.description = "This is a new description"
 repo.save
-
-# Upload an artifact to the repo
-repo.upload('/local/path/to/file', param_1: 'foo', param_2: 'bar')
 
 # Get a list of artifacts in this repository
 repo.artifacts #=> [#<Artifactory::Resource::Artifact ...>, ...]
