@@ -328,7 +328,7 @@ module Artifactory
         }
       end
 
-      it 'creates a new instnace' do
+      it 'creates a new instance' do
         instance = described_class.from_hash(hash)
         expect(instance).to be_a(described_class)
         expect(instance.uri).to eq('http://localhost:8080/artifactory/api/storage/libs-release-local/org/acme/lib/ver/lib-ver.pom')

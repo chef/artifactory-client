@@ -65,7 +65,7 @@ module Artifactory
         }
       end
 
-      it 'creates a new instnace' do
+      it 'creates a new instance' do
         instance = described_class.from_hash(hash)
         expect(instance.admin).to be_false
         expect(instance.email).to eq('admin@example.com')
