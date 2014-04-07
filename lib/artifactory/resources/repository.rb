@@ -71,6 +71,44 @@ module Artifactory
     end
 
     #
+    # Upload to a given repository
+    #
+    # @see Artifact#upload Upload syntax examples
+    #
+    # @return [Resource::Artifact]
+    #
+    def upload(path_or_io, path, properties = {}, headers = {})
+      artifact = Resource::Artifact.new
+      artifact.upload(key, path_or_io, path, properties, headers)
+    end
+
+    #
+    # Upload an artifact with the given SHA checksum. Consult the artifactory
+    # documentation for the possible responses when the checksums fail to
+    # match.
+    #
+    # @see Artifact#upload More syntax examples
+    #
+    def upload_with_checksum(path_or_io, path, checksum, properties = {})
+      upload(path_or_io, path, properties,
+        'X-Checksum-Deploy' => true,
+        'X-Checksum-Sha1'   => checksum,
+      )
+    end
+
+    #
+    # Upload an artifact with the given archive. Consult the artifactory
+    # documentation for the format of the archive to upload.
+    #
+    # @see Artifact#upload More syntax examples
+    #
+    def upload_from_archive(path_or_io, path, properties = {})
+      upload(path_or_io, path, properties,
+        'X-Explode-Archive' => true,
+      )
+    end
+
+    #
     # The list of artifacts in this repository on the remote artifactory
     # server.
     #
