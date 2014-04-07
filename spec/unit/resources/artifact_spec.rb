@@ -46,7 +46,7 @@ module Artifactory
           File.stub(:new).and_return(file)
           expect(client).to receive(:put).with('libs-release-local/remote/path', file, {})
 
-          subject.upload(file, 'libs-release-local', '/remote/path')
+          subject.upload('libs-release-local', file, '/remote/path')
         end
       end
 
@@ -57,7 +57,7 @@ module Artifactory
           File.stub(:new).with('/fake/path').and_return(file)
           expect(client).to receive(:put).with('libs-release-local/remote/path', file, {})
 
-          subject.upload(path, 'libs-release-local', '/remote/path')
+          subject.upload('libs-release-local', path, '/remote/path')
         end
       end
 
@@ -67,7 +67,7 @@ module Artifactory
           File.stub(:new).and_return(file)
           expect(client).to receive(:put).with('libs-release-local;branch=master;user=Seth%20Vargo/remote/path', file, {})
 
-          subject.upload(file, 'libs-release-local', '/remote/path',
+          subject.upload('libs-release-local', file, '/remote/path',
             branch: 'master',
             user: 'Seth Vargo',
           )
@@ -81,7 +81,7 @@ module Artifactory
           File.stub(:new).and_return(file)
           expect(client).to receive(:put).with('libs-release-local/remote/path', file, headers)
 
-          subject.upload(file, 'libs-release-local', '/remote/path', {}, headers)
+          subject.upload('libs-release-local', file, '/remote/path', {}, headers)
         end
       end
     end
@@ -89,8 +89,8 @@ module Artifactory
     describe '#upload_with_checksum' do
       it 'delegates to #upload' do
         expect(subject).to receive(:upload).with(
-          '/local/file',
           'libs-release-local',
+          '/local/file',
           '/remote/path',
           { branch: 'master' },
           {
@@ -98,7 +98,7 @@ module Artifactory
             'X-Checksum-Sha1'   => 'ABCD1234',
           },
         )
-        subject.upload_with_checksum('/local/file', 'libs-release-local', '/remote/path',
+        subject.upload_with_checksum('libs-release-local', '/local/file', '/remote/path',
           'ABCD1234',
           { branch: 'master' },
         )
@@ -108,15 +108,15 @@ module Artifactory
     describe '#upload_from_archive' do
       it 'delegates to #upload' do
         expect(subject).to receive(:upload).with(
-          '/local/file',
           'libs-release-local',
+          '/local/file',
           '/remote/path',
           {},
           {
             'X-Explode-Archive' => true,
           },
         )
-        subject.upload_from_archive('/local/file', 'libs-release-local', '/remote/path')
+        subject.upload_from_archive('libs-release-local', '/local/file', '/remote/path')
       end
     end
 

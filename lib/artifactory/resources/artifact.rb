@@ -420,10 +420,10 @@ module Artifactory
     #     branch: 'master'
     #   })
     #
-    # @param [String, File] path_or_io
-    #   the file or path to the file to upload
     # @param [String] key
     #   the key of the repository to which to upload the file
+    # @param [String, File] path_or_io
+    #   the file or path to the file to upload
     # @param [String] path
     #   the path where this resource will live in the remote artifactory
     #   repository, relative to the repository key
@@ -434,7 +434,7 @@ module Artifactory
     #
     # @return [Resource::Artifact]
     #
-    def upload(path_or_io, key, path, properties = {}, headers = {})
+    def upload(key, path_or_io, path, properties = {}, headers = {})
       file = if path_or_io.is_a?(File)
                path_or_io
              else
@@ -463,8 +463,8 @@ module Artifactory
     # @param [String] checksum
     #   the SHA1 checksum of the artifact to upload
     #
-    def upload_with_checksum(path_or_io, key, path, checksum, properties = {})
-      upload(path_or_io, key, path, properties,
+    def upload_with_checksum(key, path_or_io, path, checksum, properties = {})
+      upload(key, path_or_io, path, properties,
         'X-Checksum-Deploy' => true,
         'X-Checksum-Sha1'   => checksum,
       )
@@ -482,8 +482,8 @@ module Artifactory
     #
     # @param (see Repository#upload)
     #
-    def upload_from_archive(path_or_io, key, path, properties = {})
-      upload(path_or_io, key, path, properties,
+    def upload_from_archive(key, path_or_io, path, properties = {})
+      upload(key, path_or_io, path, properties,
         'X-Explode-Archive' => true,
       )
     end
