@@ -167,24 +167,6 @@ module Artifactory
     end
 
     #
-    # @todo Make this a mixin or reusable?
-    #
-    def to_matrix_properties(hash = {})
-      properties = hash.map do |k, v|
-        key   = URI.escape(k.to_s)
-        value = URI.escape(v.to_s)
-
-        "#{key}=#{value}"
-      end
-
-      if properties.empty?
-        nil
-      else
-        ";#{properties.join(';')}"
-      end
-    end
-
-    #
     # The default headers for this object. This includes the +Content-Type+.
     #
     # @return [Hash]
