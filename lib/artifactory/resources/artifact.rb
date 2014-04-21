@@ -435,7 +435,7 @@ module Artifactory
     # @return [Resource::Artifact]
     #
     def upload(key, path_or_io, path, properties = {}, headers = {})
-      file = if path_or_io.is_a?(File)
+      file = if respond_to?(:read)
                path_or_io
              else
                File.new(File.expand_path(path_or_io))
