@@ -111,7 +111,7 @@ module Artifactory
         it 'PUTs the file to the server' do
           file = double(file)
           File.stub(:new).and_return(file)
-          expect(client).to receive(:put).with( 'libs-release-local/remote/path', file, {})
+          expect(client).to receive(:put).with('libs-release-local/remote/path', file, {})
 
           subject.upload(file, '/remote/path')
         end
