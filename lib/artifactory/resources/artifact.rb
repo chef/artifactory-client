@@ -275,6 +275,7 @@ module Artifactory
     attribute :checksums
     attribute :created
     attribute :download_uri, ->{ raise 'Download URI missing!' }
+    attribute :key
     attribute :last_modified
     attribute :last_updated
     attribute :local_path, ->{ raise 'Local destination missing!' }
@@ -393,6 +394,98 @@ module Artifactory
       end
 
       destination
+    end
+
+    #
+    # Upload an artifact into the repository. If the first parameter is a File
+    # object, that file descriptor is passed to the uploader. If the first
+    # parameter is a string, it is assumed to be the path to a local file on
+    # disk. This method will automatically construct the File object from the
+    # given path.
+    #
+    # @see bit.ly/1dhJRMO Artifactory Matrix Properties
+    #
+    # @example Upload an artifact from a File instance
+    #   file = File.new('/local/path/to/file.deb')
+    #   artifact = Artifact.new
+    #   artifact.upload(file, 'libs-release-local', file.deb')
+    #
+    # @example Upload an artifact from a path
+    #   artifact.upload('/local/path/to/file.deb', 'libs-release-local', 'file.deb')
+    #
+    # @example Upload an artifact with matrix properties
+    #   artifact.upload('/local/path/to/file.deb', 'libs-release-local', file.deb', {
+    #     status: 'DEV',
+    #     rating: 5,
+    #     branch: 'master'
+    #   })
+    #
+    # @param [String] key
+    #   the key of the repository to which to upload the file
+    # @param [String, File] path_or_io
+    #   the file or path to the file to upload
+    # @param [String] path
+    #   the path where this resource will live in the remote artifactory
+    #   repository, relative to the repository key
+    # @param [Hash] headers
+    #   the list of headers to send with the request
+    # @param [Hash] properties
+    #   a list of matrix properties
+    #
+    # @return [Resource::Artifact]
+    #
+    def upload(key, path_or_io, path, properties = {}, headers = {})
+      file = if respond_to?(:read)
+               path_or_io
+             else
+               File.new(File.expand_path(path_or_io))
+             end
+
+      matrix   = to_matrix_properties(properties)
+      endpoint = File.join("#{url_safe(key)}#{matrix}", path)
+
+      response = client.put(endpoint, file, headers)
+      self.class.from_hash(response)
+    end
+
+    #
+    # Upload an artifact with the given SHA checksum. Consult the artifactory
+    # documentation for the possible responses when the checksums fail to
+    # match.
+    #
+    # @see Artifact#upload More syntax examples
+    #
+    # @example Upload an artifact with a checksum
+    #   artifact = Artifact.new
+    #   artifact.upload_with_checksum('/local/file', 'libs-release-local', /remote/path', 'ABCD1234')
+    #
+    # @param (see Artifact#upload)
+    # @param [String] checksum
+    #   the SHA1 checksum of the artifact to upload
+    #
+    def upload_with_checksum(key, path_or_io, path, checksum, properties = {})
+      upload(key, path_or_io, path, properties,
+        'X-Checksum-Deploy' => true,
+        'X-Checksum-Sha1'   => checksum,
+      )
+    end
+
+    #
+    # Upload an artifact with the given archive. Consult the artifactory
+    # documentation for the format of the archive to upload.
+    #
+    # @see Artifact#upload More syntax examples
+    #
+    # @example Upload an artifact with a checksum
+    #   artifact = Artifact.new('libs-release-local')
+    #   artifact.upload_from_archive('/local/archive', '/remote/path')#
+    #
+    # @param (see Repository#upload)
+    #
+    def upload_from_archive(key, path_or_io, path, properties = {})
+      upload(key, path_or_io, path, properties,
+        'X-Explode-Archive' => true,
+      )
     end
 
     private

@@ -68,7 +68,7 @@ module Artifactory
         }
       end
 
-      it 'creates a new instnace' do
+      it 'creates a new instance' do
         instance = described_class.from_hash(hash)
         expect(instance.blacked_out).to be_false
         expect(instance.description).to eq('Local repository for in-house libraries')
@@ -150,38 +150,6 @@ module Artifactory
 
           subject.upload(file, '/remote/path', {}, headers)
         end
-      end
-    end
-
-    describe '#upload_with_checksum' do
-      it 'delegates to #upload' do
-        expect(subject).to receive(:upload).with(
-          '/local/file',
-          '/remote/path',
-          { branch: 'master' },
-          {
-            'X-Checksum-Deploy' => true,
-            'X-Checksum-Sha1'   => 'ABCD1234',
-          },
-        )
-        subject.upload_with_checksum('/local/file', '/remote/path',
-          'ABCD1234',
-          { branch: 'master' },
-        )
-      end
-    end
-
-    describe '#upload_from_archive' do
-      it 'delegates to #upload' do
-        expect(subject).to receive(:upload).with(
-          '/local/file',
-          '/remote/path',
-          {},
-          {
-            'X-Explode-Archive' => true,
-          },
-        )
-        subject.upload_from_archive('/local/file', '/remote/path')
       end
     end
 

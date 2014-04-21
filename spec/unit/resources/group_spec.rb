@@ -62,7 +62,7 @@ module Artifactory
         }
       end
 
-      it 'creates a new instnace' do
+      it 'creates a new instance' do
         instance = described_class.from_hash(hash)
         expect(instance.name).to eq('readers')
         expect(instance.description).to eq('This list of read-only users')
