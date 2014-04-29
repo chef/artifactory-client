@@ -1,7 +1,5 @@
 require 'rexml/document'
 
-include REXML
-
 module Artifactory
   class Resource::Layout < Resource::Base
     class << self
@@ -52,7 +50,7 @@ module Artifactory
 
       def list_from_config(xpath, config, options = {})
         all = Array.new
-        XPath.match(config, xpath).map do |r|
+        REXML::XPath.match(config, xpath).map do |r|
           hash = Hash.new
           r.each_element_with_text do |l|
             hash[l.name] = l.get_text
@@ -64,7 +62,7 @@ module Artifactory
       end
 
       def find_from_config(xpath, config, options = {})
-        name_node = XPath.match(config, xpath)
+        name_node = REXML::XPath.match(config, xpath)
         properties = Hash.new
         name_node[0].parent.each_element_with_text do |e|
           properties[e.name] = e.text
