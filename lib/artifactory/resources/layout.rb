@@ -41,16 +41,8 @@ module Artifactory
       #   if one does not exist
       #
       def find(name, options = {})
-        client = extract_client!(options)
         config = Resource::System.configuration(options)
-
-        name_node = XPath.match(config, "config/repoLayouts/repoLayout/name[text()='#{name}']")
-        properties = Hash.new
-        name_node[0].parent.each_element_with_text do |e|
-          properties[e.name] = e.text
-        end
-
-        from_hash(properties, client: client)
+        find_from_config("config/repoLayouts/repoLayout/name[text()='#{name}']", config, options)
       rescue Error::HTTPError => e
         raise unless e.code == 404
         nil
