@@ -17,6 +17,24 @@ module Artifactory
                   xmlns='http://artifactory.jfrog.org/xsd/1.5.3'
                   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
             <offlineMode>false</offlineMode>
+            <repoLayouts>
+              <repoLayout>
+                <name>maven-2-default</name>
+                <artifactPathPattern>[orgPath]/[module]/[baseRev](-[folderItegRev])/[module]-[baseRev](-[fileItegRev])(-[classifier]).[ext]</artifactPathPattern>
+                <distinctiveDescriptorPathPattern>true</distinctiveDescriptorPathPattern>
+                <descriptorPathPattern>[orgPath]/[module]/[baseRev](-[folderItegRev])/[module]-[baseRev](-[fileItegRev])(-[classifier]).pom</descriptorPathPattern>
+                <folderIntegrationRevisionRegExp>SNAPSHOT</folderIntegrationRevisionRegExp>
+                <fileIntegrationRevisionRegExp>SNAPSHOT|(?:(?:[0-9]{8}.[0-9]{6})-(?:[0-9]+))</fileIntegrationRevisionRegExp>
+              </repoLayout>
+              <repoLayout>
+                <name>gradle-default</name>
+                <artifactPathPattern>[orgPath]/[module]/[baseRev](-[folderItegRev])/[module]-[baseRev](-[fileItegRev])(-[classifier]).[ext]</artifactPathPattern>
+                <distinctiveDescriptorPathPattern>true</distinctiveDescriptorPathPattern>
+                <descriptorPathPattern>[orgPath]/[module]/[baseRev](-[folderItegRev])/[module]-[baseRev](-[fileItegRev])(-[classifier]).pom</descriptorPathPattern>
+                <folderIntegrationRevisionRegExp>SNAPSHOT</folderIntegrationRevisionRegExp>
+                <fileIntegrationRevisionRegExp>SNAPSHOT|(?:(?:[0-9]{8}.[0-9]{6})-(?:[0-9]+))</fileIntegrationRevisionRegExp>
+              </repoLayout>
+            </repoLayouts>
           </config>
         EOH
       end
