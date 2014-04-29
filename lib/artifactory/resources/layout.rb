@@ -63,7 +63,7 @@ module Artifactory
         return all
       end
 
-      def find_from_config(xpath, config, options ={})
+      def find_from_config(xpath, config, options = {})
         name_node = XPath.match(config, xpath)
         properties = Hash.new
         name_node[0].parent.each_element_with_text do |e|
@@ -80,6 +80,5 @@ module Artifactory
     attribute :descriptor_path_pattern
     attribute :folder_integration_revision_reg_exp
     attribute :file_integration_revision_reg_exp
-
   end
 end
