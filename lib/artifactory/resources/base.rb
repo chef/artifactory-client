@@ -120,35 +120,6 @@ module Artifactory
       end
 
       #
-      # list_from_config
-      #
-      def list_from_config(xpath, config, options = {})
-        all = Array.new
-        XPath.match(config, xpath).map do |r|
-          hash = Hash.new
-          r.each_element_with_text do |l|
-            hash[l.name] = l.get_text
-          end
-          thing = from_hash(hash, options)
-          all.push(thing)
-        end
-        return all
-      end
-
-      #
-      # find_from_config
-      #
-      def find_from_config(xpath, config, options ={})
-        name_node = XPath.match(config, xpath)
-        properties = Hash.new
-        name_node[0].parent.each_element_with_text do |e|
-          properties[e.name] = e.text
-        end
-
-        from_hash(properties, options)
-      end
-
-      #
       # Get the client (connection) object from the given options. If the
       # +:client+ key is preset in the hash, it is assumed to contain the
       # connection object to use for the request. If the +:client+ key is not

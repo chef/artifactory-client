@@ -47,6 +47,31 @@ module Artifactory
         raise unless e.code == 404
         nil
       end
+
+      private
+
+      def list_from_config(xpath, config, options = {})
+        all = Array.new
+        XPath.match(config, xpath).map do |r|
+          hash = Hash.new
+          r.each_element_with_text do |l|
+            hash[l.name] = l.get_text
+          end
+          thing = from_hash(hash, options)
+          all.push(thing)
+        end
+        return all
+      end
+
+      def find_from_config(xpath, config, options ={})
+        name_node = XPath.match(config, xpath)
+        properties = Hash.new
+        name_node[0].parent.each_element_with_text do |e|
+          properties[e.name] = e.text
+        end
+
+        from_hash(properties, options)
+      end
     end
 
     attribute :name
