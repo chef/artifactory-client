@@ -12,7 +12,7 @@ module Artifactory
       # @option options [Artifactory::Client] :client
       #   the client object to make the request with
       #
-      # @return [Array<String>]
+      # @return [Array<Resource<Layout>]
       #   the list of layouts
       #
       def all(options = {})
