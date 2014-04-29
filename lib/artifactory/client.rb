@@ -32,11 +32,12 @@ module Artifactory
     include Artifactory::Configurable
 
     proxy Resource::Artifact
+    proxy Resource::Layout
     proxy Resource::Repository
     proxy Resource::User
     proxy Resource::System
-
-    #
+ 
+   #
     # Create a new Artifactory Client with the given options. Any options
     # given take precedence over the default options.
     #
