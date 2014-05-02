@@ -74,7 +74,7 @@ module Artifactory
 
     attribute :name
     attribute :artifact_path_pattern
-    attribute :distinctive_descriptor_path_pattern
+    attribute :distinctive_descriptor_path_pattern, true
     attribute :descriptor_path_pattern
     attribute :folder_integration_revision_reg_exp
     attribute :file_integration_revision_reg_exp
