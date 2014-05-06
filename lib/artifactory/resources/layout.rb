@@ -63,6 +63,7 @@ module Artifactory
 
       def find_from_config(xpath, config, options = {})
         name_node = REXML::XPath.match(config, xpath)
+        return nil if name_node.empty?
         properties = Hash.new
         name_node[0].parent.each_element_with_text do |e|
           properties[e.name] = e.text
