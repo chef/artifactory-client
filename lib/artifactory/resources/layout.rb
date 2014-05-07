@@ -12,7 +12,7 @@ module Artifactory
       # @option options [Artifactory::Client] :client
       #   the client object to make the request with
       #
-      # @return [Array<Resource<Layout>]
+      # @return [Array<Resource::Layout>]
       #   the list of layouts
       #
       def all(options = {})
@@ -47,7 +47,19 @@ module Artifactory
       end
 
       private
-
+      #
+      # List all the child text elements in the Artifactory configuration file
+      # of a node matching the specified xpath
+      #
+      # @param [String] xpath
+      #   xpath expression for the parent element whose children are to be listed
+      #
+      # @param [REXML] config
+      #   Artifactory config as an REXML file
+      #
+      # @param [Hash] options
+      #   the list of options
+      #
       def list_from_config(xpath, config, options = {})
         all = Array.new
         REXML::XPath.match(config, xpath).map do |r|
@@ -61,6 +73,19 @@ module Artifactory
         return all
       end
 
+      #
+      # Find all the sibling text elements in the Artifactory configuration file
+      # of a node matching the specified xpath
+      #
+      # @param [String] xpath
+      #   xpath expression for the element whose siblings are to be found
+      #
+      # @param [REXML] config
+      #   Artifactory configuration file as an REXML doc
+      #
+      # @param [Hash] options
+      #   the list of options
+      #
       def find_from_config(xpath, config, options = {})
         name_node = REXML::XPath.match(config, xpath)
         return nil if name_node.empty?
