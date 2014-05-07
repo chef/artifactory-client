@@ -61,16 +61,14 @@ module Artifactory
       #   the list of options
       #
       def list_from_config(xpath, config, options = {})
-        all = Array.new
         REXML::XPath.match(config, xpath).map do |r|
-          hash = Hash.new
+          hash = {}
+
           r.each_element_with_text do |l|
             hash[l.name] = l.get_text
           end
-          thing = from_hash(hash, options)
-          all.push(thing)
+          from_hash(hash, options)
         end
-        return all
       end
 
       #
