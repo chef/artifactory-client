@@ -87,7 +87,7 @@ module Artifactory
       def find_from_config(xpath, config, options = {})
         name_node = REXML::XPath.match(config, xpath)
         return nil if name_node.empty?
-        properties = Hash.new
+        properties = {}
         name_node[0].parent.each_element_with_text do |e|
           properties[e.name] = e.text
         end
@@ -96,9 +96,9 @@ module Artifactory
       end
     end
 
-    attribute :name
+    attribute :name, ->{ raise 'Name missing!' }
     attribute :artifact_path_pattern
-    attribute :distinctive_descriptor_path_pattern, true
+    attribute :distinctive_descriptor_path_pattern, 'true'
     attribute :descriptor_path_pattern
     attribute :folder_integration_revision_reg_exp
     attribute :file_integration_revision_reg_exp
