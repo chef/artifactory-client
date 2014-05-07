@@ -64,7 +64,8 @@ module Artifactory
       before { client.stub(:post).and_return(response) }
 
       it 'posts /api/system/configuration' do
-        expect(client).to receive(:post).with('/api/system/configuration', xml).once
+        headers = {"Content-Type"=>"application/xml"}
+        expect(client).to receive(:post).with('/api/system/configuration', xml, headers).once
         described_class.update_configuration(xml)
       end
 
