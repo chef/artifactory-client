@@ -17,7 +17,7 @@ module Artifactory
       #
       def all(options = {})
         config = Resource::System.configuration(options)
-        list_from_config("config/repoLayouts/repoLayout", config, options)
+        list_from_config('config/repoLayouts/repoLayout', config, options)
       end
 
       #
