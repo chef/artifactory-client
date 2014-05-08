@@ -87,7 +87,11 @@ module Artifactory
       #
       def update_configuration(xml, options = {})
         client = extract_client!(options)
-        client.post('/api/system/configuration', xml)
+
+        # The Artifactory api requires a content type of 'application/xml'.
+        # See http://bit.ly/1l2IvZY
+        headers = { 'Content-Type' => 'application/xml' }
+        client.post('/api/system/configuration', xml, headers)
       end
 
       #

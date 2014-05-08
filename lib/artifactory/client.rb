@@ -32,6 +32,7 @@ module Artifactory
     include Artifactory::Configurable
 
     proxy Resource::Artifact
+    proxy Resource::Layout
     proxy Resource::Repository
     proxy Resource::User
     proxy Resource::System
