@@ -10,8 +10,17 @@ module Artifactory
     end
 
     describe '.all' do
+      doc = <<-XML
+        <config>
+          <repoLayouts>
+            <repoLayout>
+              <name>fake-layout</name>
+            </repoLayout>
+          </repoLayouts>
+        </config>
+      XML
       let(:xml) do
-        REXML::Document.new('<config><repoLayouts><repoLayout><name>fake-layout</name></repoLayout></repoLayouts></config>')
+        REXML::Document.new(doc)
       end
 
       before do
@@ -26,8 +35,17 @@ module Artifactory
     end
 
     describe '.find' do
+      doc = <<-XML
+        <config>
+          <repoLayouts>
+            <repoLayout>
+              <name>found-layout</name>
+            </repoLayout>
+          </repoLayouts>
+        </config>
+      XML
       let(:xml) do
-        REXML::Document.new('<config><repoLayouts><repoLayout><name>found-layout</name></repoLayout></repoLayouts></config>')
+        REXML::Document.new(doc)
       end
 
       before do
