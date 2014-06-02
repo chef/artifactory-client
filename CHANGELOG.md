@@ -3,6 +3,24 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v1.2.0 (2014-06-02)
+-------------------
+- Change the airty of Repository#find to align with other resources
+- Add the ability to save/create repositories
+- Remove i18n
+- Make proxy configuration more verbose
+- Remove HTTPClient in favor of raw Net::HTTP
+- Add custom SSL configuration options
+- Make Configurable#proxy_port a string because #ocd
+- Allow file uploads
+- Return an Artifact object after uploading
+- Allow repositories to be deleted
+- Add required attribute for repository layout
+- Move upload method from Repository to Artifact
+- Implement Repository.upload via Artifact.upload
+- Move to_matrix_properties method to base class
+- Add the ability to list/find repository layouts from xml configuration
+- Specify content-type for updating config
 
 v1.1.0 (2014-02-11)
 -------------------
