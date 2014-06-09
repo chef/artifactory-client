@@ -35,39 +35,28 @@ module Artifactory
     end
 
     describe '#upload' do
-      let(:client) { double(put: {}) }
+      let(:client)     { double(put: {}) }
+      let(:local_path) { '/local/path' }
+      let(:file)       { double(File) }
+
+      subject { described_class.new(client: client, local_path: local_path) }
+
       before do
-        subject.client = client
-      end
-
-      context 'when the artifact is a File' do
-        it 'PUTs the file to the server' do
-          file = double(file)
-          File.stub(:new).and_return(file)
-          expect(client).to receive(:put).with('libs-release-local/remote/path', file, {})
-
-          subject.upload('libs-release-local', file, '/remote/path')
-        end
+        File.stub(:new).with(local_path).and_return(file)
       end
 
       context 'when the artifact is a file path' do
         it 'PUTs the file at the path to the server' do
-          file = double(file)
-          path = '/fake/path'
-          File.stub(:new).with('/fake/path').and_return(file)
           expect(client).to receive(:put).with('libs-release-local/remote/path', file, {})
-
-          subject.upload('libs-release-local', path, '/remote/path')
+          subject.upload('libs-release-local', '/remote/path')
         end
       end
 
       context 'when matrix properties are given' do
         it 'converts the hash into matrix properties' do
-          file = double(file)
-          File.stub(:new).and_return(file)
           expect(client).to receive(:put).with('libs-release-local;branch=master;user=Seth%20Vargo/remote/path', file, {})
 
-          subject.upload('libs-release-local', file, '/remote/path',
+          subject.upload('libs-release-local', '/remote/path',
             branch: 'master',
             user: 'Seth Vargo',
           )
@@ -77,11 +66,9 @@ module Artifactory
       context 'when custom headers are given' do
         it 'passes the headers to the client' do
           headers = { 'Content-Type' => 'text/plain' }
-          file = double(file)
-          File.stub(:new).and_return(file)
           expect(client).to receive(:put).with('libs-release-local/remote/path', file, headers)
 
-          subject.upload('libs-release-local', file, '/remote/path', {}, headers)
+          subject.upload('libs-release-local', '/remote/path', {}, headers)
         end
       end
     end
@@ -90,7 +77,6 @@ module Artifactory
       it 'delegates to #upload' do
         expect(subject).to receive(:upload).with(
           'libs-release-local',
-          '/local/file',
           '/remote/path',
           { branch: 'master' },
           {
@@ -98,8 +84,7 @@ module Artifactory
             'X-Checksum-Sha1'   => 'ABCD1234',
           },
         )
-        subject.upload_with_checksum('libs-release-local', '/local/file', '/remote/path',
-          'ABCD1234',
+        subject.upload_with_checksum('libs-release-local', '/remote/path', 'ABCD1234',
           { branch: 'master' },
         )
       end
@@ -109,14 +94,11 @@ module Artifactory
       it 'delegates to #upload' do
         expect(subject).to receive(:upload).with(
           'libs-release-local',
-          '/local/file',
           '/remote/path',
           {},
-          {
-            'X-Explode-Archive' => true,
-          },
+          { 'X-Explode-Archive' => true },
         )
-        subject.upload_from_archive('libs-release-local', '/local/file', '/remote/path')
+        subject.upload_from_archive('libs-release-local', '/remote/path')
       end
     end
 
