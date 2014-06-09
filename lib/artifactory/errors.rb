@@ -6,13 +6,12 @@ module Artifactory
     # Class for all HTTP errors
     class HTTPError < ArtifactoryError
       attr_reader :code
-      attr_reader :message
 
       def initialize(hash = {})
         @code = hash['status'].to_i
         @http = hash['message'].to_s
 
-        super "The Artifactory server responded with an HTTP Error "\
+        super "The Artifactory server responded with an HTTP Error " \
               "#{@code}: `#{@http}'"
       end
     end
