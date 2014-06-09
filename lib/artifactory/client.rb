@@ -33,6 +33,7 @@ module Artifactory
 
     proxy Resource::Artifact
     proxy Resource::Layout
+    proxy Resource::LdapSetting
     proxy Resource::MailServer
     proxy Resource::Repository
     proxy Resource::UrlBase
