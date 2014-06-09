@@ -22,6 +22,7 @@ module Artifactory
     autoload :Plugin,     'artifactory/resources/plugin'
     autoload :Repository, 'artifactory/resources/repository'
     autoload :System,     'artifactory/resources/system'
+    autoload :UrlBase,    'artifactory/resources/url_base'
     autoload :User,       'artifactory/resources/user'
   end
 

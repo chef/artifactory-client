@@ -34,6 +34,7 @@ module Artifactory
     proxy Resource::Artifact
     proxy Resource::Layout
     proxy Resource::Repository
+    proxy Resource::UrlBase
     proxy Resource::User
     proxy Resource::System
 
