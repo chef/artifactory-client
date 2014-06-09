@@ -337,9 +337,17 @@ module Artifactory
     #   the response object from the request
     #
     def error(response)
-      error = JSON.parse(response.body)['errors'].first
-      raise Error::HTTPError.new(error)
-    rescue JSON::ParserError
+      if (response.content_type || '').include?('json')
+        # Attempt to parse the error as JSON
+        begin
+          json = JSON.parse(response.body)
+
+          if json['errors'] && json['errors'].first
+            raise Error::HTTPError.new(json['errors'].first)
+          end
+        rescue JSON::ParserError; end
+      end
+
       raise Error::HTTPError.new(
         'status'  => response.code,
         'message' => response.body,
