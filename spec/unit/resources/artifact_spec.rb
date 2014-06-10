@@ -5,8 +5,8 @@ module Artifactory
     let(:client) { double(:client) }
 
     before(:each) do
-      Artifactory.stub(:client).and_return(client)
-      client.stub(:get).and_return(response) if defined?(response)
+      allow(Artifactory).to receive(:client).and_return(client)
+      allow(client).to receive(:get).and_return(response) if defined?(response)
     end
 
     describe '.search' do
@@ -42,7 +42,7 @@ module Artifactory
       subject { described_class.new(client: client, local_path: local_path) }
 
       before do
-        File.stub(:new).with(local_path).and_return(file)
+        allow(File).to receive(:new).with(local_path).and_return(file)
       end
 
       context 'when the artifact is a file path' do
@@ -229,7 +229,7 @@ module Artifactory
       end
 
       it 'returns an empty array when the server responses with a 404' do
-        client.stub(:get).and_raise(Error::HTTPError.new('status' => 404))
+        allow(client).to receive(:get).and_raise(Error::HTTPError.new('status' => 404))
 
         result = described_class.versions
         expect(result).to be_a(Array)
@@ -275,7 +275,7 @@ module Artifactory
       end
 
       it 'returns an nil when the server responses with a 404' do
-        client.stub(:get).and_raise(Error::HTTPError.new('status' => 404))
+        allow(client).to receive(:get).and_raise(Error::HTTPError.new('status' => 404))
 
         expect(described_class.latest_version).to be_nil
       end
@@ -329,7 +329,7 @@ module Artifactory
     describe '#copy' do
       let(:destination) { '/to/here' }
       let(:options)     { Hash.new }
-      before { subject.stub(:copy_or_move) }
+      before { allow(subject).to receive(:copy_or_move) }
 
       it 'delegates to #copy_or_move' do
         expect(subject).to receive(:copy_or_move).with(:copy, destination, options)
@@ -352,7 +352,7 @@ module Artifactory
     describe '#move' do
       let(:destination) { '/to/here' }
       let(:options)     { Hash.new }
-      before { subject.stub(:copy_or_move) }
+      before { allow(subject).to receive(:copy_or_move) }
 
       it 'delegates to #copy_or_move' do
         expect(subject).to receive(:copy_or_move).with(:move, destination, options)

@@ -35,7 +35,7 @@ module Artifactory
       end
 
       it 'delegates to the class, injecting the client' do
-        Resource::Artifact.stub(:search)
+        allow(Resource::Artifact).to receive(:search)
         expect(Resource::Artifact).to receive(:search).with(client: subject)
         subject.artifact_search
       end

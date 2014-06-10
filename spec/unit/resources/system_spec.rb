@@ -5,8 +5,8 @@ module Artifactory
     let(:client) { double(:client) }
 
     before(:each) do
-      Artifactory.stub(:client).and_return(client)
-      client.stub(:get).and_return(response) if defined?(response)
+      allow(Artifactory).to receive(:client).and_return(client)
+      allow(client).to receive(:get).and_return(response) if defined?(response)
     end
 
     describe '.info' do
@@ -32,15 +32,15 @@ module Artifactory
 
       context 'when the system is ok' do
         it 'returns true' do
-          expect(described_class.ping).to be_true
+          expect(described_class.ping).to be_truthy
         end
       end
 
       context 'when the system is not running' do
         it 'returns false' do
-          client.stub(:get)
+          allow(client).to receive(:get)
             .and_raise(Error::ConnectionError.new(Artifactory.endpoint))
-          expect(described_class.ping).to be_false
+          expect(described_class.ping).to be_falsey
         end
       end
     end
@@ -61,7 +61,7 @@ module Artifactory
     describe '.update_configuration' do
       let(:xml) { double(:xml) }
       let(:response) { double(body: '...') }
-      before { client.stub(:post).and_return(response) }
+      before { allow(client).to receive(:post).and_return(response) }
 
       it 'posts /api/system/configuration' do
         headers = { 'Content-Type' => 'application/xml' }

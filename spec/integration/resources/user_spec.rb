@@ -31,14 +31,14 @@ module Artifactory
     describe '#delete' do
       it 'deletes the user from the server' do
         sethvargo = described_class.find('sethvargo')
-        expect(sethvargo.delete).to be_true
+        expect(sethvargo.delete).to be_truthy
       end
     end
 
     describe '#save' do
       it 'saves the user to the server' do
         user = described_class.new(name: 'schisamo')
-        expect(user.save).to be_true
+        expect(user.save).to be_truthy
       end
     end
   end

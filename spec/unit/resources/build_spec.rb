@@ -5,8 +5,8 @@ module Artifactory
     let(:client) { double(:client) }
 
     before(:each) do
-      Artifactory.stub(:client).and_return(client)
-      client.stub(:get).and_return(response) if defined?(response)
+      allow(Artifactory).to receive(:client).and_return(client)
+      allow(client).to receive(:get).and_return(response) if defined?(response)
     end
 
     describe '.all' do
@@ -25,7 +25,7 @@ module Artifactory
 
       context 'when the system has no builds' do
         it 'returns an empty array' do
-          client.stub(:get).and_raise(Error::HTTPError.new('status' => 404))
+          allow(client).to receive(:get).and_raise(Error::HTTPError.new('status' => 404))
           expect(described_class.all).to be_empty
         end
       end

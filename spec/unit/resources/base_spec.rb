@@ -36,7 +36,7 @@ module Artifactory
 
       context 'when the :client key is not present' do
         let(:client) { double }
-        before { Artifactory.stub(:client).and_return(client) }
+        before { allow(Artifactory).to receive(:client).and_return(client) }
 
         it 'uses Artifactory.client' do
           expect(described_class.extract_client!({})).to be(client)
@@ -97,7 +97,7 @@ module Artifactory
 
       it 'defaults to the Artifactory.client' do
         client = double
-        Artifactory.stub(:client).and_return(client)
+        allow(Artifactory).to receive(:client).and_return(client)
 
         expect(subject.client).to be(client)
       end
@@ -132,7 +132,7 @@ module Artifactory
 
     describe '#inspect' do
       it 'includes all the attributes' do
-        subject.stub(:attributes) do
+        allow(subject).to receive(:attributes) do
           { foo: 'bar' }
         end
 

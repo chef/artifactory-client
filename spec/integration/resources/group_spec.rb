@@ -31,14 +31,14 @@ module Artifactory
     describe '#delete' do
       it 'deletes the group from the server' do
         readers = described_class.find('readers')
-        expect(readers.delete).to be_true
+        expect(readers.delete).to be_truthy
       end
     end
 
     describe '#save' do
       it 'saves the group to the server' do
         group = described_class.new(name: 'testing')
-        expect(group.save).to be_true
+        expect(group.save).to be_truthy
       end
     end
   end

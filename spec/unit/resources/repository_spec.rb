@@ -5,8 +5,8 @@ module Artifactory
     let(:client) { double(:client) }
 
     before(:each) do
-      Artifactory.stub(:client).and_return(client)
-      client.stub(:get).and_return(response) if defined?(response)
+      allow(Artifactory).to receive(:client).and_return(client)
+      allow(client).to receive(:get).and_return(response) if defined?(response)
     end
 
     describe '.all' do
@@ -18,9 +18,9 @@ module Artifactory
         ]
       end
       before do
-        described_class.stub(:find).with('a', client: client).and_return('a')
-        described_class.stub(:find).with('b', client: client).and_return('b')
-        described_class.stub(:find).with('c', client: client).and_return('c')
+        allow(described_class).to receive(:find).with('a', client: client).and_return('a')
+        allow(described_class).to receive(:find).with('b', client: client).and_return('b')
+        allow(described_class).to receive(:find).with('c', client: client).and_return('c')
       end
 
       it 'gets /api/repositories' do
@@ -70,12 +70,12 @@ module Artifactory
 
       it 'creates a new instance' do
         instance = described_class.from_hash(hash)
-        expect(instance.blacked_out).to be_false
+        expect(instance.blacked_out).to be_falsey
         expect(instance.description).to eq('Local repository for in-house libraries')
         expect(instance.checksum_policy).to eq('client-checksums')
         expect(instance.excludes_pattern).to eq('')
-        expect(instance.handle_releases).to be_true
-        expect(instance.handle_snapshots).to be_false
+        expect(instance.handle_releases).to be_truthy
+        expect(instance.handle_snapshots).to be_falsey
         expect(instance.includes_pattern).to eq('**/*')
         expect(instance.key).to eq('libs-release-local')
         expect(instance.maximum_unique_snapshots).to eq(0)
@@ -83,7 +83,7 @@ module Artifactory
         expect(instance.property_sets).to eq(['artifactory'])
         expect(instance.rclass).to eq('local')
         expect(instance.snapshot_version_behavior).to eq('unique')
-        expect(instance.suppress_pom_checks).to be_false
+        expect(instance.suppress_pom_checks).to be_falsey
       end
     end
 
@@ -107,21 +107,11 @@ module Artifactory
         subject.key    = 'libs-release-local'
       end
 
-      context 'when the artifact is a File' do
-        it 'PUTs the file to the server' do
-          file = double(file)
-          File.stub(:new).and_return(file)
-          expect(client).to receive(:put).with('libs-release-local/remote/path', file, {})
-
-          subject.upload(file, '/remote/path')
-        end
-      end
-
       context 'when the artifact is a file path' do
         it 'PUTs the file at the path to the server' do
-          file = double(file)
+          file = double(File)
           path = '/fake/path'
-          File.stub(:new).with('/fake/path').and_return(file)
+          allow(File).to receive(:new).with('/fake/path').and_return(file)
           expect(client).to receive(:put).with('libs-release-local/remote/path', file, {})
 
           subject.upload(path, '/remote/path')
@@ -130,11 +120,12 @@ module Artifactory
 
       context 'when matrix properties are given' do
         it 'converts the hash into matrix properties' do
-          file = double(file)
-          File.stub(:new).and_return(file)
+          file = double(File)
+          path = '/fake/path'
+          allow(File).to receive(:new).with('/fake/path').and_return(file)
           expect(client).to receive(:put).with('libs-release-local;branch=master;user=Seth%20Vargo/remote/path', file, {})
 
-          subject.upload(file, '/remote/path',
+          subject.upload(path, '/remote/path',
             branch: 'master',
             user: 'Seth Vargo',
           )
@@ -144,11 +135,12 @@ module Artifactory
       context 'when custom headers are given' do
         it 'passes the headers to the client' do
           headers = { 'Content-Type' => 'text/plain' }
-          file = double(file)
-          File.stub(:new).and_return(file)
+          file = double(File)
+          path = '/fake/path'
+          allow(File).to receive(:new).with('/fake/path').and_return(file)
           expect(client).to receive(:put).with('libs-release-local/remote/path', file, headers)
 
-          subject.upload(file, '/remote/path', {}, headers)
+          subject.upload(path, '/remote/path', {}, headers)
         end
       end
     end

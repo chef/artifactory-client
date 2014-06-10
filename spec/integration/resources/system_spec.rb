@@ -10,7 +10,7 @@ module Artifactory
 
     describe '.ping' do
       it 'returns ok' do
-        expect(described_class.ping).to be_true
+        expect(described_class.ping).to be_truthy
       end
     end
 

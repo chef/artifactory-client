@@ -5,8 +5,8 @@ module Artifactory
     let(:client) { double(:client) }
 
     before(:each) do
-      Artifactory.stub(:client).and_return(client)
-      client.stub(:get).and_return(response) if defined?(response)
+      allow(Artifactory).to receive(:client).and_return(client)
+      allow(client).to receive(:get).and_return(response) if defined?(response)
     end
 
     describe '.all' do

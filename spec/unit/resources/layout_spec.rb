@@ -5,8 +5,8 @@ module Artifactory
     let(:client) { double(:client) }
 
     before(:each) do
-      Artifactory.stub(:client).and_return(client)
-      client.stub(:get).and_return(response) if defined?(response)
+      allow(Artifactory).to receive(:client).and_return(client)
+      allow(client).to receive(:get).and_return(response) if defined?(response)
     end
 
     describe '.all' do
@@ -24,7 +24,7 @@ module Artifactory
       end
 
       before do
-        Resource::System.stub(:configuration).and_return(xml)
+        allow(Resource::System).to receive(:configuration).and_return(xml)
       end
 
       it 'returns the layouts' do
@@ -49,7 +49,7 @@ module Artifactory
       end
 
       before do
-        Resource::System.stub(:configuration).and_return(xml)
+        allow(Resource::System).to receive(:configuration).and_return(xml)
       end
 
       it 'returns the found layout' do

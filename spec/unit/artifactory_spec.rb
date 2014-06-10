@@ -47,10 +47,10 @@ describe Artifactory do
   describe '.method_missing' do
     context 'when the client responds to the method' do
       let(:client) { double(:client) }
-      before { Artifactory.stub(:client).and_return(client) }
+      before { allow(Artifactory).to receive(:client).and_return(client) }
 
       it 'delegates the method to the client' do
-        client.stub(bacon: 'awesome')
+        allow(client).to receive(:bacon).and_return('awesome')
         expect { Artifactory.bacon }.to_not raise_error
       end
     end
@@ -64,7 +64,7 @@ describe Artifactory do
 
   describe '.respond_to_missing?' do
     let(:client) { double(:client) }
-    before { Artifactory.stub(:client).and_return(client) }
+    before { allow(Artifactory).to receive(:client).and_return(client) }
 
     it 'delegates to the client' do
       expect { Artifactory.respond_to_missing?(:foo) }.to_not raise_error

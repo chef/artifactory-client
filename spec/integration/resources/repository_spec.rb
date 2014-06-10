@@ -13,7 +13,7 @@ module Artifactory
     describe '#save' do
       it 'saves the repository to the server' do
         repository = described_class.new(key: 'libs-testing-local')
-        expect(repository.save).to be_true
+        expect(repository.save).to be_truthy
       end
     end
   end
