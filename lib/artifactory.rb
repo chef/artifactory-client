@@ -15,6 +15,7 @@ module Artifactory
 
   module Resource
     autoload :Artifact,     'artifactory/resources/artifact'
+    autoload :Backup,       'artifactory/resources/backup'
     autoload :Base,         'artifactory/resources/base'
     autoload :Build,        'artifactory/resources/build'
     autoload :Group,        'artifactory/resources/group'
