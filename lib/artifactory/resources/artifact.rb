@@ -435,7 +435,46 @@ module Artifactory
       endpoint = File.join("#{url_safe(repo)}#{matrix}", remote_path)
 
       response = client.put(endpoint, file, headers)
+
+      # Upload checksums if they were given
+      upload_checksum(repo, remote_path, :md5,  md5)  if md5
+      upload_checksum(repo, remote_path, :sha1, sha1) if sha1
+
       self.class.from_hash(response)
+    end
+
+    #
+    # Upload the checksum for this artifact. **The artifact must already be
+    # uploaded or Artifactory will throw an exception!**. This is both a public
+    # and private API. It is automatically called in {upload} if the SHA
+    # values are set. You may also call it manually.
+    #
+    # @example Set an artifact's md5
+    #   artifact = Artifact.new(local_path: '/local/path/to/file.deb')
+    #   artifact.upload_checksum('libs-release-local', '/remote/path', :md5, 'ABCD1234')
+    #
+    # @param (see Artifact#upload)
+    # @param [Symbol] type
+    #   the type of checksum to write (+md5+ or +sha1+)
+    # @param [String] value
+    #   the actual checksum
+    #
+    # @return [true]
+    #
+    def upload_checksum(repo, remote_path, type, value)
+      file = Tempfile.new("checksum.#{type}")
+      file.write(value)
+      file.rewind
+
+      endpoint = File.join(url_safe(repo), "#{remote_path}.#{type}")
+
+      client.put(endpoint, file)
+      true
+    ensure
+      if file
+        file.close
+        file.unlink
+      end
     end
 
     #
