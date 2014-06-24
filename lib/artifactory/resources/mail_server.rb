@@ -96,9 +96,9 @@ module Artifactory
       end
     end
 
+    attribute :enabled, 'true'
     attribute :host, ->{ raise 'host missing!' }
     attribute :port
-    attribute :enabled, 'true'
     attribute :username
     attribute :password
     attribute :from
