@@ -120,15 +120,18 @@ module Artifactory
       end
     end
 
+    # Ordered to match the artifactory xsd to make consuming the attributes
+    # hash when writing artifactory xml more convenient.
+    # http://bit.ly/UHMrHc
     attribute :key, ->{ raise 'name missing!' }
-    attribute :auto_create_user
-    attribute :email_attribute, 'mail'
-    attribute :enabled, 'true'
+    attribute :enabled, true
     attribute :ldap_url
     attribute :manager_dn
     attribute :manager_password
     attribute :search_base
     attribute :search_filter
     attribute :search_sub_tree
+    attribute :auto_create_user
+    attribute :email_attribute, 'mail'
   end
 end
