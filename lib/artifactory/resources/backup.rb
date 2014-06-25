@@ -110,12 +110,13 @@ module Artifactory
     end
 
     attribute :key, ->{ raise 'name missing!' }
-    attribute :create_archive
-    attribute :cron_exp
     attribute :enabled, 'true'
-    attribute :exclude_builds
-    attribute :excluded_repositories
+    attribute :dir
+    attribute :cron_exp
     attribute :retention_period_hours
+    attribute :create_archive
+    attribute :excluded_repositories
     attribute :send_mail_on_error
+    attribute :exclude_builds
   end
 end
