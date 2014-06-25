@@ -126,11 +126,11 @@ module Artifactory
     attribute :key, ->{ raise 'name missing!' }
     attribute :enabled, true
     attribute :ldap_url
+    attribute :search_filter
+    attribute :search_base
+    attribute :search_sub_tree
     attribute :manager_dn
     attribute :manager_password
-    attribute :search_base
-    attribute :search_filter
-    attribute :search_sub_tree
     attribute :auto_create_user
     attribute :email_attribute, 'mail'
   end
