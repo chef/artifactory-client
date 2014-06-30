@@ -89,16 +89,27 @@ module Artifactory
         return nil if name_node.empty?
         properties = {}
         name_node[0].parent.each_element_with_text do |e|
-          properties[e.name] = e.text
+          properties[e.name] = to_type(e.text)
         end
 
         from_hash(properties, options)
+      end
+
+      def to_type(string)
+        return true if string.eql?('true')
+        return false if string.eql?('false')
+        return string.to_i if numeric?(string)
+        return string
+      end
+
+      def numeric?(string)
+        string.to_i.to_s == string || string.to_f.to_s == string
       end
     end
 
     attribute :name, ->{ raise 'Name missing!' }
     attribute :artifact_path_pattern
-    attribute :distinctive_descriptor_path_pattern, 'true'
+    attribute :distinctive_descriptor_path_pattern, true
     attribute :descriptor_path_pattern
     attribute :folder_integration_revision_reg_exp
     attribute :file_integration_revision_reg_exp
