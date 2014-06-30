@@ -67,30 +67,6 @@ module Artifactory
           from_hash(hash, options)
         end
       end
-
-      #
-      # Find the text elements matching a giving xpath
-      #
-      # @param [String] xpath
-      #   xpath expression
-      #
-      # @param [REXML] config
-      #   Artifactory configuration file as an REXML doc
-      #
-      # @param [Hash] options
-      #   the list of options
-      #
-      def find_from_config(xpath, config, options = {})
-        name_node = REXML::XPath.match(config, xpath)
-        return nil if name_node.empty?
-        properties = {}
-        name_node[0].parent.each_element_with_text do |e|
-          properties[e.name] = Util.to_type(e.text)
-        end
-
-        from_hash(properties, options)
-      end
-
     end
 
     attribute :url_base, ->{ raise 'URL base missing!' }
