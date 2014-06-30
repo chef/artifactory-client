@@ -96,6 +96,34 @@ module Artifactory
       end
     end
 
+    #
+    # Flatten an xml element with at most one child node with children
+    # into a hash.
+    #
+    # @param [REXML] element
+    #   xml element
+    #
+    def xml_to_hash(element, child_with_children = '', unique_children = true)
+      properties = {}
+      element.each_element_with_text do |e|
+        if e.name.eql?(child_with_children)
+          if unique_children
+            e.each_element_with_text do |t|
+              properties[t.name] = to_type(t.text)
+            end
+          else
+            children = []
+            e.each_element_with_text do |t|
+              properties[t.name] = children.push(to_type(t.text))
+            end
+          end
+        else
+          properties[e.name] = to_type(e.text)
+        end
+      end
+      properties
+    end
+
     def to_type(string)
       return true if string.eql?('true')
       return false if string.eql?('false')

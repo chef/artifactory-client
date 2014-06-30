@@ -62,7 +62,7 @@ module Artifactory
       #
       def list_from_config(xpath, config, options = {})
         REXML::XPath.match(config, xpath).map do |r|
-          hash = xml_to_hash(r, 'excludedRepositories', false)
+          hash = Util.xml_to_hash(r, 'excludedRepositories', false)
           from_hash(hash, options)
         end
       end
@@ -83,36 +83,8 @@ module Artifactory
       def find_from_config(xpath, config, options = {})
         name_node = REXML::XPath.match(config, xpath)
         return nil if name_node.empty?
-        properties = xml_to_hash(name_node[0].parent, 'excludedRepositories', false)
+        properties = Util.xml_to_hash(name_node[0].parent, 'excludedRepositories', false)
         from_hash(properties, options)
-      end
-
-      #
-      # Flatten an xml element with at most one child node with children
-      # into a hash.
-      #
-      # @param [REXML] element
-      #   xml element
-      #
-      def xml_to_hash(element, child_with_children = '', unique_children = true)
-        properties = {}
-        element.each_element_with_text do |e|
-          if e.name.eql?(child_with_children)
-            if unique_children
-              e.each_element_with_text do |t|
-                properties[t.name] = Util.to_type(t.text)
-              end
-            else
-              children = []
-              e.each_element_with_text do |t|
-                properties[t.name] = children.push(Util.to_type(t.text))
-              end
-            end
-          else
-            properties[e.name] = Util.to_type(e.text)
-          end
-        end
-        properties
       end
     end
 
