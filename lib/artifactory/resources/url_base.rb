@@ -85,7 +85,7 @@ module Artifactory
         return nil if name_node.empty?
         properties = {}
         name_node[0].parent.each_element_with_text do |e|
-          properties[e.name] = e.text
+          properties[e.name] = Util.to_type(e.text)
         end
 
         from_hash(properties, options)

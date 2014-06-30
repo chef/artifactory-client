@@ -89,21 +89,10 @@ module Artifactory
         return nil if name_node.empty?
         properties = {}
         name_node[0].parent.each_element_with_text do |e|
-          properties[e.name] = to_type(e.text)
+          properties[e.name] = Util.to_type(e.text)
         end
 
         from_hash(properties, options)
-      end
-
-      def to_type(string)
-        return true if string.eql?('true')
-        return false if string.eql?('false')
-        return string.to_i if numeric?(string)
-        return string
-      end
-
-      def numeric?(string)
-        string.to_i.to_s == string || string.to_f.to_s == string
       end
     end
 

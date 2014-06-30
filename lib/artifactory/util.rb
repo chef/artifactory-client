@@ -95,5 +95,16 @@ module Artifactory
         hash
       end
     end
+
+    def to_type(string)
+      return true if string.eql?('true')
+      return false if string.eql?('false')
+      return string.to_i if numeric?(string)
+      return string
+    end
+
+    def numeric?(string)
+      string.to_i.to_s == string || string.to_f.to_s == string
+    end
   end
 end
