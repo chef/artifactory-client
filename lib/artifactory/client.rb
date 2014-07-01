@@ -34,7 +34,7 @@ module Artifactory
     proxy Resource::Artifact
     proxy Resource::Backup
     proxy Resource::Layout
-    proxy Resource::LdapSetting
+    proxy Resource::LDAPSetting
     proxy Resource::MailServer
     proxy Resource::Repository
     proxy Resource::UrlBase

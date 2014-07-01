@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Artifactory
-  describe Resource::LdapSetting, :integration do
+  describe Resource::LDAPSetting, :integration do
     describe '.all' do
       it 'returns an array of LdapSetting' do
         results = described_class.all

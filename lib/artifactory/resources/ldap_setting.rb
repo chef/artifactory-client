@@ -1,7 +1,7 @@
 require 'rexml/document'
 
 module Artifactory
-  class Resource::LdapSetting < Resource::Base
+  class Resource::LDAPSetting < Resource::Base
     class << self
       #
       # Get a list of all ldap settings in the system.
@@ -12,7 +12,7 @@ module Artifactory
       # @option options [Artifactory::Client] :client
       #   the client object to make the request with
       #
-      # @return [Array<Resource::LdapSetting>]
+      # @return [Array<Resource::LDAPSetting>]
       #   the list of layouts
       #
       def all(options = {})
@@ -23,7 +23,7 @@ module Artifactory
       #
       # Find (fetch) an ldap setting by its name.
       #
-      # @example Find a LdapSetting by its name.
+      # @example Find an LDAPSetting by its name.
       #   ldap_config.find('ldap.example.com') #=> #<MailServer host: 'ldap.example.com' ...>
       #
       # @param [String] name
@@ -34,7 +34,7 @@ module Artifactory
       # @option options [Artifactory::Client] :client
       #   the client object to make the request with
       #
-      # @return [Resource::LdapSetting, nil]
+      # @return [Resource::LDAPSetting, nil]
       #   an instance of the ldap setting that matches the given name, or +nil+
       #   if one does not exist
       #

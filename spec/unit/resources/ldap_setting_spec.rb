@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Artifactory
-  describe Resource::LdapSetting do
+  describe Resource::LDAPSetting do
     let(:client) { double(:client) }
 
     before(:each) do

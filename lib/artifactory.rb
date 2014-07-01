@@ -20,7 +20,7 @@ module Artifactory
     autoload :Build,        'artifactory/resources/build'
     autoload :Group,        'artifactory/resources/group'
     autoload :Layout,       'artifactory/resources/layout'
-    autoload :LdapSetting,  'artifactory/resources/ldap_setting'
+    autoload :LDAPSetting,  'artifactory/resources/ldap_setting'
     autoload :MailServer,   'artifactory/resources/mail_server'
     autoload :Plugin,       'artifactory/resources/plugin'
     autoload :Repository,   'artifactory/resources/repository'
