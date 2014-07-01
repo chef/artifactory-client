@@ -47,6 +47,7 @@ module Artifactory
       end
 
       private
+
       #
       # List all the child text elements in the Artifactory configuration file
       # of a node matching the specified xpath
@@ -59,6 +60,8 @@ module Artifactory
       #
       # @param [Hash] options
       #   the list of options
+      #
+      # @return [~Resource::Base]
       #
       def list_from_config(xpath, config, options = {})
         REXML::XPath.match(config, xpath).map do |r|
