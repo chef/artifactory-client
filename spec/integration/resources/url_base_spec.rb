@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Artifactory
-  describe Resource::UrlBase, :integration do
+  describe Resource::URLBase, :integration do
     describe '.all' do
       it 'returns an array of UrlBases' do
         results = described_class.all

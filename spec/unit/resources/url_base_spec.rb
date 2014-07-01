@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Artifactory
-  describe Resource::UrlBase do
+  describe Resource::URLBase do
     let(:client) { double(:client) }
 
     before(:each) do

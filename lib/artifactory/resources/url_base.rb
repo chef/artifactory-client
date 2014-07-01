@@ -1,7 +1,7 @@
 require 'rexml/document'
 
 module Artifactory
-  class Resource::UrlBase < Resource::Base
+  class Resource::URLBase < Resource::Base
     class << self
       #
       # List UrlBase in the system configuration.
@@ -12,7 +12,7 @@ module Artifactory
       # @option options [Artifactory::Client] :client
       #   the client object to make the request with
       #
-      # @return [Array<Resource::UrlBase>]
+      # @return [Array<Resource::URLBase>]
       #   the list of UrlBases
       #
       def all(options = {})
@@ -23,8 +23,8 @@ module Artifactory
       #
       # Find (fetch) the url base.
       #
-      # @example Find a UrlBase by its url_base.
-      #   url_base.find('http://33.33.33.20/artifactory') #=> #<UrlBase url_base: 'http://33.33.33.20/artifactory' ...>
+      # @example Find a URLBase by its url_base.
+      #   url_base.find('http://33.33.33.20/artifactory') #=> #<URLBase url_base: 'http://33.33.33.20/artifactory' ...>
       #
       # @param [String] url
       #   the base url to find
