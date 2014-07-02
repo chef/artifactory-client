@@ -92,6 +92,53 @@ module Artifactory
       end
 
       #
+      # List all the child text elements in the Artifactory configuration file
+      # of a node matching the specified xpath
+      #
+      # @param [String] xpath
+      #   xpath expression for the parent element whose children are to be listed
+      #
+      # @param [REXML] config
+      #   Artifactory config as an REXML file
+      #
+      # @param [Hash] options
+      #   the list of options
+      #
+      def list_from_config(xpath, config, options = {})
+        REXML::XPath.match(config, xpath).map do |r|
+          hash = {}
+
+          r.each_element_with_text do |l|
+            hash[l.name] = l.get_text
+          end
+          from_hash(hash, options)
+        end
+      end
+
+      #
+      # Find the text elements matching a giving xpath
+      #
+      # @param [String] xpath
+      #   xpath expression
+      #
+      # @param [REXML] config
+      #   Artifactory configuration file as an REXML doc
+      #
+      # @param [Hash] options
+      #   the list of options
+      #
+      def find_from_config(xpath, config, options = {})
+        name_node = REXML::XPath.match(config, xpath)
+        return nil if name_node.empty?
+        properties = {}
+        name_node[0].parent.each_element_with_text do |e|
+          properties[e.name] = Util.to_type(e.text)
+        end
+
+        from_hash(properties, options)
+      end
+
+      #
       # Construct a new object from the hash.
       #
       # @param [Hash] hash

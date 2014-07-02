@@ -32,8 +32,12 @@ module Artifactory
     include Artifactory::Configurable
 
     proxy Resource::Artifact
+    proxy Resource::Backup
     proxy Resource::Layout
+    proxy Resource::LDAPSetting
+    proxy Resource::MailServer
     proxy Resource::Repository
+    proxy Resource::URLBase
     proxy Resource::User
     proxy Resource::System
 

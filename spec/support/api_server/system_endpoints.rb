@@ -35,7 +35,50 @@ module Artifactory
                 <fileIntegrationRevisionRegExp>SNAPSHOT|(?:(?:[0-9]{8}.[0-9]{6})-(?:[0-9]+))</fileIntegrationRevisionRegExp>
               </repoLayout>
             </repoLayouts>
-          </config>
+            <urlBase>http://33.33.33.20/artifactory</urlBase>
+            <mailServer>
+              <enabled>true</enabled>
+              <host>smtp.gmail.com</host>
+              <port>25</port>
+              <username>us@example.com</username>
+              <password>ihopethisisnotyourpassword</password>
+              <from>artifactory@example.com</from>
+              <subjectPrefix>[Artifactory]</subjectPrefix>
+              <tls>true</tls>
+              <ssl>false</ssl>
+              <artifactoryUrl>http://33.33.33.20/artifactory</artifactoryUrl>
+            </mailServer>
+            <security>
+              <ldapSettings>
+                <ldapSetting>
+                  <key>example-ldap</key>
+                  <enabled>true</enabled>
+                  <ldapUrl>ldap://localhost/DC=examplecorp,DC=com</ldapUrl>
+                  <search>
+                    <searchFilter>sAMAccountName={0}</searchFilter>
+                    <searchBase>OU=Domain Users</searchBase>
+                    <searchSubTree>true</searchSubTree>
+                    <managerDn>CN=ldapbind,OU=Employees,OU=Domain Users,DC=examplecorp,DC=com</managerDn>
+                    <managerPassword>ldappassword</managerPassword>
+                  </search>
+                  <autoCreateUser>false</autoCreateUser>
+                  <emailAttribute>mail</emailAttribute>
+                </ldapSetting>
+              </ldapSettings>
+            </security>
+            <backups>
+              <backup>
+                <key>backup-daily</key>
+                <enabled>true</enabled>
+                <cronExp>0 0 2 ? * MON-FRI</cronExp>
+                <retentionPeriodHours>0</retentionPeriodHours>
+                <createArchive>false</createArchive>
+                <excludedRepositories/>
+                <sendMailOnError>true</sendMailOnError>
+                <excludeBuilds>false</excludeBuilds>
+             </backup>
+           </backups> 
+         </config>
         EOH
       end
 
