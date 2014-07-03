@@ -52,10 +52,11 @@ module Artifactory
     proxy Resource::Layout
     proxy Resource::LDAPSetting
     proxy Resource::MailServer
+    proxy Resource::PermissionTarget
     proxy Resource::Repository
+    proxy Resource::System
     proxy Resource::URLBase
     proxy Resource::User
-    proxy Resource::System
 
     #
     # Create a new Artifactory Client with the given options. Any options
