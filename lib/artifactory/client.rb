@@ -180,7 +180,7 @@ module Artifactory
       # Setup PATCH/POST/PUT
       if [:patch, :post, :put].include?(verb)
         if data.respond_to?(:read)
-          request.add_field('Transfer-Encoding', 'chunked')
+          request.content_length = data.size
           request.body_stream = data
         elsif data.is_a?(Hash)
           request.form_data = data
