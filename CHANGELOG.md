@@ -3,6 +3,21 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.0.0 (07-15-2014)
+-------------------
+**Breaking Changes**
+- Change the airity of uploading an Artifact
+- Automatically upload checksum files during Artifact upload
+
+**Other Changes**
+- Bump to RSpec 3
+- Add support for configuring the Backup resource
+- Add support for configuring the LDAPSetting resource
+- Add support for configuring the MailServer resource
+- Add support for configuring the URLBase resource
+- Set `Transfer-Encoding` to "chunked"
+- Do not swallow returned errors from the server
+
 v1.2.0 (2014-06-02)
 -------------------
 - Change the airty of Repository#find to align with other resources
