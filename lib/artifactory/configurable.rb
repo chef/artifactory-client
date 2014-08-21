@@ -22,6 +22,7 @@ module Artifactory
           :ssl_pem_file,
           :ssl_verify,
           :user_agent,
+          :read_timeout,
         ]
       end
     end
