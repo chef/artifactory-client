@@ -195,6 +195,11 @@ module Artifactory
       connection = Net::HTTP.new(uri.host, uri.port,
         proxy_address, proxy_port, proxy_username, proxy_password)
 
+      # The artifacts being uploaded might be large, so there’s a good chance
+      # we'll need to bump this higher than the `Net::HTTP` default of 60
+      # seconds.
+      connection.read_timeout = read_timeout
+
       # Apply SSL, if applicable
       if uri.scheme == 'https'
         require 'net/https' unless defined?(Net::HTTPS)

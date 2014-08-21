@@ -111,6 +111,15 @@ module Artifactory
           %w[t y].include?(ENV['ARTIFACTORY_SSL_VERIFY'].downcase[0])
         end
       end
+
+      #
+      # Number of seconds to wait for a response from Artifactory
+      #
+      # @return [Integer, nil]
+      #
+      def read_timeout
+        ENV['ARTIFACTORY_READ_TIMEOUT'] || 120
+      end
     end
   end
 end
