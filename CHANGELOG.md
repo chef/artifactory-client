@@ -3,6 +3,11 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.1.0 (08-21-2014)
+-------------------
+- Add `Content-Size` header
+- Expose `read_timeout` as a configurable (defaulting to 120 seconds)
+
 v2.0.0 (07-15-2014)
 -------------------
 **Breaking Changes**
