@@ -57,7 +57,7 @@ module Artifactory
     attribute :handle_snapshots, true
     attribute :includes_pattern, '**/*'
     attribute :key, ->{ raise 'Key is missing!' }
-    attribute :maximum_unique_snapshots, 0
+    attribute :max_unique_snapshots, 0
     attribute :notes
     attribute :property_sets, []
     attribute :repo_layout_ref, 'maven-2-default'
