@@ -59,7 +59,7 @@ module Artifactory
           'checksumPolicyType'           => 'client-checksums',
           'handleReleases'               => false,
           'handleSnapshots'              => true,
-          'maxUniqueSnapshots'           => 0,
+          'maxUniqueSnapshots'           => 10,
           'snapshotVersionBehavior'      => 'unique',
           'suppressPomConsistencyChecks' => false,
           'blackedOut'                   => false,
