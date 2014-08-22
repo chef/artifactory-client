@@ -56,7 +56,7 @@ module Artifactory
           'checksumPolicyType'           => 'client-checksums',
           'handleReleases'               => true,
           'handleSnapshots'              => false,
-          'maxUniqueSnapshots'           => 0,
+          'maxUniqueSnapshots'           => 10,
           'snapshotVersionBehavior'      => 'unique',
           'suppressPomConsistencyChecks' => false,
           'blackedOut'                   => false,
@@ -78,7 +78,7 @@ module Artifactory
         expect(instance.handle_snapshots).to be_falsey
         expect(instance.includes_pattern).to eq('**/*')
         expect(instance.key).to eq('libs-release-local')
-        expect(instance.maximum_unique_snapshots).to eq(0)
+        expect(instance.max_unique_snapshots).to eq(10)
         expect(instance.notes).to eq('')
         expect(instance.property_sets).to eq(['artifactory'])
         expect(instance.rclass).to eq('local')
