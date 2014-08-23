@@ -58,7 +58,7 @@ module Artifactory
           'handleSnapshots'              => false,
           'maxUniqueSnapshots'           => 10,
           'snapshotVersionBehavior'      => 'unique',
-          'suppressPomConsistencyChecks' => false,
+          'suppressPomConsistencyChecks' => true,
           'blackedOut'                   => false,
           'propertySets'                 => ['artifactory'],
           'archiveBrowsingEnabled'       => false,
@@ -83,7 +83,7 @@ module Artifactory
         expect(instance.property_sets).to eq(['artifactory'])
         expect(instance.rclass).to eq('local')
         expect(instance.snapshot_version_behavior).to eq('unique')
-        expect(instance.suppress_pom_checks).to be_falsey
+        expect(instance.suppress_pom_consistency_checks).to be_truthy
       end
     end
 

@@ -63,7 +63,7 @@ module Artifactory
     attribute :repo_layout_ref, 'maven-2-default'
     attribute :rclass, 'local'
     attribute :snapshot_version_behavior, 'non-unique'
-    attribute :suppress_pom_checks, false
+    attribute :suppress_pom_consistency_checks, false
 
     def save
       client.put(api_path, to_json, headers)
