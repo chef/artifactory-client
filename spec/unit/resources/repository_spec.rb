@@ -53,7 +53,7 @@ module Artifactory
           'repoLayoutRef'                => 'maven-2-default',
           'enableNuGetSupport'           => false,
           'enableGemsSupport'            => false,
-          'checksumPolicyType'           => 'client-checksums',
+          'checksumPolicyType'           => 'server-generated-checksums',
           'handleReleases'               => true,
           'handleSnapshots'              => false,
           'maxUniqueSnapshots'           => 10,
@@ -72,7 +72,7 @@ module Artifactory
         instance = described_class.from_hash(hash)
         expect(instance.blacked_out).to be_falsey
         expect(instance.description).to eq('Local repository for in-house libraries')
-        expect(instance.checksum_policy).to eq('client-checksums')
+        expect(instance.checksum_policy_type).to eq('server-generated-checksums')
         expect(instance.excludes_pattern).to eq('')
         expect(instance.handle_releases).to be_truthy
         expect(instance.handle_snapshots).to be_falsey

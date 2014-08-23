@@ -51,7 +51,7 @@ module Artifactory
 
     attribute :blacked_out, false
     attribute :description
-    attribute :checksum_policy, 'client-checksums'
+    attribute :checksum_policy_type, 'client-checksums'
     attribute :excludes_pattern, ''
     attribute :handle_releases, true
     attribute :handle_snapshots, true
