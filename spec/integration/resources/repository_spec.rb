@@ -10,6 +10,16 @@ module Artifactory
       end
     end
 
+    describe '.find' do
+      it 'finds a repository by key' do
+        repository = described_class.find('libs-snapshots-local')
+
+        expect(repository).to be_a(described_class)
+        expect(repository.key).to eq('libs-snapshots-local')
+        expect(repository.max_unique_snapshots).to eq(10)
+      end
+    end
+
     describe '#save' do
       it 'saves the repository to the server' do
         repository = described_class.new(key: 'libs-testing-local')

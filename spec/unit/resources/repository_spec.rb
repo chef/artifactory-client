@@ -53,12 +53,12 @@ module Artifactory
           'repoLayoutRef'                => 'maven-2-default',
           'enableNuGetSupport'           => false,
           'enableGemsSupport'            => false,
-          'checksumPolicyType'           => 'client-checksums',
+          'checksumPolicyType'           => 'server-generated-checksums',
           'handleReleases'               => true,
           'handleSnapshots'              => false,
-          'maxUniqueSnapshots'           => 0,
+          'maxUniqueSnapshots'           => 10,
           'snapshotVersionBehavior'      => 'unique',
-          'suppressPomConsistencyChecks' => false,
+          'suppressPomConsistencyChecks' => true,
           'blackedOut'                   => false,
           'propertySets'                 => ['artifactory'],
           'archiveBrowsingEnabled'       => false,
@@ -72,18 +72,18 @@ module Artifactory
         instance = described_class.from_hash(hash)
         expect(instance.blacked_out).to be_falsey
         expect(instance.description).to eq('Local repository for in-house libraries')
-        expect(instance.checksum_policy).to eq('client-checksums')
+        expect(instance.checksum_policy_type).to eq('server-generated-checksums')
         expect(instance.excludes_pattern).to eq('')
         expect(instance.handle_releases).to be_truthy
         expect(instance.handle_snapshots).to be_falsey
         expect(instance.includes_pattern).to eq('**/*')
         expect(instance.key).to eq('libs-release-local')
-        expect(instance.maximum_unique_snapshots).to eq(0)
+        expect(instance.max_unique_snapshots).to eq(10)
         expect(instance.notes).to eq('')
         expect(instance.property_sets).to eq(['artifactory'])
         expect(instance.rclass).to eq('local')
         expect(instance.snapshot_version_behavior).to eq('unique')
-        expect(instance.suppress_pom_checks).to be_falsey
+        expect(instance.suppress_pom_consistency_checks).to be_truthy
       end
     end
 

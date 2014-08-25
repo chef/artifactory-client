@@ -51,19 +51,19 @@ module Artifactory
 
     attribute :blacked_out, false
     attribute :description
-    attribute :checksum_policy, 'client-checksums'
+    attribute :checksum_policy_type, 'client-checksums'
     attribute :excludes_pattern, ''
     attribute :handle_releases, true
     attribute :handle_snapshots, true
     attribute :includes_pattern, '**/*'
     attribute :key, ->{ raise 'Key is missing!' }
-    attribute :maximum_unique_snapshots, 0
+    attribute :max_unique_snapshots, 0
     attribute :notes
     attribute :property_sets, []
     attribute :repo_layout_ref, 'maven-2-default'
     attribute :rclass, 'local'
     attribute :snapshot_version_behavior, 'non-unique'
-    attribute :suppress_pom_checks, false
+    attribute :suppress_pom_consistency_checks, false
 
     def save
       client.put(api_path, to_json, headers)
