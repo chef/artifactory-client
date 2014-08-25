@@ -3,6 +3,16 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.1.1 (08-25-2014)
+-------------------
+- Use the proper name for POM consistency checks
+- Use the proper name for checksum policies
+- Use the proper name for max unique snapshots
+
+**Other Changes**
+- Improve integration test coverage
+- Enable running integration tests in `Rakefile`
+
 v2.1.0 (08-21-2014)
 -------------------
 - Add `Content-Size` header
