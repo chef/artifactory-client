@@ -65,8 +65,22 @@ module Artifactory
     attribute :snapshot_version_behavior, 'non-unique'
     attribute :suppress_pom_consistency_checks, false
 
+    #
+    # Creates or updates a repository configuration depending on if the
+    # repository configuration previously existed. This method also works
+    # around Artifactory's dangerous default behavior:
+    #
+    #   > An existing repository with the same key are removed from the
+    #   > configuration and its content is removed!
+    #
+    # @return [Boolean]
+    #
     def save
-      client.put(api_path, to_json, headers)
+      if self.class.find(key, client: client)
+        client.post(api_path, to_json, headers)
+      else
+        client.put(api_path, to_json, headers)
+      end
       true
     end
 

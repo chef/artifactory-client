@@ -78,5 +78,35 @@ module Artifactory
         expect(instance.realm).to eq('artifactory')
       end
     end
+
+    describe '#save' do
+      let(:client) { double }
+      before do
+        subject.client = client
+        subject.name = 'schisamo'
+      end
+
+      context 'when the user is new' do
+        before do
+          allow(described_class).to receive(:find).with(subject.name, client: client).and_return(nil)
+        end
+
+        it 'PUTS the user to the server' do
+          expect(client).to receive(:put).with("/api/security/users/#{subject.name}", kind_of(String), kind_of(Hash))
+          subject.save
+        end
+      end
+
+      context 'when the user exists' do
+        before do
+          allow(described_class).to receive(:find).with(subject.name, client: client).and_return({name: subject.name})
+        end
+
+        it 'POSTS the user to the server' do
+          expect(client).to receive(:post).with("/api/security/users/#{subject.name}", kind_of(String), kind_of(Hash))
+          subject.save
+        end
+      end
+    end
   end
 end

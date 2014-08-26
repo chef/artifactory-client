@@ -71,6 +71,11 @@ module Artifactory
         })
       end
 
+      # Simulate a non-existent repository
+      app.get('/api/repositories/libs-testing-local') do
+        status 400
+      end
+
       app.put('/api/repositories/libs-testing-local') do
         content_type 'text/plain'
         "Repository libs-resting-local created successfully!\n"

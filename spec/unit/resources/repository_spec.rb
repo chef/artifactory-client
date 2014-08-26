@@ -94,9 +94,26 @@ module Artifactory
         subject.key = 'libs-release-local'
       end
 
-      it 'PUTS the file to the server' do
-        expect(client).to receive(:put).with('/api/repositories/libs-release-local', kind_of(String), kind_of(Hash))
-        subject.save
+      context 'when the repository is new' do
+        before do
+          allow(described_class).to receive(:find).with(subject.key, client: client).and_return(nil)
+        end
+
+        it 'PUTS the file to the server' do
+          expect(client).to receive(:put).with("/api/repositories/#{subject.key}", kind_of(String), kind_of(Hash))
+          subject.save
+        end
+      end
+
+      context 'when the repository exists' do
+        before do
+          allow(described_class).to receive(:find).with(subject.key, client: client).and_return({key: subject.key})
+        end
+
+        it 'POSTS the file to the server' do
+          expect(client).to receive(:post).with("/api/repositories/#{subject.key}", kind_of(String), kind_of(Hash))
+          subject.save
+        end
       end
     end
 
