@@ -3,6 +3,10 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.1.2 (08-26-2014)
+-------------------
+- Use the proper REST verbs on various resources to prevent a bug
+
 v2.1.1 (08-25-2014)
 -------------------
 - Use the proper name for POM consistency checks
