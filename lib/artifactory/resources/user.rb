@@ -74,12 +74,17 @@ module Artifactory
     end
 
     #
-    # Save the user to the artifactory server.
+    # Creates or updates a user configuration depending on if the
+    # user configuration previously existed.
     #
     # @return [Boolean]
     #
     def save
-      client.put(api_path, to_json, headers)
+      if self.class.find(name, client: client)
+        client.post(api_path, to_json, headers)
+      else
+        client.put(api_path, to_json, headers)
+      end
       true
     end
 
