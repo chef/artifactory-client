@@ -70,12 +70,17 @@ module Artifactory
     end
 
     #
-    # Save the group to the artifactory server.
+    # Creates or updates a group configuration depending on if the
+    # group configuration previously existed.
     #
     # @return [Boolean]
     #
     def save
-      client.put(api_path, to_json, headers)
+      if self.class.find(name, client: client)
+        client.post(api_path, to_json, headers)
+      else
+        client.put(api_path, to_json, headers)
+      end
       true
     end
 

@@ -71,5 +71,35 @@ module Artifactory
         expect(instance.realm_attributes).to be_nil
       end
     end
+
+    describe '#save' do
+      let(:client) { double }
+      before do
+        subject.client = client
+        subject.name = 'deployers'
+      end
+
+      context 'when the group is new' do
+        before do
+          allow(described_class).to receive(:find).with(subject.name, client: client).and_return(nil)
+        end
+
+        it 'PUTS the group to the server' do
+          expect(client).to receive(:put).with("/api/security/groups/#{subject.name}", kind_of(String), kind_of(Hash))
+          subject.save
+        end
+      end
+
+      context 'when the group exists' do
+        before do
+          allow(described_class).to receive(:find).with(subject.name, client: client).and_return({name: subject.name})
+        end
+
+        it 'POSTS the group to the server' do
+          expect(client).to receive(:post).with("/api/security/groups/#{subject.name}", kind_of(String), kind_of(Hash))
+          subject.save
+        end
+      end
+    end
   end
 end
