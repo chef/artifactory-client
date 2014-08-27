@@ -1,3 +1,6 @@
+
+require 'tempfile'
+
 module Artifactory
   class Resource::Artifact < Resource::Base
     class << self
