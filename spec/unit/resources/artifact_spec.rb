@@ -54,11 +54,27 @@ module Artifactory
 
       context 'when matrix properties are given' do
         it 'converts the hash into matrix properties' do
-          expect(client).to receive(:put).with('libs-release-local;branch=master;user=Seth%20Vargo/remote/path', file, {})
+          expect(client).to receive(:put).with('libs-release-local;branch=master;user=Seth/remote/path', file, {})
 
           subject.upload('libs-release-local', '/remote/path',
             branch: 'master',
+            user: 'Seth',
+          )
+        end
+
+        it 'converts spaces to "+" characters' do
+          expect(client).to receive(:put).with('libs-release-local;user=Seth+Vargo/remote/path', file, {})
+
+          subject.upload('libs-release-local', '/remote/path',
             user: 'Seth Vargo',
+          )
+        end
+
+        it 'converts "+" to "%2B"' do
+          expect(client).to receive(:put).with('libs-release-local;version=12.0.0-alpha.1%2B20140826080510.git.50.f5ff271/remote/path', file, {})
+
+          subject.upload('libs-release-local', '/remote/path',
+            version: '12.0.0-alpha.1+20140826080510.git.50.f5ff271',
           )
         end
       end
