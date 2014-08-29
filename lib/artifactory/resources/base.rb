@@ -14,6 +14,7 @@
 # limitations under the License.
 #
 
+require 'cgi'
 require 'json'
 
 module Artifactory
@@ -321,8 +322,8 @@ module Artifactory
     #
     def to_matrix_properties(hash = {})
       properties = hash.map do |k, v|
-        key   = URI.escape(k.to_s)
-        value = URI.escape(v.to_s)
+        key   = CGI.escape(k.to_s)
+        value = CGI.escape(v.to_s)
 
         "#{key}=#{value}"
       end

@@ -119,16 +119,16 @@ module Artifactory
 
     describe '#upload' do
       let(:client) { double(put: {}) }
+      let(:file) { double(File) }
+      let(:path) { '/fake/path' }
       before do
         subject.client = client
         subject.key    = 'libs-release-local'
+        allow(File).to receive(:new).with('/fake/path').and_return(file)
       end
 
       context 'when the artifact is a file path' do
         it 'PUTs the file at the path to the server' do
-          file = double(File)
-          path = '/fake/path'
-          allow(File).to receive(:new).with('/fake/path').and_return(file)
           expect(client).to receive(:put).with('libs-release-local/remote/path', file, {})
 
           subject.upload(path, '/remote/path')
@@ -137,14 +137,36 @@ module Artifactory
 
       context 'when matrix properties are given' do
         it 'converts the hash into matrix properties' do
-          file = double(File)
-          path = '/fake/path'
-          allow(File).to receive(:new).with('/fake/path').and_return(file)
-          expect(client).to receive(:put).with('libs-release-local;branch=master;user=Seth%20Vargo/remote/path', file, {})
+          expect(client).to receive(:put).with('libs-release-local;branch=master;user=Seth+Vargo%2B1/remote/path', file, {})
 
           subject.upload(path, '/remote/path',
             branch: 'master',
+            user: 'Seth Vargo+1',
+          )
+        end
+
+        it 'converts the hash into matrix properties' do
+          expect(client).to receive(:put).with('libs-release-local;branch=master;user=Seth/remote/path', file, {})
+
+          subject.upload(path, '/remote/path',
+            branch: 'master',
+            user: 'Seth',
+          )
+        end
+
+        it 'converts spaces to "+" characters' do
+          expect(client).to receive(:put).with('libs-release-local;user=Seth+Vargo/remote/path', file, {})
+
+          subject.upload(path, '/remote/path',
             user: 'Seth Vargo',
+          )
+        end
+
+        it 'converts "+" to "%2B"' do
+          expect(client).to receive(:put).with('libs-release-local;version=12.0.0-alpha.1%2B20140826080510.git.50.f5ff271/remote/path', file, {})
+
+          subject.upload(path, '/remote/path',
+            version: '12.0.0-alpha.1+20140826080510.git.50.f5ff271',
           )
         end
       end
@@ -152,9 +174,6 @@ module Artifactory
       context 'when custom headers are given' do
         it 'passes the headers to the client' do
           headers = { 'Content-Type' => 'text/plain' }
-          file = double(File)
-          path = '/fake/path'
-          allow(File).to receive(:new).with('/fake/path').and_return(file)
           expect(client).to receive(:put).with('libs-release-local/remote/path', file, headers)
 
           subject.upload(path, '/remote/path', {}, headers)
