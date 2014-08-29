@@ -54,23 +54,60 @@ module Artifactory
     describe '.from_hash' do
       let(:hash) do
         {
-          'name'             => 'Any Remote',
-          'include_pattern'  => nil,
+          'name'             => 'Test Remote',
+          'includes_pattern'  => nil,
           'excludes_pattern' => '',
-          'repositories'     => ["ANY REMOTE"],
-          'users'            => {"anonymous"=>["w", "r"]},
-          'groups'           => nil
+          'repositories'     => ['ANY REMOTE'],
+          'principals'       => { 'users' => { 'anonymous' => ['w', 'r'] }, 'groups'  => nil }
         }
       end
 
       it 'creates a new instance' do
         instance = described_class.from_hash(hash)
-        expect(instance.name).to eq('Any Remote')
-        expect(instance.include_pattern).to eq(nil)
+        expect(instance.name).to eq('Test Remote')
+        expect(instance.includes_pattern).to eq(nil)
         expect(instance.excludes_pattern).to eq('')
-        expect(instance.repositories).to eq(["ANY REMOTE"])
-        expect(instance.users).to eq({"anonymous"=>["w", "r"]})
-        expect(instance.groups).to eq(nil)
+        expect(instance.repositories).to eq(['ANY REMOTE'])
+        expect(instance.principals).to eq({ 'users' => { 'anonymous' => ['w', 'r'] }, 'groups' => nil })
+      end
+    end
+
+    describe '#save' do
+      let(:client) { double }
+      before do
+        subject.client = client
+        subject.name = 'TestRemote'
+        subject.includes_pattern = nil
+        subject.excludes_pattern = ''
+        subject.repositories = ['ANY']
+        subject.principals = {
+          'users' => {
+            'anonymous' => ['r']
+          },
+          'groups' => {
+            'readers' => ['r']
+          }
+        }
+        allow(described_class).to receive(:find).with(subject.name, client: client).and_return(nil)
+      end
+
+      it 'PUTS the permission target to the server' do
+        expect(client).to receive(:put).with("/api/security/permissions/TestRemote",
+          "{\"name\":\"TestRemote\",\"includesPattern\":null,\"excludesPattern\":\"\",\"repositories\":[\"ANY\"],\"principals\":{\"users\":{\"anonymous\":[\"r\"]},\"groups\":{\"readers\":[\"r\"]}}}",
+          { "Content-Type" => "application/vnd.org.jfrog.artifactory.security.PermissionTarget+json"})
+        subject.save
+      end
+    end
+
+    describe '#delete' do
+      let(:client) { double }
+
+      it 'sends DELETE to the client' do
+        subject.client = client
+        subject.name = 'My Permissions'
+
+        expect(client).to receive(:delete).with('/api/security/permissions/My%20Permissions')
+        subject.delete
       end
     end
   end

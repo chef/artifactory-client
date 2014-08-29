@@ -59,7 +59,7 @@ module Artifactory
     end
 
     attribute :name, ->{ raise 'Name missing!' }
-    attribute :include_pattern
+    attribute :includes_pattern
     attribute :excludes_pattern
     attribute :repositories
     attribute :principals
