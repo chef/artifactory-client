@@ -3,6 +3,10 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.1.3 (08-29-2014)
+-------------------
+- CGI escape matrix properties
+
 v2.1.2 (08-26-2014)
 -------------------
 - Use the proper REST verbs on various resources to prevent a bug
