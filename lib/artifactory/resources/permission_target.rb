@@ -42,7 +42,7 @@ module Artifactory
         client = extract_client!(options)
 
         response = client.get("/api/security/permissions/#{url_safe(name)}")
-        from_hash(flat_hash(response), client: client)
+        from_hash(response, client: client)
       rescue Error::HTTPError => e
         raise unless e.code == 404
         nil
@@ -54,24 +54,7 @@ module Artifactory
       #
       def from_url(url, options = {})
         client = extract_client!(options)
-        from_hash(flat_hash(client.get(url)), client: client)
-      end
-
-      #
-      # Flatten a hash
-      #
-      def flat_hash(deep_hash)
-        fh = {}
-        deep_hash.each do |key, value|
-          if value.is_a?(Hash)
-            value.each do |k, v|
-              fh[k] = v
-            end
-          else
-            fh[key] = value
-          end
-        end
-        fh
+        from_hash(client.get(url), client: client)
       end
     end
 
@@ -79,8 +62,7 @@ module Artifactory
     attribute :include_pattern
     attribute :excludes_pattern
     attribute :repositories
-    attribute :users
-    attribute :groups
+    attribute :principals
 
     #
     # Delete this PermissionTarget from artifactory, suppressing any +ResourceNotFound+
@@ -105,21 +87,6 @@ module Artifactory
     def save
       client.put(api_path, to_json, headers)
       true
-    end
-
-    def to_hash
-      principals = {}
-      attributes.inject({}) do |hash, (key, value)|
-        if key.eql?(:users) || key.eql?(:groups)
-          principals[key.to_s] = value
-          hash['principals'] = principals
-        end
-        unless Resource::Base.has_attribute?(key) || key.eql?(:users) || key.eql?(:groups)
-          hash[Util.camelize(key, true)] = value
-        end
-
-        hash
-      end
     end
 
     private
