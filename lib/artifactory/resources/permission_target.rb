@@ -62,7 +62,7 @@ module Artifactory
     attribute :includes_pattern
     attribute :excludes_pattern
     attribute :repositories
-    attribute :principals
+    attribute :principals, { 'users' => {}, 'groups' => {} }
 
     #
     # Delete this PermissionTarget from artifactory, suppressing any +ResourceNotFound+
@@ -87,6 +87,36 @@ module Artifactory
     def save
       client.put(api_path, to_json, headers)
       true
+    end
+
+    #
+    # Getter for groups
+    #
+    def groups
+      return principals['groups'] if principals.key? 'groups'
+      {}
+    end
+
+    #
+    # Setter for groups
+    #
+    def groups=(groups_hash)
+      principals['groups'] = groups_hash
+    end
+
+    #
+    # Getter for users
+    #
+    def users
+      return principals['users'] if principals.key? 'users'
+      {}
+    end
+
+    #
+    # Setter for users
+    #
+    def users=(users_hash)
+      principals['users'] = users_hash
     end
 
     private
