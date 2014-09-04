@@ -55,7 +55,7 @@ module Artifactory
       let(:hash) do
         {
           'name'             => 'Test Remote',
-          'includes_pattern'  => nil,
+          'includes_pattern'  => '**',
           'excludes_pattern' => '',
           'repositories'     => ['ANY REMOTE'],
           'principals'       => { 'users' => { 'anonymous' => ['w', 'r'] }, 'groups'  => nil }
@@ -65,7 +65,7 @@ module Artifactory
       it 'creates a new instance' do
         instance = described_class.from_hash(hash)
         expect(instance.name).to eq('Test Remote')
-        expect(instance.includes_pattern).to eq(nil)
+        expect(instance.includes_pattern).to eq('**')
         expect(instance.excludes_pattern).to eq('')
         expect(instance.repositories).to eq(['ANY REMOTE'])
         expect(instance.principals).to eq({ 'users' => { 'anonymous' => ['w', 'r'] }, 'groups' => nil })

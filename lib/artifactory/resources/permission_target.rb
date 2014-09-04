@@ -59,8 +59,8 @@ module Artifactory
     end
 
     attribute :name, ->{ raise 'Name missing!' }
-    attribute :includes_pattern
-    attribute :excludes_pattern
+    attribute :includes_pattern, '**'
+    attribute :excludes_pattern, ''
     attribute :repositories
     attribute :principals, { 'users' => {}, 'groups' => {} }
 
@@ -85,6 +85,7 @@ module Artifactory
     # @return [Boolean]
     #
     def save
+      send("#{:principals}=", { 'users' => users, 'groups' => groups })
       client.put(api_path, to_json, headers)
       true
     end
@@ -93,8 +94,7 @@ module Artifactory
     # Getter for groups
     #
     def groups
-      return principals['groups'] if principals.key? 'groups'
-      {}
+      principals['groups']
     end
 
     #
@@ -108,8 +108,7 @@ module Artifactory
     # Getter for users
     #
     def users
-      return principals['users'] if principals.key? 'users'
-      {}
+      principals['users']
     end
 
     #
