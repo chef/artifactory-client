@@ -1,5 +1,12 @@
 module Artifactory
   class Resource::PermissionTarget < Resource::Base
+    VERBOSE_PERMS = {
+      'd' => 'delete',
+      'm' => 'admin',
+      'n' => 'annotate',
+      'r' => 'read',
+      'w' => 'deploy',
+    }
     class << self
       #
       # Get a list of all PermissionTargets in the system.
@@ -49,12 +56,26 @@ module Artifactory
       end
 
       #
-      # @see Resource::Base.url_safe
-      # Additionally flattens the hash returned from the client url
+      # @see Resource::Base.from_hash
+      # Additionally use verbose names for permissions (e.g. 'read' for 'r')
       #
-      def from_url(url, options = {})
-        client = extract_client!(options)
-        from_hash(client.get(url), client: client)
+      def from_hash(hash, options = {})
+        super.tap do |instance|
+          %w(users groups).each do |thing|
+            if instance.principals.key?(thing) && !instance.principals[thing].nil?
+              instance.principals[thing] = Hash[instance.principals[thing].map { |k, v| [k, verbose(v)] } ]
+            end
+          end
+        end
+      end
+
+      private
+
+      #
+      #  Replace an array of permissions with one using verbose permission names
+      #
+      def verbose(array)
+        array.map { |elt| VERBOSE_PERMS[elt] }.sort
       end
     end
 
@@ -85,7 +106,7 @@ module Artifactory
     # @return [Boolean]
     #
     def save
-      send("#{:principals}=", { 'users' => users, 'groups' => groups })
+      send("#{:principals}=", { 'users' => abbreviate(users), 'groups' => abbreviate(groups) })
       client.put(api_path, to_json, headers)
       true
     end
@@ -98,10 +119,10 @@ module Artifactory
     end
 
     #
-    # Setter for groups
+    # Setter for groups (groups_hash expected to be friendly)
     #
     def groups=(groups_hash)
-      principals['groups'] = groups_hash
+      principals['groups'] = Hash[groups_hash.map { |k, v| [k, v.sort] } ]
     end
 
     #
@@ -112,10 +133,10 @@ module Artifactory
     end
 
     #
-    # Setter for users
+    # Setter for users (expecting users_hash to be friendly)
     #
     def users=(users_hash)
-      principals['users'] = users_hash
+      principals['users'] = Hash[users_hash.map { |k, v| [k, v.sort] } ]
     end
 
     private
@@ -138,6 +159,24 @@ module Artifactory
       @headers ||= {
         'Content-Type' => 'application/vnd.org.jfrog.artifactory.security.PermissionTarget+json'
       }
+    end
+
+    #
+    # Replace an array of verbose permission names with an equivalent array of abbreviated permission names.
+    #
+    def abbrev(array)
+      inverse = VERBOSE_PERMS.invert
+      if (inverse.keys & array).sort != array.sort then
+        raise "One of your principals contains an invalid permission.  Valid permissions are #{inverse.keys.join(', ')}"
+      end
+      array.map { |elt| inverse[elt] }
+    end
+
+    #
+    # Replace a principal with verbose permissions with an equivalent one with abbreviated permissions.
+    #
+    def abbreviate(principal_hash)
+      Hash[principal_hash.map { |k, v| [k, abbrev(v)] } ]
     end
   end
 end

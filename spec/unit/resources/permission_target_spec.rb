@@ -68,7 +68,7 @@ module Artifactory
         expect(instance.includes_pattern).to eq('**')
         expect(instance.excludes_pattern).to eq('')
         expect(instance.repositories).to eq(['ANY REMOTE'])
-        expect(instance.principals).to eq({ 'users' => { 'anonymous' => ['w', 'r'] }, 'groups' => nil })
+        expect(instance.principals).to eq({ 'users' => { 'anonymous' => ['deploy', 'read'] }, 'groups' => nil })
       end
     end
 
@@ -82,10 +82,10 @@ module Artifactory
         subject.repositories = ['ANY']
         subject.principals = {
           'users' => {
-            'anonymous' => ['r']
+            'anonymous' => ['read']
           },
           'groups' => {
-            'readers' => ['r']
+            'readers' => ['read']
           }
         }
         allow(described_class).to receive(:find).with(subject.name, client: client).and_return(nil)
