@@ -33,7 +33,7 @@ module Artifactory
           'includes_pattern'  => nil,
           'excludes_pattern' => '',
           'repositories'     => ["ANY"],
-          'principals'       =>  { 'users' => { 'anonymous' => ['r'] }, 'groups' => { 'readers' => ['r'] } }
+          'principals'       =>  { 'users' => { 'anonymous' => ['r'] }, 'groups' => { 'readers' => ['r', 'm'] } }
         )
       end
 

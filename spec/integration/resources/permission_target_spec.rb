@@ -41,5 +41,35 @@ module Artifactory
         expect(target.save).to be_truthy
       end
     end
+
+    describe '#users' do
+      it 'displays the users hash with sorted verbose permissions' do
+        target = described_class.find('Any Remote')
+        expect(target.users).to eq( { 'anonymous' => ['deploy', 'read'] } )
+      end
+    end
+
+    describe '#groups' do
+      it 'displays the groups hash with sorted verbose permissions' do
+        target = described_class.find('Anything')
+        expect(target.groups).to eq( { 'readers' => ['admin', 'read'] } )
+      end
+    end
+
+    describe '#users=' do
+      it 'sets the users hash' do
+        target = described_class.find('Any Remote')
+        target.users = { 'admins' => ['admin'] }
+        expect(target.users).to eq( { 'admins' => ['admin'] })
+      end
+    end
+
+    describe '#groups=' do
+      it 'sets the groups hash' do
+        target = described_class.find('Anything')
+        target.groups = { 'deployers' => ['deploy'] }
+        expect(target.groups).to eq( { 'deployers' => ['deploy'] })
+      end
+    end
   end
 end

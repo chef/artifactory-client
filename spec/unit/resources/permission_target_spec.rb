@@ -110,5 +110,57 @@ module Artifactory
         subject.delete
       end
     end
+
+    describe 'getters' do
+      let(:client) { double }
+      before do
+        subject.client = client
+        subject.name = 'TestGetters'
+        subject.principals = {
+          'users' => {
+            'anonymous' => ['read']
+          },
+          'groups' => {
+            'readers' => ['read']
+          }
+        }
+        allow(described_class).to receive(:find).with(subject.name, client: client).and_return(nil)
+      end
+
+      it '#users returns the users hash' do
+        expect(subject.users).to eq({ 'anonymous' => ['read'] })
+      end
+
+      it '#groups returns the groups hash' do
+        expect(subject.groups).to eq({ 'readers' => ['read'] })
+      end
+    end
+
+    describe 'setters' do
+      let(:client) { double }
+      before do
+        subject.client = client
+        subject.name = 'TestSetters'
+        subject.principals = {
+          'users' => {
+            'anonymous' => ['read']
+          },
+          'groups' => {
+            'readers' => ['read']
+          }
+        }
+        allow(described_class).to receive(:find).with(subject.name, client: client).and_return(nil)
+      end
+
+      it '#users= sets the users hash' do
+        subject.users = { 'spiders' => [ 'read', 'admin'] }
+        expect(subject.users).to eq({ 'spiders' => ['admin', 'read'] })
+      end
+
+      it '#groups= returns the groups hash' do
+        subject.groups = { 'beatles' => [ 'deploy', 'delete'] }
+        expect(subject.groups).to eq({ 'beatles' => ['delete', 'deploy'] })
+      end
+    end
   end
 end
