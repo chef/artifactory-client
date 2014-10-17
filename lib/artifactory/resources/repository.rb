@@ -39,7 +39,7 @@ module Artifactory
       #
       # Find (fetch) a repository by name.
       #
-      # @example Find a respository by named key
+      # @example Find a repository by named key
       #   Repository.find(name: 'libs-release-local') #=> #<Resource::Artifact>
       #
       # @param [Hash] options
