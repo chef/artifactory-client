@@ -31,14 +31,14 @@ This will given you "Rails-like" access to the top-level Artifactory resources l
 
 ```ruby
 System.info
-Respository.all
+Repository.all
 ```
 
 If you choose not to include the module (for namespacing reasons), you will need to specify the full module path to access resources:
 
 ```ruby
 Artifactory::Resource::System.info
-Artifactory::Resource::Respository.all
+Artifactory::Resource::Repository.all
 ```
 
 ### Create a connection
