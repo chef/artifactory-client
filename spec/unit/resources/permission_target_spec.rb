@@ -58,7 +58,7 @@ module Artifactory
           'includes_pattern'  => '**',
           'excludes_pattern' => '',
           'repositories'     => ['ANY REMOTE'],
-          'principals'       => { 'users' => { 'anonymous' => ['w', 'r'] }, 'groups'  => nil }
+          'principals'       => { 'users' => { 'anonymous' => ['w', 'r'] }, 'groups'  => {} }
         }
       end
 
@@ -68,7 +68,7 @@ module Artifactory
         expect(instance.includes_pattern).to eq('**')
         expect(instance.excludes_pattern).to eq('')
         expect(instance.repositories).to eq(['ANY REMOTE'])
-        expect(instance.principals).to eq({ 'users' => { 'anonymous' => ['deploy', 'read'] }, 'groups' => nil })
+        expect(instance.principals).to eq({ 'users' => { 'anonymous' => ['deploy', 'read'] }, 'groups' => {} })
       end
     end
 
@@ -82,10 +82,10 @@ module Artifactory
         subject.repositories = ['ANY']
         subject.principals = {
           'users' => {
-            'anonymous' => ['read']
+            'anonymous_users' => ['read']
           },
           'groups' => {
-            'readers' => ['read']
+            'anonymous_readers' => ['read']
           }
         }
         allow(described_class).to receive(:find).with(subject.name, client: client).and_return(nil)
@@ -93,7 +93,7 @@ module Artifactory
 
       it 'PUTS the permission target to the server' do
         expect(client).to receive(:put).with("/api/security/permissions/TestRemote",
-          "{\"name\":\"TestRemote\",\"includesPattern\":null,\"excludesPattern\":\"\",\"repositories\":[\"ANY\"],\"principals\":{\"users\":{\"anonymous\":[\"r\"]},\"groups\":{\"readers\":[\"r\"]}}}",
+          "{\"name\":\"TestRemote\",\"includesPattern\":null,\"excludesPattern\":\"\",\"repositories\":[\"ANY\"],\"principals\":{\"users\":{\"anonymous_users\":[\"r\"]},\"groups\":{\"anonymous_readers\":[\"r\"]}}}",
           { "Content-Type" => "application/vnd.org.jfrog.artifactory.security.PermissionTarget+json"})
         subject.save
       end
@@ -157,7 +157,7 @@ module Artifactory
         expect(subject.users).to eq({ 'spiders' => ['admin', 'read'] })
       end
 
-      it '#groups= returns the groups hash' do
+      it '#groups= sets the groups hash' do
         subject.groups = { 'beatles' => [ 'deploy', 'delete'] }
         expect(subject.groups).to eq({ 'beatles' => ['delete', 'deploy'] })
       end
