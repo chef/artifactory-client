@@ -72,10 +72,48 @@ module Artifactory
       private
 
       #
-      #  Replace an array of permissions with one using verbose permission names
+      # Replace an array of permissions with one using verbose permission names
       #
       def verbose(array)
         array.map { |elt| VERBOSE_PERMS[elt] }.sort
+      end
+    end
+
+    class Principal
+      attr_accessor :users, :groups
+
+      def initialize(users = {}, groups = {})
+        @users = users
+        @groups = groups
+      end
+
+      #
+      # Converts the user-friendly form of the principals hash to one suitable
+      # for posting to Artifactory.
+      # @return [Hash]
+      #
+      def to_abbreviated
+        { 'users' => abbreviate_principal(@users), 'groups' => abbreviate_principal(@groups) }
+      end
+
+      private
+
+      #
+      # Replace an array of verbose permission names with an equivalent array of abbreviated permission names.
+      #
+      def abbreviate_permissions(array)
+        inverse = VERBOSE_PERMS.invert
+        if (inverse.keys & array).sort != array.sort then
+          raise "One of your principals contains an invalid permission.  Valid permissions are #{inverse.keys.join(', ')}"
+        end
+        array.map { |elt| inverse[elt] }
+      end
+
+      #
+      # Replace a principal with verbose permissions with an equivalent one with abbreviated permissions.
+      #
+      def abbreviate_principal(principal_hash)
+        Hash[principal_hash.map { |k, v| [k, abbreviate_permissions(v)] } ]
       end
     end
 
@@ -84,6 +122,10 @@ module Artifactory
     attribute :excludes_pattern, ''
     attribute :repositories
     attribute :principals, { 'users' => {}, 'groups' => {} }
+
+    def client_principal
+      @client_principal ||= Principal.new(principals['users'], principals['groups'])
+    end
 
     #
     # Delete this PermissionTarget from artifactory, suppressing any +ResourceNotFound+
@@ -106,7 +148,7 @@ module Artifactory
     # @return [Boolean]
     #
     def save
-      send("#{:principals}=", { 'users' => abbreviate_principal(users), 'groups' => abbreviate_principal(groups) })
+      send("#{:principals}=", client_principal.to_abbreviated)
       client.put(api_path, to_json, headers)
       true
     end
@@ -115,28 +157,28 @@ module Artifactory
     # Getter for groups
     #
     def groups
-      principals['groups']
+      client_principal.groups
     end
 
     #
     # Setter for groups (groups_hash expected to be friendly)
     #
     def groups=(groups_hash)
-      principals['groups'] = Hash[groups_hash.map { |k, v| [k, v.sort] } ]
+      client_principal.groups = Hash[groups_hash.map { |k, v| [k, v.sort] } ]
     end
 
     #
     # Getter for users
     #
     def users
-      principals['users']
+      client_principal.users
     end
 
     #
     # Setter for users (expecting users_hash to be friendly)
     #
     def users=(users_hash)
-      principals['users'] = Hash[users_hash.map { |k, v| [k, v.sort] } ]
+      client_principal.users = Hash[users_hash.map { |k, v| [k, v.sort] } ]
     end
 
     private
@@ -159,24 +201,6 @@ module Artifactory
       @headers ||= {
         'Content-Type' => 'application/vnd.org.jfrog.artifactory.security.PermissionTarget+json'
       }
-    end
-
-    #
-    # Replace an array of verbose permission names with an equivalent array of abbreviated permission names.
-    #
-    def abbreviate_permissions(array)
-      inverse = VERBOSE_PERMS.invert
-      if (inverse.keys & array).sort != array.sort then
-        raise "One of your principals contains an invalid permission.  Valid permissions are #{inverse.keys.join(', ')}"
-      end
-      array.map { |elt| inverse[elt] }
-    end
-
-    #
-    # Replace a principal with verbose permissions with an equivalent one with abbreviated permissions.
-    #
-    def abbreviate_principal(principal_hash)
-      Hash[principal_hash.map { |k, v| [k, abbreviate_permissions(v)] } ]
     end
   end
 end
