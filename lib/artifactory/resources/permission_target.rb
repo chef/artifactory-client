@@ -106,7 +106,7 @@ module Artifactory
         if (inverse.keys & array).sort != array.sort then
           raise "One of your principals contains an invalid permission.  Valid permissions are #{inverse.keys.join(', ')}"
         end
-        array.map { |elt| inverse[elt] }
+        array.map { |elt| inverse[elt] }.sort
       end
 
       #
