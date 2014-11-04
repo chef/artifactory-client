@@ -72,6 +72,26 @@ module Artifactory
       end
     end
 
+    describe Artifactory::Resource::PermissionTarget::Principal do
+      context 'principal object' do
+        users = { 'anonymous_users' => ['admin', 'deploy', 'read'] }
+        groups = { 'anonymous_groups' => ['delete', 'read'] }
+        instance = described_class.new(users, groups)
+
+        it 'has unabbreviated users' do
+          expect(instance.users).to eq( { 'anonymous_users' => ['admin', 'deploy', 'read'] } )
+        end
+
+        it 'has unabbreviated groups' do
+          expect(instance.groups).to eq( { 'anonymous_groups' => ['delete', 'read'] } )
+        end
+
+        it 'abbreviates' do
+          expect(instance.to_abbreviated).to eq( { 'users' => { 'anonymous_users' => ['m', 'r', 'w'] }, 'groups' => { 'anonymous_groups' => ['d', 'r'] } } )
+        end
+      end
+    end
+
     describe '#save' do
       let(:client) { double }
       before do
