@@ -52,6 +52,14 @@ module Artifactory
       it_behaves_like 'an artifact search endpoint', :checksum_search, md5: 'abcd1234'
     end
 
+    describe '.usage_search' do
+      it_behaves_like 'an artifact search endpoint', :usage_search, notUsedSince: '1414800000'
+    end
+
+    describe '.creation_search' do
+      it_behaves_like 'an artifact search endpoint', :creation_search, from: '1414800000'
+    end
+
     describe '.versions' do
       it 'returns an array of versions' do
         response = described_class.versions

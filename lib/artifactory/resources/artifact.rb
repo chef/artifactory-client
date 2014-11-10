@@ -186,6 +186,88 @@ module Artifactory
       end
 
       #
+      # Search for an artifact by its usage
+      #
+      # @example Search for all repositories with the given usage statistics
+      #   Artifact.usage_search(
+      #     notUsedSince: 1388534400000,
+      #     createdBefore: 1388534400000,
+      #   )
+      #
+      # @example Search for all artifacts with the given usage statistics in a repo
+      #   Artifact.usage_search(
+      #     notUsedSince: 1388534400000,
+      #     createdBefore: 1388534400000,
+      #     repos: 'libs-release-local',
+      #   )
+      #
+      # @param [Hash] options
+      #   the list of options to search with
+      #
+      # @option options [Artifactory::Client] :client
+      #   the client object to make the request with
+      # @option options [Long] :notUsedSince
+      #   the last downloaded cutoff date of the artifact to search for (millis since epoch)
+      # @option options [Long] :createdBefore
+      #   the creation cutoff date of the artifact to search for (millis since epoch)
+      # @option options [String, Array<String>] :repos
+      #   the list of repos to search
+      #
+      # @return [Array<Resource::Artifact>]
+      #   a list of artifacts that match the query
+      #
+      def usage_search(options = {})
+        client = extract_client!(options)
+        params = Util.slice(options, :notUsedSince, :createdBefore, :repos)
+        format_repos!(params)
+
+        client.get('/api/search/usage', params)['results'].map do |artifact|
+          from_url(artifact['uri'], client: client)
+        end
+      end
+
+      #
+      # Search for an artifact by its creation date
+      #
+      # @example Search for all repositories with the given creation date range
+      #   Artifact.usage_search(
+      #     from : 1414800000000,
+      #     to   : 1414871200000,
+      #   )
+      #
+      # @example Search for all artifacts with the given creation date range in a repo
+      #   Artifact.usage_search(
+      #     from : 1414800000000,
+      #     to   : 1414871200000,
+      #     repos: 'libs-release-local',
+      #   )
+      #
+      # @param [Hash] options
+      #   the list of options to search with
+      #
+      # @option options [Artifactory::Client] :client
+      #   the client object to make the request with
+      # @option options [Long] :from
+      #   the creation start date of the artifact to search for (millis since epoch)
+      # @option options [Long] :to
+      #   the creation end date of the artifact to search for (millis since epoch)
+      # @option options [String, Array<String>] :repos
+      #   the list of repos to search
+      #
+      # @return [Array<Resource::Artifact>]
+      #   a list of artifacts that match the query
+      #
+      def creation_search(options = {})
+        client = extract_client!(options)
+        params = Util.slice(options, :from, :to, :repos)
+        format_repos!(params)
+
+        client.get('/api/search/creation', params)['results'].map do |artifact|
+          from_url(artifact['uri'], client: client)
+        end
+      end
+
+      #
       # Get all versions of an artifact.
       #
       # @example Get all versions of a given artifact

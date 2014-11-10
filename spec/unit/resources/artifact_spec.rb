@@ -207,6 +207,56 @@ module Artifactory
       end
     end
 
+    describe '.usage_search' do
+      let(:response) { { 'results' => [] } }
+
+      it 'calls /api/search/usage' do
+        expect(client).to receive(:get).with('/api/search/usage', {}).once
+        described_class.usage_search
+      end
+
+      it 'slices the correct parameters' do
+        expect(client).to receive(:get).with('/api/search/usage',
+          notUsedSince:  1414800000000,
+          createdBefore: 1414871200000,
+        ).once
+        described_class.usage_search(
+          notUsedSince:  1414800000000,
+          createdBefore: 1414871200000,
+          fizz: 'foo',
+        )
+      end
+
+      it 'returns an array of objects' do
+        expect(described_class.usage_search).to be_a(Array)
+      end
+    end
+
+    describe '.creation_search' do
+      let(:response) { { 'results' => [] } }
+
+      it 'calls /api/search/creation' do
+        expect(client).to receive(:get).with('/api/search/creation', {}).once
+        described_class.creation_search
+      end
+
+      it 'slices the correct parameters' do
+        expect(client).to receive(:get).with('/api/search/creation',
+          from:  1414800000000,
+          to: 1414871200000,
+        ).once
+        described_class.creation_search(
+          from:  1414800000000,
+          to: 1414871200000,
+          fizz: 'foo',
+        )
+      end
+
+      it 'returns an array of objects' do
+        expect(described_class.creation_search).to be_a(Array)
+      end
+    end
+
     describe '.versions' do
       let(:response) { { 'results' => [] } }
 

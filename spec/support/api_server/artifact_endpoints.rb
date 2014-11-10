@@ -32,6 +32,20 @@ module Artifactory
         end
       end
 
+      app.get('/api/search/usage') do
+        content_type 'application/vnd.org.jfrog.artifactory.search.ArtifactUsageResult+json'
+        artifacts_for_conditions do
+          params['notUsedSince'] == '1414800000'
+        end
+      end
+
+      app.get('/api/search/creation') do
+        content_type 'application/vnd.org.jfrog.artifactory.search.ArtifactCreationResult+json'
+        artifacts_for_conditions do
+          params['from'] == '1414800000'
+        end
+      end
+
       app.get('/api/search/versions') do
         content_type 'application/vnd.org.jfrog.artifactory.search.ArtifactVersionsResult+json'
         JSON.fast_generate(
