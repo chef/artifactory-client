@@ -30,19 +30,20 @@ module Artifactory
   end
 
   module Resource
-    autoload :Artifact,     'artifactory/resources/artifact'
-    autoload :Backup,       'artifactory/resources/backup'
-    autoload :Base,         'artifactory/resources/base'
-    autoload :Build,        'artifactory/resources/build'
-    autoload :Group,        'artifactory/resources/group'
-    autoload :Layout,       'artifactory/resources/layout'
-    autoload :LDAPSetting,  'artifactory/resources/ldap_setting'
-    autoload :MailServer,   'artifactory/resources/mail_server'
-    autoload :Plugin,       'artifactory/resources/plugin'
-    autoload :Repository,   'artifactory/resources/repository'
-    autoload :System,       'artifactory/resources/system'
-    autoload :URLBase,      'artifactory/resources/url_base'
-    autoload :User,         'artifactory/resources/user'
+    autoload :Artifact,         'artifactory/resources/artifact'
+    autoload :Backup,           'artifactory/resources/backup'
+    autoload :Base,             'artifactory/resources/base'
+    autoload :Build,            'artifactory/resources/build'
+    autoload :Group,            'artifactory/resources/group'
+    autoload :Layout,           'artifactory/resources/layout'
+    autoload :LDAPSetting,      'artifactory/resources/ldap_setting'
+    autoload :MailServer,       'artifactory/resources/mail_server'
+    autoload :PermissionTarget, 'artifactory/resources/permission_target'
+    autoload :Plugin,           'artifactory/resources/plugin'
+    autoload :Repository,       'artifactory/resources/repository'
+    autoload :System,           'artifactory/resources/system'
+    autoload :URLBase,          'artifactory/resources/url_base'
+    autoload :User,             'artifactory/resources/user'
   end
 
   class << self
