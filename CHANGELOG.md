@@ -3,6 +3,12 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.2.0 (11-20-2014)
+-------------------
+- Add artifact usage search
+- Add artifact creation search
+- Add support for configuring permission targets
+
 v2.1.3 (08-29-2014)
 -------------------
 - CGI escape matrix properties
