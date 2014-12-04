@@ -678,7 +678,7 @@ module Artifactory
 
       endpoint = File.join('/api', action.to_s, relative_path) + '?' + params.join('&')
 
-      client.post(endpoint)
+      client.post(endpoint, {})
     end
   end
 end
