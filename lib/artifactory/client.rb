@@ -331,7 +331,7 @@ module Artifactory
     #
     def to_query_string(hash)
       hash.map do |key, value|
-        "#{URI.escape(key.to_s)}=#{URI.escape(value.to_s)}"
+        "#{URI.escape(key.to_s)}=#{CGI.escape(value.to_s)}"
       end.join('&')[/.+/]
     end
 
