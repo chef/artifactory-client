@@ -534,20 +534,18 @@ module Artifactory
       matrix   = to_matrix_properties(properties)
       endpoint = File.join("#{url_safe(repo)}#{matrix}", remote_path)
 
-      response = client.put(endpoint, file, headers)
+      # Include checksums in headers if given.
+      headers['X-Checksum-Md5'] = md5   if md5
+      headers['X-Checksum-Sha1'] = sha1 if sha1
 
-      # Upload checksums if they were given
-      upload_checksum(repo, remote_path, :md5,  md5)  if md5
-      upload_checksum(repo, remote_path, :sha1, sha1) if sha1
+      response = client.put(endpoint, file, headers)
 
       self.class.from_hash(response)
     end
 
     #
     # Upload the checksum for this artifact. **The artifact must already be
-    # uploaded or Artifactory will throw an exception!**. This is both a public
-    # and private API. It is automatically called in {upload} if the SHA
-    # values are set. You may also call it manually.
+    # uploaded or Artifactory will throw an exception!**.
     #
     # @example Set an artifact's md5
     #   artifact = Artifact.new(local_path: '/local/path/to/file.deb')
