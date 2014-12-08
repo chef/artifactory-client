@@ -498,12 +498,12 @@ module Artifactory
       end
 
       it 'sends POST to the client with parsed params' do
-        expect(client).to receive(:post).with('/api/move/foo/bar/artifact.deb?to=/to/path')
+        expect(client).to receive(:post).with('/api/move/foo/bar/artifact.deb?to=/to/path', {})
         subject.copy_or_move(:move, '/to/path')
       end
 
       it 'adds the correct parameters to the request' do
-        expect(client).to receive(:post).with('/api/move/foo/bar/artifact.deb?to=/to/path&failFast=1&dry=1')
+        expect(client).to receive(:post).with('/api/move/foo/bar/artifact.deb?to=/to/path&failFast=1&dry=1', {})
         subject.copy_or_move(:move, '/to/path', fail_fast: true, dry_run: true)
       end
     end
