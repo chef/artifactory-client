@@ -14,6 +14,7 @@
 # limitations under the License.
 #
 
+require 'cgi'
 require 'json'
 require 'net/http'
 require 'uri'
