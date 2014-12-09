@@ -14,6 +14,7 @@
 # limitations under the License.
 #
 
+require 'cgi'
 require 'json'
 require 'net/http'
 require 'uri'
@@ -331,7 +332,7 @@ module Artifactory
     #
     def to_query_string(hash)
       hash.map do |key, value|
-        "#{URI.escape(key.to_s)}=#{URI.escape(value.to_s)}"
+        "#{CGI.escape(key.to_s)}=#{CGI.escape(value.to_s)}"
       end.join('&')[/.+/]
     end
 

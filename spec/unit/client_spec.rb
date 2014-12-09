@@ -91,5 +91,17 @@ module Artifactory
         end
       end
     end
+
+    describe '#to_query_string' do
+      it 'converts spaces to "+" characters' do
+        params = {user: 'Seth Chisamore'}
+        expect(subject.to_query_string(params)).to eq('user=Seth+Chisamore')
+      end
+
+      it 'converts "+" to "%2B"' do
+        params = {version: '12.0.0-alpha.1+20140826080510.git.50.f5ff271'}
+        expect(subject.to_query_string(params)).to eq('version=12.0.0-alpha.1%2B20140826080510.git.50.f5ff271')
+      end
+    end
   end
 end
