@@ -442,6 +442,27 @@ module Artifactory
     end
 
     #
+    # Attach a property to an artifactory item (file or folder). When a folder is used property attachment is recursive by default.
+    #
+    # PUT /api/storage/libs-release-local/ch/qos/logback/logback-classic/0.9.9?properties=os=win,linux|qa=done&recursive=1
+    # RESTT API Usage: PUT /api/storage/{repoKey}{itemPath}?properties=p1=v1[,v2][|p2=v3][&recursive=1]
+    #
+    # @example add a property named 'foo' with value of 'bar' to an artifact
+    #   artifact.set_property('foo','bar')
+    #
+    # @return [Hash]
+    #   the parsed JSON response from the server
+    #
+    def set_property(property_name, property_value)
+
+      raise ArgumentError.new('property_name cannot be empty') if property_name.empty?
+
+      endpoint = "/api/storage#{relative_path}?properties=#{url_safe(property_name)}=#{url_safe(property_value)}"
+
+      client.put(endpoint, {})
+    end
+
+    #
     # Get compliance info for a given artifact path. The result includes
     # license and vulnerabilities, if any.
     #
