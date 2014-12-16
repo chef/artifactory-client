@@ -52,6 +52,24 @@ module Artifactory
         end
       end
 
+      context 'when the md5 is available' do
+        subject { described_class.new(client: client, local_path: local_path, checksums: { 'md5' => 'ABCDEF123456' } ) }
+
+        it 'PUTs the file with the checksum headers set' do
+          expect(client).to receive(:put).with('libs-release-local/remote/path', file, { 'X-Checksum-Md5' => 'ABCDEF123456' } )
+          subject.upload('libs-release-local', '/remote/path')
+        end
+      end
+
+      context 'when the sha1 is available' do
+        subject { described_class.new(client: client, local_path: local_path, checksums: { 'sha1' => 'SHA1' } ) }
+
+        it 'PUTs the file with the checksum headers set' do
+          expect(client).to receive(:put).with('libs-release-local/remote/path', file, { 'X-Checksum-Sha1' => 'SHA1' } )
+          subject.upload('libs-release-local', '/remote/path')
+        end
+      end
+
       context 'when matrix properties are given' do
         it 'converts the hash into matrix properties' do
           expect(client).to receive(:put).with('libs-release-local;branch=master;user=Seth/remote/path', file, {})
