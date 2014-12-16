@@ -3,6 +3,13 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.2.1 (12-16-2014)
+-------------------
+- provide data to post in `Artifact#copy_or_move`
+- pass correct variable to redirect request in `Client#request`
+- use CGI escape to encode data values
+- when checksums are available, upload using the checksum headers.
+
 v2.2.0 (11-20-2014)
 -------------------
 - Add artifact usage search
