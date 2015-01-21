@@ -663,10 +663,6 @@ module Artifactory
         param[:dry]             = 1 if options[:dry_run]
       end
 
-      # Okay, seriously, WTF Artifactory? Are you fucking serious? You want me
-      # to make a POST request, but you don't actually read the contents of the
-      # POST request, you read the URL-params. Sigh, whoever claimed this was a
-      # RESTful API should seriously consider a new occupation.
       params = params.map do |k, v|
         key   = URI.escape(k.to_s)
         value = URI.escape(v.to_s)
