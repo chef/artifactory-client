@@ -28,6 +28,8 @@ RSpec.configure do |config|
   #
   config.before(:each, :integration) do
     Artifactory.endpoint = 'http://localhost:8889'
+    Artifactory.username = nil
+    Artifactory.password = nil
     stub_request(:any, /#{Artifactory.endpoint}/).to_rack(Artifactory::APIServer)
   end
 
