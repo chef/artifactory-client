@@ -10,7 +10,25 @@ module Artifactory
     end
 
     describe '.all' do
-      let(:response) { ['a', 'b', 'c'] }
+      let(:response) do
+        {
+          'uri'    => "#{Artifactory.endpoint}/api/build",
+          'builds' => builds
+        }
+      end
+
+      let(:builds) do
+        [
+          {
+            'uri'         => '/wicket',
+            'lastStarted' => '2014-01-01 12:00:00',
+          },
+          {
+            'uri'         => '/jackrabbit',
+            'lastStarted' => '2014-02-11 10:00:00',
+          }
+        ]
+      end
 
       it 'gets /api/build' do
         expect(client).to receive(:get).with('/api/build').once
@@ -19,7 +37,7 @@ module Artifactory
 
       context 'when there are builds' do
         it 'returns the builds' do
-          expect(described_class.all).to eq(['a', 'b', 'c'])
+          expect(described_class.all).to eq(builds)
         end
       end
 
