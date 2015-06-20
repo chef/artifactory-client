@@ -1,6 +1,6 @@
 Artifactory Client
 ==================
-[![Build Status](https://secure.travis-ci.org/opscode/artifactory-client.png?branch=master)](http://travis-ci.org/opscode/artifactory-client)
+[![Build Status](https://secure.travis-ci.org/chef/artifactory-client.png?branch=master)](http://travis-ci.org/chef/artifactory-client)
 
 A Ruby client and interface to the Artifactory API. **The majority of API endpoints are only exposed for Artifactory Pro customers!** As such, many of the resources and actions exposed by this gem also require Artifactory Pro.
 
@@ -121,8 +121,36 @@ artifact.delete #=> true
 
 #### Builds
 ```ruby
-# Show all builds
-Build.all #=> [#<Build ...>]
+# Show all components
+BuildComponent.all #=> [#<BuildComponent ...>]
+
+# Show all builds for a components
+Build.all('wicket') #=> [#<Build ...>]
+
+# Find a build component by name
+component = BuildComponent.find('wicket')
+
+# Delete some builds for a component
+component.delete(build_numbers: %w( 51 52)) #=> true
+
+# Delete all builds for a component
+component.delete(delete_all: true) #=> true
+
+# Delete a component and all of its associated data (including artifacts)
+component.delete(artifacts: true, delete_all: true) #=> true
+
+# Get a list of all buld records for a component
+component.builds #=> #=> [#<Artifactory::Resource::Build ...>, ...]
+
+# Create a new build record
+build = Build.new(name: 'fricket', number: '51', properties: {...}, modules: [...])
+build.save
+
+# Find a build
+build = Build.find('wicket', '51')
+
+# Promote a build
+build.promote('libs-release-local', status: 'staged', comment: 'Tested on all target platforms.')
 ```
 
 #### Plugins
