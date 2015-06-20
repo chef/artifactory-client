@@ -27,6 +27,7 @@ module Artifactory
   module Collection
     autoload :Artifact, 'artifactory/collections/artifact'
     autoload :Base,     'artifactory/collections/base'
+    autoload :Build, 'artifactory/collections/build'
   end
 
   module Resource
