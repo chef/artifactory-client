@@ -113,7 +113,7 @@ module Artifactory
 
       it 'PUTS the permission target to the server' do
         expect(client).to receive(:put).with("/api/security/permissions/TestRemote",
-          "{\"name\":\"TestRemote\",\"includesPattern\":null,\"excludesPattern\":\"\",\"repositories\":[\"ANY\"],\"principals\":{\"users\":{\"anonymous_users\":[\"r\"]},\"groups\":{\"anonymous_readers\":[\"r\"]}}}",
+          "{\"name\":\"TestRemote\",\"includesPattern\":\"**\",\"excludesPattern\":\"\",\"repositories\":[\"ANY\"],\"principals\":{\"users\":{\"anonymous_users\":[\"r\"]},\"groups\":{\"anonymous_readers\":[\"r\"]}}}",
           { "Content-Type" => "application/vnd.org.jfrog.artifactory.security.PermissionTarget+json"})
         subject.save
       end
