@@ -663,14 +663,7 @@ module Artifactory
         param[:dry]             = 1 if options[:dry_run]
       end
 
-      params = params.map do |k, v|
-        key   = URI.escape(k.to_s)
-        value = URI.escape(v.to_s)
-
-        "#{key}=#{value}"
-      end
-
-      endpoint = File.join('/api', action.to_s, relative_path) + '?' + params.join('&')
+      endpoint = File.join('/api', action.to_s, relative_path) + "?#{to_query_string_parameters(params)}"
 
       client.post(endpoint, {})
     end

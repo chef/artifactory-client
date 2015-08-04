@@ -27,6 +27,7 @@ module Artifactory
   module Collection
     autoload :Artifact, 'artifactory/collections/artifact'
     autoload :Base,     'artifactory/collections/base'
+    autoload :Build, 'artifactory/collections/build'
   end
 
   module Resource
@@ -34,6 +35,7 @@ module Artifactory
     autoload :Backup,           'artifactory/resources/backup'
     autoload :Base,             'artifactory/resources/base'
     autoload :Build,            'artifactory/resources/build'
+    autoload :BuildComponent,   'artifactory/resources/build_component'
     autoload :Group,            'artifactory/resources/group'
     autoload :Layout,           'artifactory/resources/layout'
     autoload :LDAPSetting,      'artifactory/resources/ldap_setting'

@@ -297,7 +297,7 @@ module Artifactory
     def to_hash
       attributes.inject({}) do |hash, (key, value)|
         unless Resource::Base.has_attribute?(key)
-          hash[Util.camelize(key, true)] = value
+          hash[Util.camelize(key, true)] = send(key.to_sym)
         end
 
         hash
@@ -316,7 +316,7 @@ module Artifactory
     end
 
     #
-    # Create URI-escaped string from matrix properties
+    # Create CGI-escaped string from matrix properties
     #
     # @see http://bit.ly/1qeVYQl
     #
@@ -332,6 +332,26 @@ module Artifactory
         nil
       else
         ";#{properties.join(';')}"
+      end
+    end
+
+    #
+    # Create URI-escaped querystring parameters
+    #
+    # @see http://bit.ly/1qeVYQl
+    #
+    def to_query_string_parameters(hash = {})
+      properties = hash.map do |k, v|
+        key   = URI.escape(k.to_s)
+        value = URI.escape(v.to_s)
+
+        "#{key}=#{value}"
+      end
+
+      if properties.empty?
+        nil
+      else
+        properties.join('&')
       end
     end
 

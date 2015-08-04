@@ -40,5 +40,19 @@ module Artifactory
               "running an that your authentication information is correct."
       end
     end
+
+    # A general connection error with a more informative message
+    class InvalidBuildType < ArtifactoryError
+      def initialize(given_type)
+        super <<-EOH
+'#{given_type}' is not a valid build type.
+
+Valid build types include:
+
+    #{Resource::Build::BUILD_TYPES.join("\n    ")}"
+
+EOH
+      end
+    end
   end
 end
