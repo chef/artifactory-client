@@ -3,6 +3,10 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.3.0 (08-04-2015)
+-------------------
+- Support for Build endpoints
+
 v2.2.1 (12-16-2014)
 -------------------
 - provide data to post in `Artifact#copy_or_move`
