@@ -17,6 +17,16 @@ module Artifactory
         expect(repository).to be_a(described_class)
         expect(repository.key).to eq('libs-snapshots-local')
         expect(repository.max_unique_snapshots).to eq(10)
+        expect(repository.package_type).to eql('maven')
+      end
+
+      it 'finds debian repositories' do
+        repo = 'libs-debian-local'
+
+        repository = described_class.find(repo)
+
+        expect(repository.package_type).to eql('debian')
+        expect(repository.key).to eql(repo)
       end
     end
 
