@@ -41,7 +41,8 @@ module Artifactory
           'archiveBrowsingEnabled'       => false,
           'calculateYumMetadata'         => false,
           'yumRootDepth'                 => 0,
-          'rclass'                       => 'local'
+          'rclass'                       => 'local',
+          'packageType'                  => 'maven'
         })
       end
 
@@ -67,8 +68,36 @@ module Artifactory
           'archiveBrowsingEnabled'       => false,
           'calculateYumMetadata'         => false,
           'yumRootDepth'                 => 0,
-          'rclass'                       => 'local'
+          'rclass'                       => 'local',
+          'packageType'                  => 'maven'
         })
+      end
+
+      app.get('/api/repositories/libs-debian-local') do
+        content_type 'application/vnd.org.jfrog.artifactory.repositories.LocalRepositoryConfiguration+json'
+        JSON.fast_generate({
+            'key'                          => 'libs-debian-local',
+            'description'                  => 'Local repository for in-house snapshots',
+            'notes'                        => '',
+            'includesPattern'              => '**/*',
+            'excludesPattern'              => '',
+            'repoLayoutRef'                => 'maven-2-default',
+            'enableNuGetSupport'           => false,
+            'enableGemsSupport'            => false,
+            'checksumPolicyType'           => 'client-checksums',
+            'handleReleases'               => false,
+            'handleSnapshots'              => true,
+            'maxUniqueSnapshots'           => 10,
+            'snapshotVersionBehavior'      => 'unique',
+            'suppressPomConsistencyChecks' => false,
+            'blackedOut'                   => false,
+            'propertySets'                 => ['artifactory'],
+            'archiveBrowsingEnabled'       => false,
+            'calculateYumMetadata'         => false,
+            'yumRootDepth'                 => 0,
+            'rclass'                       => 'local',
+            'packageType'                  => 'debian'
+          })
       end
 
       # Simulate a non-existent repository
