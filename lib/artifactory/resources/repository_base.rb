@@ -86,6 +86,10 @@ module Artifactory
       false
     end
 
+    def content_type
+      raise 'You must implement a content_type method'
+    end
+
     private
 
     #

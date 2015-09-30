@@ -47,6 +47,7 @@ module Artifactory
     autoload :URLBase,          'artifactory/resources/url_base'
     autoload :User,             'artifactory/resources/user'
     autoload :RemoteRepository, 'artifactory/resources/remote_repository'
+    autoload :VirtualRepository,'artifactory/resources/virtual_repository'
   end
 
   class << self
