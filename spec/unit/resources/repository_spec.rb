@@ -9,39 +9,6 @@ module Artifactory
       allow(client).to receive(:get).and_return(response) if defined?(response)
     end
 
-    describe '.all' do
-      let(:response) do
-        [
-          { 'key' => 'a' },
-          { 'key' => 'b' },
-          { 'key' => 'c' },
-        ]
-      end
-      before do
-        allow(described_class).to receive(:find).with('a', client: client).and_return('a')
-        allow(described_class).to receive(:find).with('b', client: client).and_return('b')
-        allow(described_class).to receive(:find).with('c', client: client).and_return('c')
-      end
-
-      it 'gets /api/repositories' do
-        expect(client).to receive(:get).with('/api/repositories').once
-        described_class.all
-      end
-
-      it 'returns the repositories' do
-        expect(described_class.all).to eq(['a', 'b', 'c'])
-      end
-    end
-
-    describe '.find' do
-      let(:response) { {} }
-
-      it 'gets /api/repositories/#{name}' do
-        expect(client).to receive(:get).with('/api/repositories/libs-release-local').once
-        described_class.find('libs-release-local')
-      end
-    end
-
     describe '.from_hash' do
       let(:hash) do
         {

@@ -1,5 +1,9 @@
+require 'artifactory/resources/repository_base'
+
 module Artifactory
   class Resource::RemoteRepository < Resource::Base
+    include Artifactory::Resource::RepositoryBase
+
     class << self
       #
       # Get a list of all repositories in the system.
@@ -49,7 +53,6 @@ module Artifactory
       end
     end
 
-    attribute :key, ->{ raise ::ArgumentError.new('key is required') }
     attribute :rclass, 'remote'
     attribute :package_type, 'maven'
     attribute :url, ->{ raise ::ArgumentError.new('url is required') }
@@ -91,27 +94,5 @@ module Artifactory
     def content_type
       'application/vnd.org.jfrog.artifactory.repositories.RemoteRepositoryConfiguration+json'
     end
-
-    def save
-      if self.class.find(key, client: client)
-        client.post(api_path, to_json, headers)
-      else
-        client.put(api_path, to_json, headers)
-      end
-      true
-    end
-
-    private
-
-    def api_path
-      "/api/repositories/#{url_safe(key)}"
-    end
-
-    def headers
-      @headers ||= {
-        'Content-Type' => content_type
-      }
-    end
-
   end
 end
