@@ -1,9 +1,58 @@
 module Artifactory
   class Resource::RemoteRepository < Resource::Base
-    attribute :key, ->{ raise ArgumentError('key is required') }
+    class << self
+      #
+      # Get a list of all repositories in the system.
+      #
+      # @param [Hash] options
+      #   the list of options
+      #
+      # @option options [Artifactory::Client] :client
+      #   the client object to make the request with
+      #
+      # @return [Array<Resource::Repository>]
+      #   the list of builds
+      #
+      def all(options = {})
+        client = extract_client!(options)
+        client.get('/api/repositories').map do |hash|
+          find(hash['key'], client: client)
+        end.compact
+      end
+
+      #
+      # Find (fetch) a repository by name.
+      #
+      # @example Find a repository by named key
+      #   Repository.find(name: 'libs-release-local') #=> #<Resource::Artifact>
+      #
+      # @param [Hash] options
+      #   the list of options
+      #
+      # @option options [String] :name
+      #   the name of the repository to find
+      # @option options [Artifactory::Client] :client
+      #   the client object to make the request with
+      #
+      # @return [Resource::Repository, nil]
+      #   an instance of the repository that matches the given name, or +nil+
+      #   if one does not exist
+      #
+      def find(name, options = {})
+        client = extract_client!(options)
+
+        response = client.get("/api/repositories/#{url_safe(name)}")
+        from_hash(response, client: client)
+      rescue Error::HTTPError => e
+        raise unless e.code == 400
+        nil
+      end
+    end
+
+    attribute :key, ->{ raise ::ArgumentError.new('key is required') }
     attribute :rclass, 'remote'
     attribute :package_type, 'maven'
-    attribute :url, ->{ raise ArgumentError('url is required') }
+    attribute :url, ->{ raise ::ArgumentError.new('url is required') }
     attribute :username
     attribute :password
     attribute :proxy
@@ -42,5 +91,27 @@ module Artifactory
     def content_type
       'application/vnd.org.jfrog.artifactory.repositories.RemoteRepositoryConfiguration+json'
     end
+
+    def save
+      if self.class.find(key, client: client)
+        client.post(api_path, to_json, headers)
+      else
+        client.put(api_path, to_json, headers)
+      end
+      true
+    end
+
+    private
+
+    def api_path
+      "/api/repositories/#{url_safe(key)}"
+    end
+
+    def headers
+      @headers ||= {
+        'Content-Type' => content_type
+      }
+    end
+
   end
 end
