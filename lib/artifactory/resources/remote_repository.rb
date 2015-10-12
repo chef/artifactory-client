@@ -6,55 +6,6 @@ module Artifactory
 
     include Artifactory::Resource::RepositoryBase
 
-    class << self
-      #
-      # Get a list of all repositories in the system.
-      #
-      # @param [Hash] options
-      #   the list of options
-      #
-      # @option options [Artifactory::Client] :client
-      #   the client object to make the request with
-      #
-      # @return [Array<Resource::Repository>]
-      #   the list of builds
-      #
-      def all(options = {})
-        client = extract_client!(options)
-        client.get('/api/repositories').map do |hash|
-          find(hash['key'], client: client)
-        end.compact
-      end
-
-      #
-      # Find (fetch) a repository by name.
-      #
-      # @example Find a repository by named key
-      #   Repository.find(name: 'libs-release-local') #=> #<Resource::Artifact>
-      #
-      # @param [Hash] options
-      #   the list of options
-      #
-      # @option options [String] :name
-      #   the name of the repository to find
-      # @option options [Artifactory::Client] :client
-      #   the client object to make the request with
-      #
-      # @return [Resource::Repository, nil]
-      #   an instance of the repository that matches the given name, or +nil+
-      #   if one does not exist
-      #
-      def find(name, options = {})
-        client = extract_client!(options)
-
-        response = client.get("/api/repositories/#{url_safe(name)}")
-        from_hash(response, client: client)
-      rescue Error::HTTPError => e
-        raise unless e.code == 400
-        nil
-      end
-    end
-
     attribute :rclass, 'remote'
     attribute :package_type, 'maven'
     attribute :url, ->{ raise ::ArgumentError.new('url is required') }
