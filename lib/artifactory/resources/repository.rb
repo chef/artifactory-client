@@ -18,6 +18,8 @@ require 'artifactory/resources/repository_base'
 
 module Artifactory
   class Resource::Repository < Resource::Base
+    RCLASS = 'local'
+
     include Artifactory::Resource::RepositoryBase
 
     attribute :blacked_out, false

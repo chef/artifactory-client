@@ -2,6 +2,8 @@ require 'artifactory/resources/repository_base'
 
 module Artifactory
   class Resource::VirtualRepository < Resource::Base
+    RCLASS = 'virtual'
+
     include Resource::RepositoryBase
 
     attribute :rclass, 'virtual'

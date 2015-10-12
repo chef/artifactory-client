@@ -4,6 +4,14 @@ module Artifactory
   describe Resource::RemoteRepository do
     subject(:repository) { described_class.new }
 
+    it_behaves_like 'all-repositories' do
+      let(:subject) { described_class.new(url: 'my-url') }
+    end
+
+    it 'has proper RCLASS' do
+      expect(described_class::RCLASS).to eql('remote')
+    end
+
     describe '#content_type' do
       it 'has a proper content type' do
         # rubocop:disable LineLength

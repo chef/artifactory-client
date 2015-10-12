@@ -3,6 +3,7 @@ module Artifactory
 
     def self.included(clazz)
       clazz.attribute :key, ->{ raise 'Key is missing!' }
+      clazz.attribute :rclass, ->{ raise 'rclass is missing!' }
 
       class << clazz
         #
@@ -18,8 +19,10 @@ module Artifactory
         #   the list of builds
         #
         def all(options = {})
+          raise 'const RCLASS must be defined' unless defined?(self::RCLASS)
+
           client = extract_client!(options)
-          client.get('/api/repositories').map do |hash|
+          client.get("/api/repositories?type=#{self::RCLASS}").map do |hash|
             find(hash['key'], client: client)
           end.compact
         end

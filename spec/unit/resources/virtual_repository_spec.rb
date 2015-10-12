@@ -2,6 +2,12 @@ require 'spec_helper'
 
 module Artifactory
   describe Artifactory::Resource::VirtualRepository do
+    it_behaves_like 'all-repositories'
+
+    it 'has proper RCLASS' do
+      expect(described_class::RCLASS).to eql('virtual')
+    end
+
     describe '.from_hash' do
       let(:hash) do
         hash = {

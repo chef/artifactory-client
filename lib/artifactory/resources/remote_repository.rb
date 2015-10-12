@@ -2,6 +2,8 @@ require 'artifactory/resources/repository_base'
 
 module Artifactory
   class Resource::RemoteRepository < Resource::Base
+    RCLASS = 'remote'
+
     include Artifactory::Resource::RepositoryBase
 
     class << self
