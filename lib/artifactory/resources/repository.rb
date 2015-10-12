@@ -36,6 +36,7 @@ module Artifactory
     attribute :rclass, 'local'
     attribute :snapshot_version_behavior, 'non-unique'
     attribute :suppress_pom_consistency_checks, false
+    attribute :package_type, 'maven'
 
     #
     # Upload to a given repository
