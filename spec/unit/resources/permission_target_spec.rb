@@ -47,7 +47,7 @@ module Artifactory
 
       it 'constructs a new instance from the result' do
         expect(described_class).to receive(:from_hash).once
-        described_class.from_url('/api/security/permissions/Any Remote')
+        described_class.from_url('/api/security/permissions/AnyRemote')
       end
     end
 

@@ -2,6 +2,12 @@ require 'spec_helper'
 
 module Artifactory
   describe Resource::Base do
+    let(:client) { double }
+
+    before do
+      allow(Artifactory).to receive(:client).and_return(client)
+    end
+
     describe '.attribute' do
       before { described_class.attribute(:bacon) }
 
@@ -74,19 +80,30 @@ module Artifactory
           expect(options).to eq(options)
         end
       end
+    end
 
-      describe '.url_safe' do
-        let(:string) { double(to_s: 'string') }
+    describe '.from_url' do
+      let(:relative_path) { '/api/storage/omnibus-unstable-local/com/getchef/harmony/0.1.0+20151111083608.git.15.8736e1e/el/5/harmony-0.1.0+20151111083608.git.15.8736e1e-1.el5.x86_64.rpm' }
 
-        it 'delegates to URI.escape' do
-          expect(URI).to receive(:escape).once
-          described_class.url_safe(string)
-        end
+      it 'only uses the path from absolute URLs' do
 
-        it 'converts the value to a string' do
-          expect(string).to receive(:to_s).once
-          described_class.url_safe(string)
-        end
+        expect(described_class).to receive(:from_hash)
+        expect(client).to receive(:get).with(relative_path)
+        described_class.from_url(File.join('http://33.33.33.11', relative_path))
+      end
+    end
+
+    describe '.url_safe' do
+      let(:string) { double(to_s: 'string') }
+
+      it 'delegates to URI.escape' do
+        expect(URI).to receive(:escape).once
+        described_class.url_safe(string)
+      end
+
+      it 'converts the value to a string' do
+        expect(string).to receive(:to_s).once
+        described_class.url_safe(string)
       end
     end
 
