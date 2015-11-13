@@ -239,7 +239,7 @@ module Artifactory
           connection.verify_mode = OpenSSL::SSL::VERIFY_NONE
         end
       end
-
+      puts "REQUEST URI -----> #{uri.to_s}"
       # Create a connection using the block form, which will ensure the socket
       # is properly closed in the event of an error.
       connection.start do |http|

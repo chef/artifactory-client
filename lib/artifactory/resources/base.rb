@@ -16,6 +16,7 @@
 
 require 'cgi'
 require 'json'
+require 'uri'
 
 module Artifactory
   class Resource::Base
@@ -104,8 +105,11 @@ module Artifactory
       # @return [~Resource::Base]
       #
       def from_url(url, options = {})
+        # Parse the URL and only use the path so the configure
+        # endpoint/proxy/SSL settings are used in the GET request.
+        path = URI.parse(url).path
         client = extract_client!(options)
-        from_hash(client.get(url), client: client)
+        from_hash(client.get(path), client: client)
       end
 
       #
@@ -171,7 +175,8 @@ module Artifactory
       def from_hash(hash, options = {})
         instance = new
         instance.client = extract_client!(options)
-
+        puts "IN Base#from_hash"
+        require 'pp'; pp instance.client
         hash.inject(instance) do |instance, (key, value)|
           method = :"#{Util.underscore(key)}="
 

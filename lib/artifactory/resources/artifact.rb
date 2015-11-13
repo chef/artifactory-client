@@ -140,8 +140,11 @@ module Artifactory
         client = extract_client!(options)
         params = options.dup
         format_repos!(params)
-
+        puts "IN Artifact.property_search"
+        require 'pp'; pp client
         client.get('/api/search/prop', params)['results'].map do |artifact|
+          puts "IN Artifact.get.map"
+          require 'pp'; pp client
           from_url(artifact['uri'], client: client)
         end
       end
@@ -362,7 +365,11 @@ module Artifactory
       # @see Artifactory::Resource::Base.from_hash
       #
       def from_hash(hash, options = {})
+        puts "IN Artifact#from_hash"
+
         super.tap do |instance|
+          puts "IN Artifact#from_hash.tap"
+          require 'pp'; pp instance.client
           instance.created       = Time.parse(instance.created) rescue nil
           instance.last_modified = Time.parse(instance.last_modified) rescue nil
           instance.last_updated  = Time.parse(instance.last_updated)  rescue nil
@@ -438,7 +445,11 @@ module Artifactory
     #   the list of properties
     #
     def properties
-      @properties ||= client.get(uri, properties: nil)['properties']
+      @properties ||= begin
+        puts "IN Artifact#properties"
+        require 'pp'; pp client
+        client.get(relative_path, properties: nil)['properties']
+      end
     end
 
     #
