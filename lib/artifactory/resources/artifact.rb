@@ -438,7 +438,7 @@ module Artifactory
     #   the list of properties
     #
     def properties
-      @properties ||= client.get(uri, properties: nil)['properties']
+      @properties ||= client.get(File.join('/api/storage', relative_path), properties: nil)['properties']
     end
 
     #

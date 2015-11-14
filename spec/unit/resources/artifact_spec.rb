@@ -452,15 +452,16 @@ module Artifactory
         { 'properties' => properties }
       end
       let(:client) { double(get: response) }
-      let(:uri) { '/artifact.deb' }
+      let(:relative_path) { '/api/storage/some-repo/path/artifact.deb' }
+      let(:artifact_uri) { File.join('http://33.33.33.11', relative_path) }
 
       before do
-        subject.client   = client
-        subject.uri = uri
+        subject.client = client
+        subject.uri    = artifact_uri
       end
 
       it 'gets the properties from the server' do
-        expect(client).to receive(:get).with(uri, properties: nil).once
+        expect(client).to receive(:get).with(relative_path, properties: nil).once
         expect(subject.properties).to eq(properties)
       end
 
