@@ -3,6 +3,10 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.3.1 (11-13-2015)
+-------------------
+- Ensure embedded requests respect configured settings
+
 v2.3.0 (08-04-2015)
 -------------------
 - Support for Build endpoints
