@@ -3,6 +3,8 @@ require 'spec_helper'
 module Artifactory
   describe Resource::Base do
     let(:client) { double }
+    let(:endpoint_host) { 'http://33.33.33.11' }
+    let(:endpoint) { "#{endpoint_host}/" }
 
     before do
       allow(Artifactory).to receive(:client).and_return(client)
@@ -85,11 +87,28 @@ module Artifactory
     describe '.from_url' do
       let(:relative_path) { '/api/storage/omnibus-unstable-local/com/getchef/harmony/0.1.0+20151111083608.git.15.8736e1e/el/5/harmony-0.1.0+20151111083608.git.15.8736e1e-1.el5.x86_64.rpm' }
 
-      it 'only uses the path from absolute URLs' do
+      context 'when endpoint path part is not empty' do
+        let(:endpoint) { "#{endpoint_host}/artifactory" }
+        let(:full_url) { "#{endpoint}#{relative_path}" }
 
-        expect(described_class).to receive(:from_hash)
-        expect(client).to receive(:get).with(relative_path)
-        described_class.from_url(File.join('http://33.33.33.11', relative_path))
+        it 'uses the path minus the path part of the endpoint' do
+          expect(client).to receive(:endpoint).and_return(endpoint)
+          expect(described_class).to receive(:from_hash)
+          expect(client).to receive(:get).with(relative_path)
+          described_class.from_url(full_url)
+        end
+      end
+
+      context 'when endpoint has empty path part' do
+        let(:endpoint) { "#{endpoint_host}/" }
+        let(:full_url) { "#{endpoint}#{relative_path}" }
+
+        it 'only uses the path from absolute URLs' do
+          expect(client).to receive(:endpoint).and_return(endpoint)
+          expect(described_class).to receive(:from_hash)
+          expect(client).to receive(:get).with(relative_path)
+          described_class.from_url(full_url)
+        end
       end
     end
 
@@ -115,6 +134,7 @@ module Artifactory
       it 'defaults to the Artifactory.client' do
         client = double
         allow(Artifactory).to receive(:client).and_return(client)
+        allow(client).to receive(:endpoint).and_return(endpoint)
 
         expect(subject.client).to be(client)
       end
