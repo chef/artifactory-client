@@ -3,6 +3,8 @@ require 'spec_helper'
 module Artifactory
   describe Resource::Artifact do
     let(:client) { double(:client) }
+    let(:endpoint_host) { 'http://33.33.33.11' }
+    let(:endpoint) { "#{endpoint_host}/" }
 
     before(:each) do
       allow(Artifactory).to receive(:client).and_return(client)
@@ -369,6 +371,7 @@ module Artifactory
       let(:response) { {} }
 
       it 'constructs a new instance from the result' do
+        expect(client).to receive(:endpoint).and_return(endpoint)
         expect(described_class).to receive(:from_hash).once
         described_class.from_url('/some/artifact/path.deb')
       end
