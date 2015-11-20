@@ -9,39 +9,6 @@ module Artifactory
       allow(client).to receive(:get).and_return(response) if defined?(response)
     end
 
-    describe '.all' do
-      let(:response) do
-        [
-          { 'key' => 'a' },
-          { 'key' => 'b' },
-          { 'key' => 'c' },
-        ]
-      end
-      before do
-        allow(described_class).to receive(:find).with('a', client: client).and_return('a')
-        allow(described_class).to receive(:find).with('b', client: client).and_return('b')
-        allow(described_class).to receive(:find).with('c', client: client).and_return('c')
-      end
-
-      it 'gets /api/repositories' do
-        expect(client).to receive(:get).with('/api/repositories').once
-        described_class.all
-      end
-
-      it 'returns the repositories' do
-        expect(described_class.all).to eq(['a', 'b', 'c'])
-      end
-    end
-
-    describe '.find' do
-      let(:response) { {} }
-
-      it 'gets /api/repositories/#{name}' do
-        expect(client).to receive(:get).with('/api/repositories/libs-release-local').once
-        described_class.find('libs-release-local')
-      end
-    end
-
     describe '.from_hash' do
       let(:hash) do
         {
@@ -65,6 +32,7 @@ module Artifactory
           'calculateYumMetadata'         => false,
           'yumRootDepth'                 => 0,
           'rclass'                       => 'local',
+          'packageType'                  => 'maven'
         }
       end
 
@@ -84,36 +52,7 @@ module Artifactory
         expect(instance.rclass).to eq('local')
         expect(instance.snapshot_version_behavior).to eq('unique')
         expect(instance.suppress_pom_consistency_checks).to be_truthy
-      end
-    end
-
-    describe '#save' do
-      let(:client) { double }
-      before do
-        subject.client = client
-        subject.key = 'libs-release-local'
-      end
-
-      context 'when the repository is new' do
-        before do
-          allow(described_class).to receive(:find).with(subject.key, client: client).and_return(nil)
-        end
-
-        it 'PUTS the file to the server' do
-          expect(client).to receive(:put).with("/api/repositories/#{subject.key}", kind_of(String), kind_of(Hash))
-          subject.save
-        end
-      end
-
-      context 'when the repository exists' do
-        before do
-          allow(described_class).to receive(:find).with(subject.key, client: client).and_return({key: subject.key})
-        end
-
-        it 'POSTS the file to the server' do
-          expect(client).to receive(:post).with("/api/repositories/#{subject.key}", kind_of(String), kind_of(Hash))
-          subject.save
-        end
+        expect(instance.package_type).to eql('maven')
       end
     end
 

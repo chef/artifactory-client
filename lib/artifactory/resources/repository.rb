@@ -14,56 +14,13 @@
 # limitations under the License.
 #
 
+require 'artifactory/resources/repository_base'
+
 module Artifactory
   class Resource::Repository < Resource::Base
-    class << self
-      #
-      # Get a list of all repositories in the system.
-      #
-      # @param [Hash] options
-      #   the list of options
-      #
-      # @option options [Artifactory::Client] :client
-      #   the client object to make the request with
-      #
-      # @return [Array<Resource::Repository>]
-      #   the list of builds
-      #
-      def all(options = {})
-        client = extract_client!(options)
-        client.get('/api/repositories').map do |hash|
-          find(hash['key'], client: client)
-        end.compact
-      end
+    RCLASS = 'local'
 
-      #
-      # Find (fetch) a repository by name.
-      #
-      # @example Find a repository by named key
-      #   Repository.find(name: 'libs-release-local') #=> #<Resource::Artifact>
-      #
-      # @param [Hash] options
-      #   the list of options
-      #
-      # @option options [String] :name
-      #   the name of the repository to find
-      # @option options [Artifactory::Client] :client
-      #   the client object to make the request with
-      #
-      # @return [Resource::Repository, nil]
-      #   an instance of the repository that matches the given name, or +nil+
-      #   if one does not exist
-      #
-      def find(name, options = {})
-        client = extract_client!(options)
-
-        response = client.get("/api/repositories/#{url_safe(name)}")
-        from_hash(response, client: client)
-      rescue Error::HTTPError => e
-        raise unless e.code == 400
-        nil
-      end
-    end
+    include Artifactory::Resource::RepositoryBase
 
     attribute :blacked_out, false
     attribute :description
@@ -72,7 +29,6 @@ module Artifactory
     attribute :handle_releases, true
     attribute :handle_snapshots, true
     attribute :includes_pattern, '**/*'
-    attribute :key, ->{ raise 'Key is missing!' }
     attribute :max_unique_snapshots, 0
     attribute :notes
     attribute :property_sets, []
@@ -80,25 +36,7 @@ module Artifactory
     attribute :rclass, 'local'
     attribute :snapshot_version_behavior, 'non-unique'
     attribute :suppress_pom_consistency_checks, false
-
-    #
-    # Creates or updates a repository configuration depending on if the
-    # repository configuration previously existed. This method also works
-    # around Artifactory's dangerous default behavior:
-    #
-    #   > An existing repository with the same key are removed from the
-    #   > configuration and its content is removed!
-    #
-    # @return [Boolean]
-    #
-    def save
-      if self.class.find(key, client: client)
-        client.post(api_path, to_json, headers)
-      else
-        client.put(api_path, to_json, headers)
-      end
-      true
-    end
+    attribute :package_type, 'maven'
 
     #
     # Upload to a given repository
@@ -168,42 +106,9 @@ module Artifactory
       response['children']
     end
 
-    #
-    # Delete this repository from artifactory, suppressing any +ResourceNotFound+
-    # exceptions might occur.
-    #
-    # @return [Boolean]
-    #   true if the object was deleted successfully, false otherwise
-    #
-    def delete
-      client.delete(api_path)
-      true
-    rescue Error::HTTPError => e
-      false
-    end
+
 
     private
-
-    #
-    # The path to this repository on the server.
-    #
-    # @return [String]
-    #
-    def api_path
-      "/api/repositories/#{url_safe(key)}"
-    end
-
-    #
-    # The default headers for this object. This includes the +Content-Type+.
-    #
-    # @return [Hash]
-    #
-    def headers
-      @headers ||= {
-        'Content-Type' => content_type
-      }
-    end
-
     #
     # The default Content-Type for this repository. It varies based on the
     # repository type.

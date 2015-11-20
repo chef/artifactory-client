@@ -8,6 +8,9 @@ require 'artifactory'
 # Require helpers
 require_relative 'support/api_server'
 
+# require our shared examples
+require_relative 'unit/resources/repository_base_spec'
+
 RSpec.configure do |config|
   # Custom helper modules and extensions
 
