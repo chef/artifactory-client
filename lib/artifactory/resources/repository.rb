@@ -75,12 +75,12 @@ module Artifactory
     attribute :key, ->{ raise 'Key is missing!' }
     attribute :max_unique_snapshots, 0
     attribute :notes
+    attribute :package_type, 'generic'
     attribute :property_sets, []
-    attribute :repo_layout_ref, 'maven-2-default'
+    attribute :repo_layout_ref, 'simple-default'
     attribute :rclass, 'local'
     attribute :snapshot_version_behavior, 'non-unique'
     attribute :suppress_pom_consistency_checks, false
-    attribute :package_type, 'maven'
 
     #
     # Creates or updates a repository configuration depending on if the

@@ -27,7 +27,7 @@ module Artifactory
           'notes'                        => '',
           'includesPattern'              => '**/*',
           'excludesPattern'              => '',
-          'repoLayoutRef'                => 'maven-2-default',
+          'repoLayoutRef'                => 'simple-default',
           'enableNuGetSupport'           => false,
           'enableGemsSupport'            => false,
           'checksumPolicyType'           => 'client-checksums',
@@ -42,7 +42,7 @@ module Artifactory
           'calculateYumMetadata'         => false,
           'yumRootDepth'                 => 0,
           'rclass'                       => 'local',
-          'packageType'                  => 'maven'
+          'packageType'                  => 'generic'
         })
       end
 
@@ -54,7 +54,7 @@ module Artifactory
           'notes'                        => '',
           'includesPattern'              => '**/*',
           'excludesPattern'              => '',
-          'repoLayoutRef'                => 'maven-2-default',
+          'repoLayoutRef'                => 'simple-default',
           'enableNuGetSupport'           => false,
           'enableGemsSupport'            => false,
           'checksumPolicyType'           => 'client-checksums',
@@ -69,7 +69,7 @@ module Artifactory
           'calculateYumMetadata'         => false,
           'yumRootDepth'                 => 0,
           'rclass'                       => 'local',
-          'packageType'                  => 'maven'
+          'packageType'                  => 'generic'
         })
       end
 
@@ -81,7 +81,7 @@ module Artifactory
             'notes'                        => '',
             'includesPattern'              => '**/*',
             'excludesPattern'              => '',
-            'repoLayoutRef'                => 'maven-2-default',
+            'repoLayoutRef'                => 'simple-default',
             'enableNuGetSupport'           => false,
             'enableGemsSupport'            => false,
             'checksumPolicyType'           => 'client-checksums',
