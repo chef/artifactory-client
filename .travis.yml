@@ -9,6 +9,9 @@ branches:
   only:
     - master
 
+before_install:
+  - gem install bundler
+
 script: bundle exec rake travis:ci
 
 notifications:
