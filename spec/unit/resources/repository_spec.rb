@@ -50,7 +50,6 @@ module Artifactory
           'notes'                        => '',
           'includesPattern'              => '**/*',
           'excludesPattern'              => '',
-          'repoLayoutRef'                => 'maven-2-default',
           'enableNuGetSupport'           => false,
           'enableGemsSupport'            => false,
           'checksumPolicyType'           => 'server-generated-checksums',
@@ -80,8 +79,10 @@ module Artifactory
         expect(instance.key).to eq('libs-release-local')
         expect(instance.max_unique_snapshots).to eq(10)
         expect(instance.notes).to eq('')
+        expect(instance.package_type).to eq('generic')
         expect(instance.property_sets).to eq(['artifactory'])
         expect(instance.rclass).to eq('local')
+        expect(instance.repo_layout_ref).to eq('simple-default')
         expect(instance.snapshot_version_behavior).to eq('unique')
         expect(instance.suppress_pom_consistency_checks).to be_truthy
       end
