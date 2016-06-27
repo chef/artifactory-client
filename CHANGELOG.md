@@ -3,6 +3,10 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.3.3 (06-27-2016)
+-------------------
+- Artifactory 4 requires setting package type during repository creation
+
 v2.3.2 (11-20-2015)
 -------------------
 - Fix embedded requests when endpoint has a non-empty path
