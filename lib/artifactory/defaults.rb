@@ -134,7 +134,7 @@ module Artifactory
       # @return [Integer, nil]
       #
       def read_timeout
-        ENV['ARTIFACTORY_READ_TIMEOUT'] || 120
+        ENV['ARTIFACTORY_READ_TIMEOUT'].to_i || 120
       end
     end
   end
