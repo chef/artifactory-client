@@ -3,6 +3,11 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.4.0 (09-13-2016)
+-------------------
+- Coerce `ARTIFACTORY_READ_TIMEOUT` value to integer
+- Add url attribute to support remote repositories
+
 v2.3.3 (06-27-2016)
 -------------------
 - Artifactory 4 requires setting package type during repository creation
