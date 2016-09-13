@@ -64,6 +64,7 @@ module Artifactory
           'calculateYumMetadata'         => false,
           'yumRootDepth'                 => 0,
           'rclass'                       => 'local',
+          'url'                          => 'someurl',
         }
       end
 
@@ -85,6 +86,7 @@ module Artifactory
         expect(instance.repo_layout_ref).to eq('simple-default')
         expect(instance.snapshot_version_behavior).to eq('unique')
         expect(instance.suppress_pom_consistency_checks).to be_truthy
+        expect(instance.url).to eq('someurl')
       end
     end
 
