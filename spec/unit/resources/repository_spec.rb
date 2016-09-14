@@ -62,7 +62,7 @@ module Artifactory
           'propertySets'                 => ['artifactory'],
           'archiveBrowsingEnabled'       => false,
           'calculateYumMetadata'         => false,
-          'yumRootDepth'                 => 0,
+          'yumRootDepth'                 => 3,
           'rclass'                       => 'local',
           'url'                          => 'someurl',
         }
@@ -87,6 +87,8 @@ module Artifactory
         expect(instance.snapshot_version_behavior).to eq('unique')
         expect(instance.suppress_pom_consistency_checks).to be_truthy
         expect(instance.url).to eq('someurl')
+        expect(instance.yum_root_depth).to eq(3)
+        expect(instance.calculate_yum_metadata).to eq(false)
       end
     end
 
