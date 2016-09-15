@@ -3,6 +3,10 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.5.0 (09-15-2016)
+-------------------
+- Add support for extended YUM repo attributes
+
 v2.4.0 (09-13-2016)
 -------------------
 - Coerce `ARTIFACTORY_READ_TIMEOUT` value to integer
