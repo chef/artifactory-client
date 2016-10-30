@@ -14,6 +14,7 @@
 # limitations under the License.
 #
 
+require 'time'
 require 'tempfile'
 
 module Artifactory
