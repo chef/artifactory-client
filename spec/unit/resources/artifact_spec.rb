@@ -109,6 +109,21 @@ module Artifactory
       end
     end
 
+    describe '#upload_checksum' do
+      it 'uploads checksum.sha1' do
+        value = 'ABCD1234'
+
+        tempfile = double('Tempfile').as_null_object
+        expect(Tempfile).to receive(:new).with('checksum.sha1') { tempfile }
+        expect(tempfile).to receive(:write).with(value).once
+        expect(client).to receive(:put).with(
+            "libs-release-local/remote/path.sha1",
+            tempfile
+        )
+        subject.upload_checksum('libs-release-local', '/remote/path', 'sha1', value)
+      end
+    end
+
     describe '#upload_with_checksum' do
       it 'delegates to #upload' do
         expect(subject).to receive(:upload).with(
