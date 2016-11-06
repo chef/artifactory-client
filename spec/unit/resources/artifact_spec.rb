@@ -526,7 +526,25 @@ module Artifactory
     end
 
     describe '#download' do
-      it
+      it 'download content to directory' do
+        Dir.mktmpdir('artifact_download') do |tmpdir|
+          subject.download_uri = '/artifact.deb'
+
+          expect(client).to receive(:get) { 'some content' }
+          subject.download(tmpdir)
+          expect(Dir.entries(tmpdir)).to include('artifact.deb')
+        end
+      end
+
+      it 'download content to directory with filename' do
+        Dir.mktmpdir('artifact_download') do |tmpdir|
+          subject.download_uri = '/artifact.deb'
+
+          expect(client).to receive(:get) { 'some content' }
+          subject.download(tmpdir, {filename: 'foobar.deb'})
+          expect(Dir.entries(tmpdir)).to include('foobar.deb')
+        end
+      end
     end
 
     describe '#relative_path' do
