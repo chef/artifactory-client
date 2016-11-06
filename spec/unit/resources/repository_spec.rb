@@ -193,5 +193,15 @@ module Artifactory
         expect(subject.artifacts).to be_a(Collection::Artifact)
       end
     end
+
+    describe '#upload_with_checksum' do
+      it 'delecates to artifact' do
+        artifact = double('Artifact')
+        allow(Resource::Artifact).to receive(:new) { artifact }
+        subject.key = 'libs-release-local'
+        expect(artifact).to receive(:upload_with_checksum).once
+        subject.upload_with_checksum('/local/path', '/remote/path', 'checksum', {properties: :foobar})
+      end
+    end
   end
 end
