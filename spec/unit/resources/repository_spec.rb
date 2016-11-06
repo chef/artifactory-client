@@ -203,5 +203,15 @@ module Artifactory
         subject.upload_with_checksum('/local/path', '/remote/path', 'checksum', {properties: :foobar})
       end
     end
+
+    describe '#upload_from_archive' do
+      it 'delecates to artifact' do
+        artifact = double('Artifact')
+        allow(Resource::Artifact).to receive(:new) { artifact }
+        subject.key = 'libs-release-local'
+        expect(artifact).to receive(:upload_from_archive).once
+        subject.upload_from_archive('/local/path', '/remote/path', {properties: :foobar})
+      end
+    end
   end
 end
