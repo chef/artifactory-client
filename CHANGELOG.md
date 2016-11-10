@@ -5,6 +5,8 @@ Ruby client.
 
 v2.5.1 (11-10-2016)
 -------------------
+- Ensure `Artifact#Upload_from_archive` returns empty response
+- Additional test coverage
 
 v2.5.0 (09-15-2016)
 -------------------
