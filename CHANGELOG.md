@@ -3,6 +3,9 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.5.1 (11-10-2016)
+-------------------
+
 v2.5.0 (09-15-2016)
 -------------------
 - Add support for extended YUM repo attributes
