@@ -2,6 +2,18 @@ require 'bundler/setup'
 require 'rspec'
 require 'webmock/rspec'
 
+if ENV['COVERAGE']
+  require 'simplecov'
+  require 'simplecov-console'
+  SimpleCov.start do
+    add_filter 'spec/'
+    formatter SimpleCov::Formatter::MultiFormatter.new [
+      SimpleCov::Formatter::HTMLFormatter,
+      SimpleCov::Formatter::Console,
+    ]
+  end
+end
+
 # Require our main library
 require 'artifactory'
 
