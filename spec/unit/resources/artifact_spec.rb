@@ -136,6 +136,19 @@ module Artifactory
         )
         subject.upload_from_archive('libs-release-local', '/remote/path')
       end
+
+      it 'receives empty response' do
+        file = double(File)
+        allow(File).to receive(:new).and_return( file )
+        expect(client).to receive(:put).with(
+            "libs-release-local/remote/path",
+            file,
+            { 'X-Explode-Archive' => true },
+        )
+        subject.local_path = '/local/path'
+        subject.upload_from_archive('libs-release-local', '/remote/path')
+      end
+
     end
 
     describe '.gavc_search' do
