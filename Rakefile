@@ -12,3 +12,8 @@ namespace :travis do
   desc 'Run tests on Travis'
   task :ci => [:unit,:integration]
 end
+
+desc 'Generate coverage report'
+RSpec::Core::RakeTask.new(:coverage) do |t|
+  ENV['COVERAGE'] = 'true'
+end

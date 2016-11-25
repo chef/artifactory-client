@@ -3,6 +3,20 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.5.1 (11-10-2016)
+-------------------
+- Ensure `Artifact#Upload_from_archive` returns empty response
+- Additional test coverage
+
+v2.5.0 (09-15-2016)
+-------------------
+- Add support for extended YUM repo attributes
+
+v2.4.0 (09-13-2016)
+-------------------
+- Coerce `ARTIFACTORY_READ_TIMEOUT` value to integer
+- Add url attribute to support remote repositories
+
 v2.3.3 (06-27-2016)
 -------------------
 - Artifactory 4 requires setting package type during repository creation

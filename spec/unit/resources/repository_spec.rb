@@ -62,8 +62,9 @@ module Artifactory
           'propertySets'                 => ['artifactory'],
           'archiveBrowsingEnabled'       => false,
           'calculateYumMetadata'         => false,
-          'yumRootDepth'                 => 0,
+          'yumRootDepth'                 => 3,
           'rclass'                       => 'local',
+          'url'                          => 'someurl',
         }
       end
 
@@ -85,6 +86,9 @@ module Artifactory
         expect(instance.repo_layout_ref).to eq('simple-default')
         expect(instance.snapshot_version_behavior).to eq('unique')
         expect(instance.suppress_pom_consistency_checks).to be_truthy
+        expect(instance.url).to eq('someurl')
+        expect(instance.yum_root_depth).to eq(3)
+        expect(instance.calculate_yum_metadata).to eq(false)
       end
     end
 
@@ -187,6 +191,26 @@ module Artifactory
 
       it 'returns an artifact collection' do
         expect(subject.artifacts).to be_a(Collection::Artifact)
+      end
+    end
+
+    describe '#upload_with_checksum' do
+      it 'delecates to artifact' do
+        artifact = double('Artifact')
+        allow(Resource::Artifact).to receive(:new) { artifact }
+        subject.key = 'libs-release-local'
+        expect(artifact).to receive(:upload_with_checksum).once
+        subject.upload_with_checksum('/local/path', '/remote/path', 'checksum', {properties: :foobar})
+      end
+    end
+
+    describe '#upload_from_archive' do
+      it 'delecates to artifact' do
+        artifact = double('Artifact')
+        allow(Resource::Artifact).to receive(:new) { artifact }
+        subject.key = 'libs-release-local'
+        expect(artifact).to receive(:upload_from_archive).once
+        subject.upload_from_archive('/local/path', '/remote/path', {properties: :foobar})
       end
     end
   end

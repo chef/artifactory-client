@@ -15,5 +15,5 @@
 #
 
 module Artifactory
-  VERSION = '2.3.3'
+  VERSION = '2.5.1'
 end

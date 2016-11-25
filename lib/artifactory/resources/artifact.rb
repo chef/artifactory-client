@@ -540,6 +540,7 @@ module Artifactory
 
       response = client.put(endpoint, file, headers)
 
+      return unless response.is_a?(Hash)
       self.class.from_hash(response)
     end
 

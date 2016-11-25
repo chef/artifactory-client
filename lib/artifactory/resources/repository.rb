@@ -81,6 +81,9 @@ module Artifactory
     attribute :rclass, 'local'
     attribute :snapshot_version_behavior, 'non-unique'
     attribute :suppress_pom_consistency_checks, false
+    attribute :url, ''
+    attribute :yum_root_depth, 0
+    attribute :calculate_yum_metadata, false
 
     #
     # Creates or updates a repository configuration depending on if the

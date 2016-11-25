@@ -131,10 +131,14 @@ module Artifactory
       #
       # Number of seconds to wait for a response from Artifactory
       #
-      # @return [Integer, nil]
+      # @return [Integer]
       #
       def read_timeout
-        ENV['ARTIFACTORY_READ_TIMEOUT'] || 120
+        if ENV['ARTIFACTORY_READ_TIMEOUT']
+          ENV['ARTIFACTORY_READ_TIMEOUT'].to_i
+        else
+          120
+        end
       end
     end
   end
