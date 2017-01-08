@@ -44,7 +44,7 @@ module Artifactory
       subject { described_class.new(client: client, local_path: local_path) }
 
       before do
-        allow(File).to receive(:new).with(local_path).and_return(file)
+        allow(File).to receive(:new).with(/\A(\w:)?#{local_path}\z/).and_return(file)
       end
 
       context 'when the artifact is a file path' do
