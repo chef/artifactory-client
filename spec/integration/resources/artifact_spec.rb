@@ -6,7 +6,7 @@ module Artifactory
       it "finds artifacts by #{name}" do
         response = described_class.send(name, options)
         expect(response).to be_a(Array)
-        expect(response.size).to eq(2)
+        expect(response.size).to eq(3)
 
         artifact_1 = response[0]
         expect(artifact_1).to be_a(described_class)
@@ -15,6 +15,10 @@ module Artifactory
         artifact_2 = response[1]
         expect(artifact_2).to be_a(described_class)
         expect(artifact_2.repo).to eq('ext-release-local')
+
+        artifact_3 = response[2]
+        expect(artifact_3).to be_a(described_class)
+        expect(artifact_3.repo).to eq('bin-release-local')
       end
 
       it "finds artifacts by repo" do

@@ -111,6 +111,31 @@ module Artifactory
         )
       end
 
+      app.get('/api/storage/bin-release-local/org/acme/artifact 1.0.0.msi') do
+        content_type 'application/vnd.org.jfrog.artifactory.storage.FileInfo+json'
+        JSON.fast_generate(
+          'uri'          => server_url.join('/api/storage/bin-release-local/org/acme/artifact 1.0.0.msi'),
+          'downloadUri'  => server_url.join('/artifactory/bin-release-local/org/acme/artifact 1.0.0.msi'),
+          'repo'         => 'bin-release-local',
+          'path'         => '/org/acme/artifact 1.0.0.msi',
+          'created'      => Time.parse('1995-04-11 11:05am'),
+          'createdBy'    => 'yzl',
+          'lastModified' => Time.parse('2013-11-10 10:10pm'),
+          'modifiedBy'   => 'schisamo',
+          'lastUpdated'  => Time.parse('2014-02-02 2:00pm'),
+          'size'         => '1024',
+          'mimeType'     => 'application/octet-stream',
+          'checksums'    => {
+            'md5' => 'MD5789',
+            'sha' => 'SHA101'
+          },
+          'originalChecksums' => {
+            'md5' => 'MD5789',
+            'sha' => 'SHA101'
+          }
+        )
+      end
+
       app.class_eval do
         def artifacts_for_conditions(&block)
           if block.call
@@ -125,6 +150,7 @@ module Artifactory
                 'results' => [
                   { 'uri' => server_url.join('/api/storage/libs-release-local/org/acme/artifact.deb') },
                   { 'uri' => server_url.join('/api/storage/ext-release-local/org/acme/artifact.deb') },
+                  { 'uri' => server_url.join('/api/storage/bin-release-local/org/acme/artifact 1.0.0.msi') },
                 ]
               )
             end
