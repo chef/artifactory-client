@@ -107,7 +107,7 @@ module Artifactory
       def from_url(url, options = {})
         # Parse the URL and only use the path so the configured
         # endpoint/proxy/SSL settings are used in the GET request.
-        path = URI.parse(url).path
+        path = URI.parse(url_safe(url)).path
         client = extract_client!(options)
         # If the endpoint contains a path part, we must remove the
         # endpoint path part from path, because the client uses
@@ -241,7 +241,7 @@ module Artifactory
       #   the URL-safe version of the string
       #
       def url_safe(value)
-        URI.escape(value.to_s)
+        URI.escape(URI.unescape(value.to_s))
       end
     end
 
