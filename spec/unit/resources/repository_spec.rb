@@ -129,7 +129,7 @@ module Artifactory
       before do
         subject.client = client
         subject.key    = 'libs-release-local'
-        allow(File).to receive(:new).with('/fake/path').and_return(file)
+        allow(File).to receive(:new).with(/\A(\w:)?#{path}\z/).and_return(file)
       end
 
       context 'when the artifact is a file path' do
