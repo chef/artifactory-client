@@ -3,6 +3,12 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.5.2 (01-27-2017)
+-------------------
+- Update tests to run properly on Windows
+- Begin testing PRs with Appveyor
+- Ensure URI from artifacts are escaped
+
 v2.5.1 (11-10-2016)
 -------------------
 - Ensure `Artifact#Upload_from_archive` returns empty response
