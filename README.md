@@ -2,6 +2,8 @@ Artifactory Client
 ==================
 [![Build Status](https://secure.travis-ci.org/chef/artifactory-client.png?branch=master)](http://travis-ci.org/chef/artifactory-client)
 
+[![Gem Version](http://img.shields.io/gem/v/artifactory.svg)][gem] [![Travis Build Status](http://img.shields.io/travis/chef/artifactory-client.svg?label=Travis CI)][travis] [![AppVeyor Build Status](http://img.shields.io/appveyor/ci/chef/artifactory-client.svg?label=AppVeyor)][appveyor]
+
 A Ruby client and interface to the Artifactory API. **The majority of API endpoints are only exposed for Artifactory Pro customers!** As such, many of the resources and actions exposed by this gem also require Artifactory Pro.
 
 The Artifactory gem offers a convienent interface for managing various parts of the Artifactory API. It is not a complete API implementation, and should still be considered a work in progress.
@@ -275,3 +277,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
+[appveyor]: https://ci.appveyor.com/project/chef/artifactory-client
+[gem]: https://rubygems.org/gems/artifactory
+[travis]: https://travis-ci.org/chef/artifactory-client
