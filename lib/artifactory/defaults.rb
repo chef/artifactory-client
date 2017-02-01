@@ -71,6 +71,15 @@ module Artifactory
       end
 
       #
+      # The API Key for authentication
+      #
+      # @return [String, nil]
+      #
+      def api_key
+        ENV['ARTIFACTORY_API_KEY']
+      end
+
+      #
       # The HTTP Proxy server address as a string
       #
       # @return [String, nil]

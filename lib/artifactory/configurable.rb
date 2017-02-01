@@ -31,6 +31,7 @@ module Artifactory
           :endpoint,
           :username,
           :password,
+          :api_key,
           :proxy_address,
           :proxy_password,
           :proxy_port,
