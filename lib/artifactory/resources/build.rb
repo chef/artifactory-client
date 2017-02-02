@@ -14,13 +14,13 @@
 # limitations under the License.
 #
 
-require 'time'
+require "time"
 
 module Artifactory
   class Resource::Build < Resource::Base
-    BUILD_SCHEMA_VERSION = '1.0.1'.freeze
+    BUILD_SCHEMA_VERSION = "1.0.1".freeze
     # valid build types as dictated by the Artifactory API
-    BUILD_TYPES = %w( ANT IVY MAVEN GENERIC GRADLE )
+    BUILD_TYPES = %w{ ANT IVY MAVEN GENERIC GRADLE }
 
     class << self
       #
@@ -39,9 +39,9 @@ module Artifactory
       #
       def all(name, options = {})
         client = extract_client!(options)
-        client.get("/api/build/#{url_safe(name)}")['buildsNumbers'].map do |build_number|
+        client.get("/api/build/#{url_safe(name)}")["buildsNumbers"].map do |build_number|
           # Remove the leading / from the `uri` value. Converts `/484` to `484`.
-          number = build_number['uri'].slice(1..-1)
+          number = build_number["uri"].slice(1..-1)
           find(name, number, client: client)
         end.compact.flatten
       rescue Error::HTTPError => e
@@ -75,7 +75,7 @@ module Artifactory
       def find(name, number, options = {})
         client = extract_client!(options)
         response = client.get("/api/build/#{url_safe(name)}/#{url_safe(number)}")
-        from_hash(response['buildInfo'], client: client)
+        from_hash(response["buildInfo"], client: client)
       rescue Error::HTTPError => e
         raise unless e.code == 404
         nil
@@ -95,9 +95,9 @@ module Artifactory
     # Based on https://github.com/JFrogDev/build-info/blob/master/README.md#build-info-json-format
     attribute :properties, {}
     attribute :version, BUILD_SCHEMA_VERSION
-    attribute :name, ->{ raise 'Build component missing!' }
-    attribute :number, ->{ raise 'Build number missing!' }
-    attribute :type, 'GENERIC'
+    attribute :name, -> { raise "Build component missing!" }
+    attribute :number, -> { raise "Build number missing!" }
+    attribute :type, "GENERIC"
     attribute :build_agent, {}
     attribute :agent, {}
     attribute :started, Time.now.utc.iso8601(3)
@@ -126,7 +126,7 @@ module Artifactory
     #   the list of properties
     #
     def diff(previous_build_number)
-      endpoint = api_path + '?' "diff=#{url_safe(previous_build_number)}"
+      endpoint = api_path + "?" "diff=#{url_safe(previous_build_number)}"
       client.get(endpoint, {})
     end
 
@@ -173,8 +173,8 @@ module Artifactory
     #
     def promote(target_repo, options = {})
       request_body = {}.tap do |body|
-        body[:status]       = options[:status] || 'promoted'
-        body[:comment]      = options[:comment] || ''
+        body[:status]       = options[:status] || "promoted"
+        body[:comment]      = options[:comment] || ""
         body[:ciUser]       = options[:user] || Artifactory.username
         body[:dryRun]       = options[:dry_run] || false
         body[:targetRepo]   = target_repo
@@ -188,7 +188,7 @@ module Artifactory
 
       endpoint = "/api/build/promote/#{url_safe(name)}/#{url_safe(number)}"
       client.post(endpoint, JSON.fast_generate(request_body),
-        'Content-Type' => 'application/json'
+        "Content-Type" => "application/json"
       )
     end
 
@@ -204,8 +204,8 @@ module Artifactory
       file.write(to_json)
       file.rewind
 
-      client.put('/api/build', file,
-        'Content-Type' => 'application/json'
+      client.put("/api/build", file,
+        "Content-Type" => "application/json"
       )
       true
     ensure

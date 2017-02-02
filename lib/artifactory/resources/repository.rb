@@ -31,8 +31,8 @@ module Artifactory
       #
       def all(options = {})
         client = extract_client!(options)
-        client.get('/api/repositories').map do |hash|
-          find(hash['key'], client: client)
+        client.get("/api/repositories").map do |hash|
+          find(hash["key"], client: client)
         end.compact
       end
 
@@ -67,21 +67,21 @@ module Artifactory
 
     attribute :blacked_out, false
     attribute :description
-    attribute :checksum_policy_type, 'client-checksums'
-    attribute :excludes_pattern, ''
+    attribute :checksum_policy_type, "client-checksums"
+    attribute :excludes_pattern, ""
     attribute :handle_releases, true
     attribute :handle_snapshots, true
-    attribute :includes_pattern, '**/*'
-    attribute :key, ->{ raise 'Key is missing!' }
+    attribute :includes_pattern, "**/*"
+    attribute :key, -> { raise "Key is missing!" }
     attribute :max_unique_snapshots, 0
     attribute :notes
-    attribute :package_type, 'generic'
+    attribute :package_type, "generic"
     attribute :property_sets, []
-    attribute :repo_layout_ref, 'simple-default'
-    attribute :rclass, 'local'
-    attribute :snapshot_version_behavior, 'non-unique'
+    attribute :repo_layout_ref, "simple-default"
+    attribute :rclass, "local"
+    attribute :snapshot_version_behavior, "non-unique"
     attribute :suppress_pom_consistency_checks, false
-    attribute :url, ''
+    attribute :url, ""
     attribute :yum_root_depth, 0
     attribute :calculate_yum_metadata, false
 
@@ -154,7 +154,7 @@ module Artifactory
     #
     def artifacts
       @artifacts ||= Collection::Artifact.new(self, repos: key) do
-        Resource::Artifact.search(name: '.*', repos: key)
+        Resource::Artifact.search(name: ".*", repos: key)
       end
     end
 
@@ -169,7 +169,7 @@ module Artifactory
         includeRootPath: 0,
       })
 
-      response['children']
+      response["children"]
     end
 
     #
@@ -204,7 +204,7 @@ module Artifactory
     #
     def headers
       @headers ||= {
-        'Content-Type' => content_type
+        "Content-Type" => content_type,
       }
     end
 
@@ -216,12 +216,12 @@ module Artifactory
     #
     def content_type
       case rclass.to_s.downcase
-      when 'local'
-        'application/vnd.org.jfrog.artifactory.repositories.LocalRepositoryConfiguration+json'
-      when 'remote'
-        'application/vnd.org.jfrog.artifactory.repositories.RemoteRepositoryConfiguration+json'
-      when 'virtual'
-        'application/vnd.org.jfrog.artifactory.repositories.VirtualRepositoryConfiguration+json'
+      when "local"
+        "application/vnd.org.jfrog.artifactory.repositories.LocalRepositoryConfiguration+json"
+      when "remote"
+        "application/vnd.org.jfrog.artifactory.repositories.RemoteRepositoryConfiguration+json"
+      when "virtual"
+        "application/vnd.org.jfrog.artifactory.repositories.VirtualRepositoryConfiguration+json"
       else
         raise "Unknown Repository type `#{rclass}'!"
       end

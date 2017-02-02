@@ -1,11 +1,11 @@
 module Artifactory
   class Resource::PermissionTarget < Resource::Base
     VERBOSE_PERMS = {
-      'd' => 'delete',
-      'm' => 'admin',
-      'n' => 'annotate',
-      'r' => 'read',
-      'w' => 'deploy',
+      "d" => "delete",
+      "m" => "admin",
+      "n" => "annotate",
+      "r" => "read",
+      "w" => "deploy",
     }
     class << self
       #
@@ -22,8 +22,8 @@ module Artifactory
       #
       def all(options = {})
         client = extract_client!(options)
-        client.get('/api/security/permissions').map do |hash|
-          from_url(hash['uri'], client: client)
+        client.get("/api/security/permissions").map do |hash|
+          from_url(hash["uri"], client: client)
         end
       end
 
@@ -61,7 +61,7 @@ module Artifactory
       #
       def from_hash(hash, options = {})
         super.tap do |instance|
-          %w(users groups).each do |key|
+          %w{users groups}.each do |key|
             if instance.principals[key] && !instance.principals[key].nil?
               instance.principals[key] = Hash[instance.principals[key].map { |k, v| [k, verbose(v)] } ]
             end
@@ -93,7 +93,7 @@ module Artifactory
       # @return [Hash]
       #
       def to_abbreviated
-        { 'users' => abbreviate_principal(@users), 'groups' => abbreviate_principal(@groups) }
+        { "users" => abbreviate_principal(@users), "groups" => abbreviate_principal(@groups) }
       end
 
       private
@@ -103,7 +103,7 @@ module Artifactory
       #
       def abbreviate_permissions(array)
         inverse = VERBOSE_PERMS.invert
-        if (inverse.keys & array).sort != array.sort then
+        if (inverse.keys & array).sort != array.sort
           raise "One of your principals contains an invalid permission.  Valid permissions are #{inverse.keys.join(', ')}"
         end
         array.map { |elt| inverse[elt] }.sort
@@ -117,14 +117,14 @@ module Artifactory
       end
     end
 
-    attribute :name, ->{ raise 'Name missing!' }
-    attribute :includes_pattern, '**'
-    attribute :excludes_pattern, ''
+    attribute :name, -> { raise "Name missing!" }
+    attribute :includes_pattern, "**"
+    attribute :excludes_pattern, ""
     attribute :repositories
-    attribute :principals, { 'users' => {}, 'groups' => {} }
+    attribute :principals, { "users" => {}, "groups" => {} }
 
     def client_principal
-      @client_principal ||= Principal.new(principals['users'], principals['groups'])
+      @client_principal ||= Principal.new(principals["users"], principals["groups"])
     end
 
     #
@@ -136,9 +136,9 @@ module Artifactory
     #
     def delete
       client.delete(api_path)
-        true
-      rescue Error::HTTPError
-        false
+      true
+    rescue Error::HTTPError
+      false
     end
 
     #
@@ -148,7 +148,7 @@ module Artifactory
     # @return [Boolean]
     #
     def save
-      send("#{:principals}=", client_principal.to_abbreviated)
+      send("principals=", client_principal.to_abbreviated)
       client.put(api_path, to_json, headers)
       true
     end
@@ -199,7 +199,7 @@ module Artifactory
     #
     def headers
       @headers ||= {
-        'Content-Type' => 'application/vnd.org.jfrog.artifactory.security.PermissionTarget+json'
+        "Content-Type" => "application/vnd.org.jfrog.artifactory.security.PermissionTarget+json",
       }
     end
   end

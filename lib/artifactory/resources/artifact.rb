@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require 'tempfile'
+require "tempfile"
 
 module Artifactory
   class Resource::Artifact < Resource::Base
@@ -46,8 +46,8 @@ module Artifactory
         params = Util.slice(options, :name, :repos)
         format_repos!(params)
 
-        client.get('/api/search/artifact', params)['results'].map do |artifact|
-          from_url(artifact['uri'], client: client)
+        client.get("/api/search/artifact", params)["results"].map do |artifact|
+          from_url(artifact["uri"], client: client)
         end
       end
 
@@ -97,13 +97,13 @@ module Artifactory
           :group      => :g,
           :name       => :a,
           :version    => :v,
-          :classifier => :c,
+          :classifier => :c
         )
         params = Util.slice(options, :g, :a, :v, :c, :repos)
         format_repos!(params)
 
-        client.get('/api/search/gavc', params)['results'].map do |artifact|
-          from_url(artifact['uri'], client: client)
+        client.get("/api/search/gavc", params)["results"].map do |artifact|
+          from_url(artifact["uri"], client: client)
         end
       end
 
@@ -141,8 +141,8 @@ module Artifactory
         params = options.dup
         format_repos!(params)
 
-        client.get('/api/search/prop', params)['results'].map do |artifact|
-          from_url(artifact['uri'], client: client)
+        client.get("/api/search/prop", params)["results"].map do |artifact|
+          from_url(artifact["uri"], client: client)
         end
       end
 
@@ -180,8 +180,8 @@ module Artifactory
         params = Util.slice(options, :md5, :sha1, :repos)
         format_repos!(params)
 
-        client.get('/api/search/checksum', params)['results'].map do |artifact|
-          from_url(artifact['uri'], client: client)
+        client.get("/api/search/checksum", params)["results"].map do |artifact|
+          from_url(artifact["uri"], client: client)
         end
       end
 
@@ -221,8 +221,8 @@ module Artifactory
         params = Util.slice(options, :notUsedSince, :createdBefore, :repos)
         format_repos!(params)
 
-        client.get('/api/search/usage', params)['results'].map do |artifact|
-          from_url(artifact['uri'], client: client)
+        client.get("/api/search/usage", params)["results"].map do |artifact|
+          from_url(artifact["uri"], client: client)
         end
       end
 
@@ -262,8 +262,8 @@ module Artifactory
         params = Util.slice(options, :from, :to, :repos)
         format_repos!(params)
 
-        client.get('/api/search/creation', params)['results'].map do |artifact|
-          from_url(artifact['uri'], client: client)
+        client.get("/api/search/creation", params)["results"].map do |artifact|
+          from_url(artifact["uri"], client: client)
         end
       end
 
@@ -292,12 +292,12 @@ module Artifactory
         options = Util.rename_keys(options,
           :group   => :g,
           :name    => :a,
-          :version => :v,
+          :version => :v
         )
         params = Util.slice(options, :g, :a, :v, :repos)
         format_repos!(params)
 
-        client.get('/api/search/versions', params)['results']
+        client.get("/api/search/versions", params)["results"]
       rescue Error::HTTPError => e
         raise unless e.code == 404
         []
@@ -343,7 +343,7 @@ module Artifactory
         options = Util.rename_keys(options,
           :group   => :g,
           :name    => :a,
-          :version => :v,
+          :version => :v
         )
         params = Util.slice(options, :g, :a, :v, :repos, :remote)
         format_repos!(params)
@@ -352,7 +352,7 @@ module Artifactory
         # literal "1"...
         params[:remote] = 1 if options[:remote]
 
-        client.get('/api/search/latestVersion', params)
+        client.get("/api/search/latestVersion", params)
       rescue Error::HTTPError => e
         raise unless e.code == 404
         nil
@@ -371,14 +371,14 @@ module Artifactory
       end
     end
 
-    attribute :uri, ->{ raise 'API path missing!' }
+    attribute :uri, -> { raise "API path missing!" }
     attribute :checksums
     attribute :created
-    attribute :download_uri, ->{ raise 'Download URI missing!' }
+    attribute :download_uri, -> { raise "Download URI missing!" }
     attribute :key
     attribute :last_modified
     attribute :last_updated
-    attribute :local_path, ->{ raise 'Local destination missing!' }
+    attribute :local_path, -> { raise "Local destination missing!" }
     attribute :mime_type
     attribute :repo
     attribute :size
@@ -389,7 +389,7 @@ module Artifactory
     # @return [String]
     #
     def sha1
-      checksums && checksums['sha1']
+      checksums && checksums["sha1"]
     end
 
     #
@@ -398,7 +398,7 @@ module Artifactory
     # @return [String]
     #
     def md5
-      checksums && checksums['md5']
+      checksums && checksums["md5"]
     end
 
     #
@@ -438,7 +438,7 @@ module Artifactory
     #   the list of properties
     #
     def properties
-      @properties ||= client.get(File.join('/api/storage', relative_path), properties: nil)['properties']
+      @properties ||= client.get(File.join("/api/storage", relative_path), properties: nil)["properties"]
     end
 
     #
@@ -453,7 +453,7 @@ module Artifactory
     # @return [Hash<String, Array<Hash>>]
     #
     def compliance
-      @compliance ||= client.get(File.join('/api/compliance', relative_path))
+      @compliance ||= client.get(File.join("/api/compliance", relative_path))
     end
 
     #
@@ -489,7 +489,7 @@ module Artifactory
       # Construct the full path for the file
       destination = File.join(target, filename)
 
-      File.open(destination, 'wb') do |file|
+      File.open(destination, "wb") do |file|
         file.write(client.get(download_uri))
       end
 
@@ -535,8 +535,8 @@ module Artifactory
       endpoint = File.join("#{url_safe(repo)}#{matrix}", remote_path)
 
       # Include checksums in headers if given.
-      headers['X-Checksum-Md5'] = md5   if md5
-      headers['X-Checksum-Sha1'] = sha1 if sha1
+      headers["X-Checksum-Md5"] = md5   if md5
+      headers["X-Checksum-Sha1"] = sha1 if sha1
 
       response = client.put(endpoint, file, headers)
 
@@ -593,8 +593,8 @@ module Artifactory
     #
     def upload_with_checksum(repo, remote_path, checksum, properties = {})
       upload(repo, remote_path, properties,
-        'X-Checksum-Deploy' => true,
-        'X-Checksum-Sha1'   => checksum,
+        "X-Checksum-Deploy" => true,
+        "X-Checksum-Sha1"   => checksum
       )
     end
 
@@ -612,7 +612,7 @@ module Artifactory
     #
     def upload_from_archive(repo, remote_path, properties = {})
       upload(repo, remote_path, properties,
-        'X-Explode-Archive' => true,
+        "X-Explode-Archive" => true
       )
     end
 
@@ -628,7 +628,7 @@ module Artifactory
     # @return [String]
     #
     def relative_path
-      @relative_path ||= uri.split('/api/storage', 2).last
+      @relative_path ||= uri.split("/api/storage", 2).last
     end
 
     #
@@ -664,7 +664,7 @@ module Artifactory
         param[:dry]             = 1 if options[:dry_run]
       end
 
-      endpoint = File.join('/api', action.to_s, relative_path) + "?#{to_query_string_parameters(params)}"
+      endpoint = File.join("/api", action.to_s, relative_path) + "?#{to_query_string_parameters(params)}"
 
       client.post(endpoint, {})
     end

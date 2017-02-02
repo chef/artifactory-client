@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 module Artifactory
   describe Resource::Backup do
@@ -9,7 +9,7 @@ module Artifactory
       allow(client).to receive(:get).and_return(response) if defined?(response)
     end
 
-    describe '.all' do
+    describe ".all" do
       doc = <<-XML
         <config>
           <backups>
@@ -27,14 +27,14 @@ module Artifactory
         allow(Resource::System).to receive(:configuration).and_return(xml)
       end
 
-      it 'returns the backup settings' do
+      it "returns the backup settings" do
         expect(described_class.all).to be_a(Array)
         expect(described_class.all.first).to be_a(described_class)
-        expect(described_class.all.first.key).to eq('backup-daily')
+        expect(described_class.all.first.key).to eq("backup-daily")
       end
     end
 
-    describe '.find' do
+    describe ".find" do
       doc = <<-XML
         <config>
           <backups>
@@ -52,9 +52,9 @@ module Artifactory
         allow(Resource::System).to receive(:configuration).and_return(xml)
       end
 
-      it 'returns the found backup setting' do
-        expect(described_class.find('backup-weekly')).to be_a(described_class)
-        expect(described_class.find('backup-weekly').key).to eq('backup-weekly')
+      it "returns the found backup setting" do
+        expect(described_class.find("backup-weekly")).to be_a(described_class)
+        expect(described_class.find("backup-weekly").key).to eq("backup-weekly")
       end
     end
   end

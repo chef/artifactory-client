@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 module Artifactory
   describe Resource::LDAPSetting do
@@ -9,7 +9,7 @@ module Artifactory
       allow(client).to receive(:get).and_return(response) if defined?(response)
     end
 
-    describe '.all' do
+    describe ".all" do
       doc = <<-XML
         <config>
           <security>
@@ -29,14 +29,14 @@ module Artifactory
         allow(Resource::System).to receive(:configuration).and_return(xml)
       end
 
-      it 'returns the ldap settings' do
+      it "returns the ldap settings" do
         expect(described_class.all).to be_a(Array)
         expect(described_class.all.first).to be_a(described_class)
-        expect(described_class.all.first.key).to eq('example-ldap')
+        expect(described_class.all.first.key).to eq("example-ldap")
       end
     end
 
-    describe '.find' do
+    describe ".find" do
       doc = <<-XML
         <config>
           <security>
@@ -56,9 +56,9 @@ module Artifactory
         allow(Resource::System).to receive(:configuration).and_return(xml)
       end
 
-      it 'returns the found ldap setting' do
-        expect(described_class.find('viridian-ldap')).to be_a(described_class)
-        expect(described_class.find('viridian-ldap').key).to eq('viridian-ldap')
+      it "returns the found ldap setting" do
+        expect(described_class.find("viridian-ldap")).to be_a(described_class)
+        expect(described_class.find("viridian-ldap").key).to eq("viridian-ldap")
       end
     end
   end

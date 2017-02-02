@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 module Artifactory
   describe Resource::MailServer do
@@ -9,7 +9,7 @@ module Artifactory
       allow(client).to receive(:get).and_return(response) if defined?(response)
     end
 
-    describe '.all' do
+    describe ".all" do
       doc = <<-XML
         <config>
           <mailServer>
@@ -25,14 +25,14 @@ module Artifactory
         allow(Resource::System).to receive(:configuration).and_return(xml)
       end
 
-      it 'returns the mail server settings' do
+      it "returns the mail server settings" do
         expect(described_class.all).to be_a(Array)
         expect(described_class.all.first).to be_a(described_class)
-        expect(described_class.all.first.host).to eq('smtp.gmail.com')
+        expect(described_class.all.first.host).to eq("smtp.gmail.com")
       end
     end
 
-    describe '.find' do
+    describe ".find" do
       doc = <<-XML
         <config>
           <mailServer>
@@ -48,9 +48,9 @@ module Artifactory
         allow(Resource::System).to receive(:configuration).and_return(xml)
       end
 
-      it 'returns the found mail server setting' do
-        expect(described_class.find('mailserver.example.com')).to be_a(described_class)
-        expect(described_class.find('mailserver.example.com').host).to eq('mailserver.example.com')
+      it "returns the found mail server setting" do
+        expect(described_class.find("mailserver.example.com")).to be_a(described_class)
+        expect(described_class.find("mailserver.example.com").host).to eq("mailserver.example.com")
       end
     end
   end

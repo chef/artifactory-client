@@ -1,12 +1,12 @@
-require 'bundler/setup'
-require 'rspec'
-require 'webmock/rspec'
+require "bundler/setup"
+require "rspec"
+require "webmock/rspec"
 
-if ENV['COVERAGE']
-  require 'simplecov'
-  require 'simplecov-console'
+if ENV["COVERAGE"]
+  require "simplecov"
+  require "simplecov-console"
   SimpleCov.start do
-    add_filter 'spec/'
+    add_filter "spec/"
     formatter SimpleCov::Formatter::MultiFormatter.new [
       SimpleCov::Formatter::HTMLFormatter,
       SimpleCov::Formatter::Console,
@@ -15,10 +15,10 @@ if ENV['COVERAGE']
 end
 
 # Require our main library
-require 'artifactory'
+require "artifactory"
 
 # Require helpers
-require_relative 'support/api_server'
+require_relative "support/api_server"
 
 RSpec.configure do |config|
   # Custom helper modules and extensions
@@ -38,7 +38,7 @@ RSpec.configure do |config|
   config.after(:each)  { Artifactory.reset! }
 
   config.before(:each, :integration) do
-    Artifactory.endpoint = 'http://localhost:8889'
+    Artifactory.endpoint = "http://localhost:8889"
     Artifactory.username = nil
     Artifactory.password = nil
     stub_request(:any, /#{Artifactory.endpoint}/).to_rack(Artifactory::APIServer)
@@ -48,5 +48,5 @@ RSpec.configure do |config|
   # order dependency and want to debug it, you can fix the order by providing
   # the seed, which is printed after each run.
   #     --seed 1234
-  config.order = 'random'
+  config.order = "random"
 end

@@ -1,4 +1,4 @@
-require 'sinatra/base'
+require "sinatra/base"
 
 module Artifactory
   #
@@ -6,15 +6,15 @@ module Artifactory
   # fake, but it is based off of real responses from the Artifactory server.
   #
   class APIServer < Sinatra::Base
-    require_relative 'api_server/artifact_endpoints'
-    require_relative 'api_server/build_component_endpoints'
-    require_relative 'api_server/build_endpoints'
-    require_relative 'api_server/group_endpoints'
-    require_relative 'api_server/repository_endpoints'
-    require_relative 'api_server/permission_target_endpoints'
-    require_relative 'api_server/status_endpoints'
-    require_relative 'api_server/system_endpoints'
-    require_relative 'api_server/user_endpoints'
+    require_relative "api_server/artifact_endpoints"
+    require_relative "api_server/build_component_endpoints"
+    require_relative "api_server/build_endpoints"
+    require_relative "api_server/group_endpoints"
+    require_relative "api_server/repository_endpoints"
+    require_relative "api_server/permission_target_endpoints"
+    require_relative "api_server/status_endpoints"
+    require_relative "api_server/system_endpoints"
+    require_relative "api_server/user_endpoints"
 
     register APIServer::ArtifactEndpoints
     register APIServer::BuildComponentEndpoints
@@ -38,9 +38,9 @@ module Artifactory
     #
     def server_url
       @server_url ||= begin
-        scheme  = request.env['rack.url_scheme']
-        address = request.env['SERVER_NAME']
-        port    = request.env['SERVER_PORT']
+        scheme  = request.env["rack.url_scheme"]
+        address = request.env["SERVER_NAME"]
+        port    = request.env["SERVER_PORT"]
 
         Pathname.new("#{scheme}://#{address}:#{port}")
       end

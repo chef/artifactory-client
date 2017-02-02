@@ -14,9 +14,9 @@
 # limitations under the License.
 #
 
-require 'cgi'
-require 'json'
-require 'uri'
+require "cgi"
+require "json"
+require "uri"
 
 module Artifactory
   class Resource::Base
@@ -227,7 +227,7 @@ module Artifactory
       #
       def format_repos!(options)
         return options if options[:repos].nil? || options[:repos].empty?
-        options[:repos] = Array(options[:repos]).compact.join(',')
+        options[:repos] = Array(options[:repos]).compact.join(",")
         options
       end
 
@@ -245,7 +245,7 @@ module Artifactory
       end
     end
 
-    attribute :client, ->{ Artifactory.client }
+    attribute :client, -> { Artifactory.client }
 
     #
     # Create a new instance
@@ -360,7 +360,7 @@ module Artifactory
       if properties.empty?
         nil
       else
-        properties.join('&')
+        properties.join("&")
       end
     end
 
@@ -383,7 +383,7 @@ module Artifactory
     private
 
     def short_classname
-      @short_classname ||= self.class.name.split('::').last
+      @short_classname ||= self.class.name.split("::").last
     end
   end
 end

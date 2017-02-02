@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require 'rexml/document'
+require "rexml/document"
 
 module Artifactory
   class Resource::Backup < Resource::Base
@@ -33,7 +33,7 @@ module Artifactory
       #
       def all(options = {})
         config = Resource::System.configuration(options)
-        list_from_config('config/backups/backup', config, options)
+        list_from_config("config/backups/backup", config, options)
       end
 
       #
@@ -81,7 +81,7 @@ module Artifactory
       #
       def list_from_config(xpath, config, options = {})
         REXML::XPath.match(config, xpath).map do |r|
-          hash = Util.xml_to_hash(r, 'excludedRepositories', false)
+          hash = Util.xml_to_hash(r, "excludedRepositories", false)
           from_hash(hash, options)
         end
       end
@@ -102,12 +102,12 @@ module Artifactory
       def find_from_config(xpath, config, options = {})
         name_node = REXML::XPath.match(config, xpath)
         return nil if name_node.empty?
-        properties = Util.xml_to_hash(name_node[0].parent, 'excludedRepositories', false)
+        properties = Util.xml_to_hash(name_node[0].parent, "excludedRepositories", false)
         from_hash(properties, options)
       end
     end
 
-    attribute :key, ->{ raise 'name missing!' }
+    attribute :key, -> { raise "name missing!" }
     attribute :enabled, true
     attribute :dir
     attribute :cron_exp

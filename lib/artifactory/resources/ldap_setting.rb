@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require 'rexml/document'
+require "rexml/document"
 
 module Artifactory
   class Resource::LDAPSetting < Resource::Base
@@ -33,7 +33,7 @@ module Artifactory
       #
       def all(options = {})
         config = Resource::System.configuration(options)
-        list_from_config('config/security/ldapSettings/ldapSetting', config, options)
+        list_from_config("config/security/ldapSettings/ldapSetting", config, options)
       end
 
       #
@@ -63,6 +63,7 @@ module Artifactory
       end
 
       private
+
       #
       # List all the child text elements in the Artifactory configuration file
       # of a node matching the specified xpath
@@ -78,7 +79,7 @@ module Artifactory
       #
       def list_from_config(xpath, config, options = {})
         REXML::XPath.match(config, xpath).map do |r|
-          hash = Util.xml_to_hash(r, 'search')
+          hash = Util.xml_to_hash(r, "search")
           from_hash(hash, options)
         end
       end
@@ -99,7 +100,7 @@ module Artifactory
       def find_from_config(xpath, config, options = {})
         name_node = REXML::XPath.match(config, xpath)
         return nil if name_node.empty?
-        properties = Util.xml_to_hash(name_node[0].parent, 'search')
+        properties = Util.xml_to_hash(name_node[0].parent, "search")
         from_hash(properties, options)
       end
     end
@@ -107,7 +108,7 @@ module Artifactory
     # Ordered to match the artifactory xsd to make consuming the attributes
     # hash when writing artifactory xml more convenient.
     # http://bit.ly/UHMrHc
-    attribute :key, ->{ raise 'name missing!' }
+    attribute :key, -> { raise "name missing!" }
     attribute :enabled, true
     attribute :ldap_url
     attribute :search_filter
@@ -116,6 +117,6 @@ module Artifactory
     attribute :manager_dn
     attribute :manager_password
     attribute :auto_create_user
-    attribute :email_attribute, 'mail'
+    attribute :email_attribute, "mail"
   end
 end

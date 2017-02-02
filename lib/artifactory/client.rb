@@ -14,10 +14,10 @@
 # limitations under the License.
 #
 
-require 'cgi'
-require 'json'
-require 'net/http'
-require 'uri'
+require "cgi"
+require "json"
+require "net/http"
+require "uri"
 
 module Artifactory
   #
@@ -31,7 +31,7 @@ module Artifactory
       # @private
       #
       def proxy(klass)
-        namespace = klass.name.split('::').last.downcase
+        namespace = klass.name.split("::").last.downcase
         klass.singleton_methods(false).each do |name|
           define_method("#{namespace}_#{name}") do |*args|
             if args.last.is_a?(Hash)
@@ -69,10 +69,10 @@ module Artifactory
       # Use any options given, but fall back to the defaults set on the module
       Artifactory::Configurable.keys.each do |key|
         value = if options[key].nil?
-          Artifactory.instance_variable_get(:"@#{key}")
-        else
-          options[key]
-        end
+                  Artifactory.instance_variable_get(:"@#{key}")
+                else
+                  options[key]
+                end
 
         instance_variable_set(:"@#{key}", value)
       end
@@ -194,7 +194,7 @@ module Artifactory
       if username && password
         request.basic_auth(username, password)
       elsif api_key
-        request.add_field('X-JFrog-Art-Api', api_key)
+        request.add_field("X-JFrog-Art-Api", api_key)
       end
 
       # Setup PATCH/POST/PUT
@@ -221,8 +221,8 @@ module Artifactory
       connection.read_timeout = read_timeout
 
       # Apply SSL, if applicable
-      if uri.scheme == 'https'
-        require 'net/https' unless defined?(Net::HTTPS)
+      if uri.scheme == "https"
+        require "net/https" unless defined?(Net::HTTPS)
 
         # Turn on SSL
         connection.use_ssl = true
@@ -249,7 +249,7 @@ module Artifactory
 
         case response
         when Net::HTTPRedirection
-          redirect = URI.parse(response['location'])
+          redirect = URI.parse(response["location"])
           request(verb, redirect, data, headers)
         when Net::HTTPSuccess
           success(response)
@@ -269,9 +269,9 @@ module Artifactory
     #
     def default_headers
       {
-        'Connection' => 'keep-alive',
-        'Keep-Alive' => '30',
-        'User-Agent' => user_agent,
+        "Connection" => "keep-alive",
+        "Keep-Alive" => "30",
+        "User-Agent" => user_agent,
       }
     end
 
@@ -296,7 +296,7 @@ module Artifactory
     def build_uri(verb, path, params = {})
       # Add any query string parameters
       if [:delete, :get].include?(verb)
-        path = [path, to_query_string(params)].compact.join('?')
+        path = [path, to_query_string(params)].compact.join("?")
       end
 
       # Parse the URI
@@ -335,7 +335,7 @@ module Artifactory
     def to_query_string(hash)
       hash.map do |key, value|
         "#{CGI.escape(key.to_s)}=#{CGI.escape(value.to_s)}"
-      end.join('&')[/.+/]
+      end.join("&")[/.+/]
     end
 
     #
@@ -350,7 +350,7 @@ module Artifactory
     #   the parsed response, as an object
     #
     def success(response)
-      if (response.content_type || '').include?('json')
+      if (response.content_type || "").include?("json")
         JSON.parse(response.body)
       else
         response.body
@@ -367,20 +367,20 @@ module Artifactory
     #   the response object from the request
     #
     def error(response)
-      if (response.content_type || '').include?('json')
+      if (response.content_type || "").include?("json")
         # Attempt to parse the error as JSON
         begin
           json = JSON.parse(response.body)
 
-          if json['errors'] && json['errors'].first
-            raise Error::HTTPError.new(json['errors'].first)
+          if json["errors"] && json["errors"].first
+            raise Error::HTTPError.new(json["errors"].first)
           end
         rescue JSON::ParserError; end
       end
 
       raise Error::HTTPError.new(
-        'status'  => response.code,
-        'message' => response.body,
+        "status"  => response.code,
+        "message" => response.body
       )
     end
   end

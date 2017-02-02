@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require 'time'
+require "time"
 
 module Artifactory
   class Resource::BuildComponent < Resource::Base
@@ -33,7 +33,7 @@ module Artifactory
       #
       def all(options = {})
         client = extract_client!(options)
-        client.get('/api/build')['builds'].map do |component|
+        client.get("/api/build")["builds"].map do |component|
           from_hash(component, client: client)
         end.compact.flatten
       rescue Error::HTTPError => e
@@ -82,7 +82,7 @@ module Artifactory
     end
 
     attribute :uri
-    attribute :name, ->{ raise 'Name missing!' }
+    attribute :name, -> { raise "Name missing!" }
     attribute :last_started
 
     #
@@ -117,7 +117,7 @@ module Artifactory
     #
     def delete(options = {})
       params = {}.tap do |param|
-        param[:buildNumbers] = options[:build_numbers].join(',') if options[:build_numbers]
+        param[:buildNumbers] = options[:build_numbers].join(",") if options[:build_numbers]
         param[:artifacts]    = 1 if options[:artifacts]
         param[:deleteAll]    = 1 if options[:delete_all]
       end
