@@ -103,7 +103,7 @@ module Artifactory
         format_repos!(params)
 
         client.get('/api/search/gavc', params)['results'].map do |artifact|
-          from_url(artifact['uri'], client: client)
+          from_url(url_safe(artifact['uri']), client: client)
         end
       end
 
@@ -142,7 +142,7 @@ module Artifactory
         format_repos!(params)
 
         client.get('/api/search/prop', params)['results'].map do |artifact|
-          from_url(artifact['uri'], client: client)
+          from_url(url_safe(artifact['uri']), client: client)
         end
       end
 
@@ -181,7 +181,7 @@ module Artifactory
         format_repos!(params)
 
         client.get('/api/search/checksum', params)['results'].map do |artifact|
-          from_url(artifact['uri'], client: client)
+          from_url(url_safe(artifact['uri']), client: client)
         end
       end
 
@@ -222,7 +222,7 @@ module Artifactory
         format_repos!(params)
 
         client.get('/api/search/usage', params)['results'].map do |artifact|
-          from_url(artifact['uri'], client: client)
+          from_url(url_safe(artifact['uri']), client: client)
         end
       end
 
@@ -263,7 +263,7 @@ module Artifactory
         format_repos!(params)
 
         client.get('/api/search/creation', params)['results'].map do |artifact|
-          from_url(artifact['uri'], client: client)
+          from_url(url_safe(artifact['uri']), client: client)
         end
       end
 
