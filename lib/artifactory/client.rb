@@ -193,6 +193,8 @@ module Artifactory
       # Add basic authentication
       if username && password
         request.basic_auth(username, password)
+      elsif api_key
+        request.add_field('X-JFrog-Art-Api', api_key)
       end
 
       # Setup PATCH/POST/PUT
