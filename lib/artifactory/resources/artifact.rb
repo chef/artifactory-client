@@ -15,6 +15,7 @@
 #
 
 require "tempfile"
+require "time"
 
 module Artifactory
   class Resource::Artifact < Resource::Base
