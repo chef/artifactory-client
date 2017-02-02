@@ -3,6 +3,12 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.6.0 (02-02-2017)
+-------------------
+- Add API Key authentication
+- Add new Ruby versions to test matrix
+- Add ChefStyle for linting
+
 v2.5.2 (01-27-2017)
 -------------------
 - Update tests to run properly on Windows
