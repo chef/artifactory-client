@@ -14,38 +14,38 @@
 # limitations under the License.
 #
 
-require 'pathname'
-require 'artifactory/version'
+require "pathname"
+require "artifactory/version"
 
 module Artifactory
-  autoload :Client,       'artifactory/client'
-  autoload :Configurable, 'artifactory/configurable'
-  autoload :Defaults,     'artifactory/defaults'
-  autoload :Error,        'artifactory/errors'
-  autoload :Util,         'artifactory/util'
+  autoload :Client,       "artifactory/client"
+  autoload :Configurable, "artifactory/configurable"
+  autoload :Defaults,     "artifactory/defaults"
+  autoload :Error,        "artifactory/errors"
+  autoload :Util,         "artifactory/util"
 
   module Collection
-    autoload :Artifact, 'artifactory/collections/artifact'
-    autoload :Base,     'artifactory/collections/base'
-    autoload :Build, 'artifactory/collections/build'
+    autoload :Artifact, "artifactory/collections/artifact"
+    autoload :Base,     "artifactory/collections/base"
+    autoload :Build, "artifactory/collections/build"
   end
 
   module Resource
-    autoload :Artifact,         'artifactory/resources/artifact'
-    autoload :Backup,           'artifactory/resources/backup'
-    autoload :Base,             'artifactory/resources/base'
-    autoload :Build,            'artifactory/resources/build'
-    autoload :BuildComponent,   'artifactory/resources/build_component'
-    autoload :Group,            'artifactory/resources/group'
-    autoload :Layout,           'artifactory/resources/layout'
-    autoload :LDAPSetting,      'artifactory/resources/ldap_setting'
-    autoload :MailServer,       'artifactory/resources/mail_server'
-    autoload :PermissionTarget, 'artifactory/resources/permission_target'
-    autoload :Plugin,           'artifactory/resources/plugin'
-    autoload :Repository,       'artifactory/resources/repository'
-    autoload :System,           'artifactory/resources/system'
-    autoload :URLBase,          'artifactory/resources/url_base'
-    autoload :User,             'artifactory/resources/user'
+    autoload :Artifact,         "artifactory/resources/artifact"
+    autoload :Backup,           "artifactory/resources/backup"
+    autoload :Base,             "artifactory/resources/base"
+    autoload :Build,            "artifactory/resources/build"
+    autoload :BuildComponent,   "artifactory/resources/build_component"
+    autoload :Group,            "artifactory/resources/group"
+    autoload :Layout,           "artifactory/resources/layout"
+    autoload :LDAPSetting,      "artifactory/resources/ldap_setting"
+    autoload :MailServer,       "artifactory/resources/mail_server"
+    autoload :PermissionTarget, "artifactory/resources/permission_target"
+    autoload :Plugin,           "artifactory/resources/plugin"
+    autoload :Repository,       "artifactory/resources/repository"
+    autoload :System,           "artifactory/resources/system"
+    autoload :URLBase,          "artifactory/resources/url_base"
+    autoload :User,             "artifactory/resources/user"
   end
 
   class << self
@@ -58,7 +58,7 @@ module Artifactory
     # @return [Pathname]
     #
     def root
-      @root ||= Pathname.new(File.expand_path('../../', __FILE__))
+      @root ||= Pathname.new(File.expand_path("../../", __FILE__))
     end
 
     #

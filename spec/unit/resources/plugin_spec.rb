@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 module Artifactory
   describe Resource::Plugin do
@@ -9,16 +9,16 @@ module Artifactory
       allow(client).to receive(:get).and_return(response) if defined?(response)
     end
 
-    describe '.all' do
-      let(:response) { ['a', 'b', 'c'] }
+    describe ".all" do
+      let(:response) { %w{a b c} }
 
-      it 'gets /api/plugins' do
-        expect(client).to receive(:get).with('/api/plugins').once
+      it "gets /api/plugins" do
+        expect(client).to receive(:get).with("/api/plugins").once
         described_class.all
       end
 
-      it 'returns the plugins' do
-        expect(described_class.all).to eq(['a', 'b', 'c'])
+      it "returns the plugins" do
+        expect(described_class.all).to eq(%w{a b c})
       end
     end
   end

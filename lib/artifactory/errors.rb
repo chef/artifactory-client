@@ -24,8 +24,8 @@ module Artifactory
       attr_reader :code
 
       def initialize(hash = {})
-        @code = hash['status'].to_i
-        @http = hash['message'].to_s
+        @code = hash["status"].to_i
+        @http = hash["message"].to_s
 
         super "The Artifactory server responded with an HTTP Error " \
               "#{@code}: `#{@http}'"

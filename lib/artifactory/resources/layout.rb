@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require 'rexml/document'
+require "rexml/document"
 
 module Artifactory
   class Resource::Layout < Resource::Base
@@ -33,7 +33,7 @@ module Artifactory
       #
       def all(options = {})
         config = Resource::System.configuration(options)
-        list_from_config('config/repoLayouts/repoLayout', config, options)
+        list_from_config("config/repoLayouts/repoLayout", config, options)
       end
 
       #
@@ -63,7 +63,7 @@ module Artifactory
       end
     end
 
-    attribute :name, ->{ raise 'Name missing!' }
+    attribute :name, -> { raise "Name missing!" }
     attribute :artifact_path_pattern
     attribute :distinctive_descriptor_path_pattern, true
     attribute :descriptor_path_pattern

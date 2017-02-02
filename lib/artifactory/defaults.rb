@@ -14,12 +14,12 @@
 # limitations under the License.
 #
 
-require 'artifactory/version'
+require "artifactory/version"
 
 module Artifactory
   module Defaults
     # Default API endpoint
-    ENDPOINT = 'http://localhost:8080/artifactory'.freeze
+    ENDPOINT = "http://localhost:8080/artifactory".freeze
 
     # Default User Agent header string
     USER_AGENT = "Artifactory Ruby Gem #{Artifactory::VERSION}".freeze
@@ -40,7 +40,7 @@ module Artifactory
       # @return [String]
       #
       def endpoint
-        ENV['ARTIFACTORY_ENDPOINT'] || ENDPOINT
+        ENV["ARTIFACTORY_ENDPOINT"] || ENDPOINT
       end
 
       #
@@ -49,7 +49,7 @@ module Artifactory
       # @return [String]
       #
       def user_agent
-        ENV['ARTIFACTORY_USER_AGENT'] || USER_AGENT
+        ENV["ARTIFACTORY_USER_AGENT"] || USER_AGENT
       end
 
       #
@@ -58,7 +58,7 @@ module Artifactory
       # @return [String, nil]
       #
       def username
-        ENV['ARTIFACTORY_USERNAME']
+        ENV["ARTIFACTORY_USERNAME"]
       end
 
       #
@@ -67,7 +67,7 @@ module Artifactory
       # @return [String, nil]
       #
       def password
-        ENV['ARTIFACTORY_PASSWORD']
+        ENV["ARTIFACTORY_PASSWORD"]
       end
 
       #
@@ -76,7 +76,7 @@ module Artifactory
       # @return [String, nil]
       #
       def api_key
-        ENV['ARTIFACTORY_API_KEY']
+        ENV["ARTIFACTORY_API_KEY"]
       end
 
       #
@@ -85,7 +85,7 @@ module Artifactory
       # @return [String, nil]
       #
       def proxy_address
-        ENV['ARTIFACTORY_PROXY_ADDRESS']
+        ENV["ARTIFACTORY_PROXY_ADDRESS"]
       end
 
       #
@@ -94,7 +94,7 @@ module Artifactory
       # @return [String, nil]
       #
       def proxy_password
-        ENV['ARTIFACTORY_PROXY_PASSWORD']
+        ENV["ARTIFACTORY_PROXY_PASSWORD"]
       end
 
       #
@@ -103,7 +103,7 @@ module Artifactory
       # @return [String, nil]
       #
       def proxy_port
-        ENV['ARTIFACTORY_PROXY_PORT']
+        ENV["ARTIFACTORY_PROXY_PORT"]
       end
 
       #
@@ -112,7 +112,7 @@ module Artifactory
       # @return [String, nil]
       #
       def proxy_username
-        ENV['ARTIFACTORY_PROXY_USERNAME']
+        ENV["ARTIFACTORY_PROXY_USERNAME"]
       end
 
       #
@@ -121,7 +121,7 @@ module Artifactory
       # @return [String, nil]
       #
       def ssl_pem_file
-        ENV['ARTIFACTORY_SSL_PEM_FILE']
+        ENV["ARTIFACTORY_SSL_PEM_FILE"]
       end
 
       #
@@ -130,10 +130,10 @@ module Artifactory
       # @return [true, false]
       #
       def ssl_verify
-        if ENV['ARTIFACTORY_SSL_VERIFY'].nil?
+        if ENV["ARTIFACTORY_SSL_VERIFY"].nil?
           true
         else
-          %w[t y].include?(ENV['ARTIFACTORY_SSL_VERIFY'].downcase[0])
+          %w{t y}.include?(ENV["ARTIFACTORY_SSL_VERIFY"].downcase[0])
         end
       end
 
@@ -143,8 +143,8 @@ module Artifactory
       # @return [Integer]
       #
       def read_timeout
-        if ENV['ARTIFACTORY_READ_TIMEOUT']
-          ENV['ARTIFACTORY_READ_TIMEOUT'].to_i
+        if ENV["ARTIFACTORY_READ_TIMEOUT"]
+          ENV["ARTIFACTORY_READ_TIMEOUT"].to_i
         else
           120
         end

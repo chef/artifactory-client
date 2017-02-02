@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require 'rexml/document'
+require "rexml/document"
 
 module Artifactory
   class Resource::MailServer < Resource::Base
@@ -33,7 +33,7 @@ module Artifactory
       #
       def all(options = {})
         config = Resource::System.configuration(options)
-        list_from_config('config/mailServer', config, options)
+        list_from_config("config/mailServer", config, options)
       end
 
       #
@@ -64,7 +64,7 @@ module Artifactory
     end
 
     attribute :enabled
-    attribute :host, ->{ raise 'host missing!' }
+    attribute :host, -> { raise "host missing!" }
     attribute :port
     attribute :username
     attribute :password

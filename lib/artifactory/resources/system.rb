@@ -34,7 +34,7 @@ module Artifactory
       #
       def info(options = {})
         client = extract_client!(options)
-        client.get('/api/system')
+        client.get("/api/system")
       end
 
       #
@@ -59,7 +59,7 @@ module Artifactory
       #
       def ping(options = {})
         client = extract_client!(options)
-        !!client.get('/api/system/ping')
+        !!client.get("/api/system/ping")
       rescue Error::ConnectionError
         false
       end
@@ -81,7 +81,7 @@ module Artifactory
       #
       def configuration(options = {})
         client   = extract_client!(options)
-        response = client.get('/api/system/configuration')
+        response = client.get("/api/system/configuration")
 
         REXML::Document.new(response)
       end
@@ -106,8 +106,8 @@ module Artifactory
 
         # The Artifactory api requires a content type of 'application/xml'.
         # See http://bit.ly/1l2IvZY
-        headers = { 'Content-Type' => 'application/xml' }
-        client.post('/api/system/configuration', xml, headers)
+        headers = { "Content-Type" => "application/xml" }
+        client.post("/api/system/configuration", xml, headers)
       end
 
       #
@@ -127,7 +127,7 @@ module Artifactory
       #
       def version(options = {})
         client = extract_client!(options)
-        client.get('/api/system/version')
+        client.get("/api/system/version")
       end
     end
   end

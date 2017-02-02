@@ -31,8 +31,8 @@ module Artifactory
       #
       def all(options = {})
         client = extract_client!(options)
-        client.get('/api/security/users').map do |hash|
-          from_url(hash['uri'], client: client)
+        client.get("/api/security/users").map do |hash|
+          from_url(hash["uri"], client: client)
         end
       end
 
@@ -70,7 +70,7 @@ module Artifactory
     attribute :groups, []
     attribute :internal_password_disabled, false
     attribute :last_logged_in
-    attribute :name, -> { raise 'Name missing' }
+    attribute :name, -> { raise "Name missing" }
     attribute :password # write only, never returned
     attribute :profile_updatable, true
     attribute :realm
@@ -122,7 +122,7 @@ module Artifactory
     #
     def headers
       @headers ||= {
-        'Content-Type' => 'application/vnd.org.jfrog.artifactory.security.User+json'
+        "Content-Type" => "application/vnd.org.jfrog.artifactory.security.User+json",
       }
     end
   end

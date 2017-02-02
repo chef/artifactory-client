@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require 'rexml/document'
+require "rexml/document"
 
 module Artifactory
   class Resource::URLBase < Resource::Base
@@ -33,7 +33,7 @@ module Artifactory
       #
       def all(options = {})
         config = Resource::System.configuration(options)
-        simple_text_from_config('config/urlBase', config, options)
+        simple_text_from_config("config/urlBase", config, options)
       end
 
       #
@@ -63,6 +63,7 @@ module Artifactory
       end
 
       private
+
       #
       # List all the text elements in the Artifactory configuration file
       # matching the given xpath.  Ignore any children of elements that match the xpath.
@@ -85,6 +86,6 @@ module Artifactory
       end
     end
 
-    attribute :url_base, ->{ raise 'URL base missing!' }
+    attribute :url_base, -> { raise "URL base missing!" }
   end
 end
