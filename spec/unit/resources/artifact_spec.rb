@@ -556,6 +556,27 @@ module Artifactory
       end
     end
 
+    describe '#set_property' do
+      let(:client) { double }
+      before do
+        described_class.send(:public, :set_property)
+        subject.client   = client
+        subject.uri = '/api/storage/foo/bar/artifact'
+      end
+
+      it 'sends POST to the client with parsed params' do
+        expect(client).to receive(:put).with('/api/storage/foo/bar/artifact?properties=foo=bar', {})
+        subject.set_property('foo', 'bar')
+      end
+
+      it 'raises' do
+        expect{
+          subject.set_property('','value')
+        }.to raise_error(ArgumentError)
+      end
+
+    end
+
     describe '#copy_or_move' do
       let(:client) { double }
       before do
