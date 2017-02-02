@@ -56,6 +56,10 @@ Artifactory.configure do |config|
   config.username = 'admin'
   config.password = 'password'
 
+  # You can also use an API key for authentication, username and password
+  # take precedence so leave them off if you are using an API key.
+  config.api_key = 'XXXXXXXXXXXXXXXXXX'
+
   # Speaking of SSL, you can specify the path to a pem file with your custom
   # certificates and the gem will wire it all up for you (NOTE: it must be a
   # valid PEM file).
@@ -86,6 +90,7 @@ Or, if you want to be really Unixy, these parameters are all configurable via en
 export ARTIFACTORY_ENDPOINT=http://my.storage.server/artifactory
 export ARTIFACTORY_USERNAME=admin
 export ARTIFACTORY_PASSWORD=password
+export ARTIFACTORY_API_KEY=XXXXXXXXXXXXXXXXXX
 export ARTIFACTORY_SSL_PEM_FILE=/path/to/my.pem
 ```
 
