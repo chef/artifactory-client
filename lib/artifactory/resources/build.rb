@@ -110,6 +110,7 @@ module Artifactory
     attribute :build_retention, {}
     attribute :modules, []
     attribute :governance
+    attribute :statuses, []
 
     #
     # Compare a build artifacts/dependencies/environment with an older
