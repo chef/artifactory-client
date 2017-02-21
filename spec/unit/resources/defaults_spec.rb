@@ -11,8 +11,8 @@ module Artifactory
         ENV.delete("ARTIFACTORY_READ_TIMEOUT")
       end
 
-      it "returns Fixnums even when given strings" do
-        expect(subject.read_timeout).to be_an_instance_of Fixnum
+      it "returns Integers even when given strings" do
+        expect(subject.read_timeout).to be_kind_of Integer
       end
 
       it "returns a non-zero value" do

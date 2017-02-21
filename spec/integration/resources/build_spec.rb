@@ -18,6 +18,7 @@ module Artifactory
         expect(build.name).to eq("wicket")
         expect(build.number).to eq("51")
         expect(build.started).to eq(Time.parse("2014-09-30T12:00:19.893+0300"))
+        expect(build.statuses.first).to include("status" => "promoted")
       end
     end
 

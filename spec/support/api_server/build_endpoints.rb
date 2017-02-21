@@ -204,6 +204,15 @@ module Artifactory
                 "autoDiscardStaleComponentRequests" => false,
               },
             },
+              "statuses" => [ {
+                "status" => "promoted",
+                "comment" => "",
+                "repository" => "omnibus-stable-local",
+                "timestamp" => "2017-02-20T12:33:59.570+0100",
+                "user" => "doge",
+                "ciUser" => "doge",
+                "timestampDate" => 1487590439570,
+            } ],
           }
         )
       end
