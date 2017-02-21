@@ -3,6 +3,10 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.7.0 (02-21-2017)
+-------------------
+- Include statuses in Build resource
+
 v2.6.0 (02-02-2017)
 -------------------
 - Add API Key authentication
