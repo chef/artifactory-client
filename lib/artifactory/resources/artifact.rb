@@ -430,16 +430,25 @@ module Artifactory
     end
 
     #
-    # The list of properties for this object.
+    # Set properties for this object. If no properties are given it lists the properties for this object.
     #
     # @example List all properties for an artifact
-    #   artifact.properties #=> { 'artifactory.licenses'=>['Apache-2.0'] }
+    #   artifact.properties #=> { 'licenses'=>['Apache-2.0'] }
+    #   artifact.properties(maintainer: 'SuperStartup01') #=> { 'licenses'=>['Apache-2.0'], 'maintainer'=>'SuperStartup01' }
+    #
+    # @param [Hash<String, Object>] props (default: +nil+)
+    #   A hash of properties and corresponding values to set for the artifact
     #
     # @return [Hash<String, Object>]
     #   the list of properties
     #
-    def properties
-      @properties ||= client.get(File.join("/api/storage", relative_path), properties: nil)["properties"]
+    def properties(props = nil)
+      if props.nil? || props.empty?
+        get_properties
+      else
+        set_properties(props)
+        get_properties(true)
+      end
     end
 
     #
@@ -618,6 +627,45 @@ module Artifactory
     end
 
     private
+
+    #
+    # Helper method for reading artifact properties
+    #
+    # @example List all properties for an artifact
+    #   artifact.get_properties #=> { 'artifactory.licenses'=>['Apache-2.0'] }
+    #
+    # @param [TrueClass, FalseClass] refresh_cache (default: +false+)
+    #   wether or not to use the locally cached value if it exists and is not nil
+    #
+    # @return [Hash<String, Object>]
+    #   the list of properties
+    #
+    def get_properties(refresh_cache = false)
+      if refresh_cache || @properties.nil?
+        @properties = client.get(File.join("/api/storage", relative_path), properties: nil)["properties"]
+      end
+
+      @properties
+    end
+
+    #
+    # Helper method for setting artifact properties
+    #
+    # @example Set properties for an artifact
+    #   artifact.set_properties({ prop1: 'value1', 'prop2' => 'value2' })
+    #
+    # @param [Hash<String, Object>] props
+    #   A hash of properties and corresponding values to set for the artifact
+    #
+    # @return [Hash]
+    #   the parsed JSON response from the server
+    #
+    def set_properties(props)
+      safe_properties = props.map { |p, v| "#{url_safe(p)}=#{url_safe(v)}" }.join(';')
+      artifact_url_with_props = "#{File.join("/api/storage", relative_path)}?properties=#{safe_properties}"
+
+      client.put(artifact_url_with_props, nil)
+    end
 
     #
     # Helper method for extracting the relative (repo) path, since it's not

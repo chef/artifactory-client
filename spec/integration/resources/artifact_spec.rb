@@ -32,6 +32,20 @@ module Artifactory
       end
     end
 
+    describe ".properties" do
+      let(:artifact) {
+        artifact = described_class.send(:search, repos: "libs-properties-local", name: "artifact.deb").first
+      }
+
+      it "returns artifact properties when reading" do
+        expect(artifact.properties).to include({ "licenses" => [ "Apache 2" ] })
+      end
+
+      it "writes artifact properties" do
+        expect(artifact.properties({ author: 'Jörg', 'status' => 'public' })).to eq({ "licenses" => [ "Apache 2" ], "author" => "Jörg", "status" => "public" })
+      end
+    end
+
     describe ".search" do
       it_behaves_like "an artifact search endpoint", :search, name: "artifact.deb"
     end
