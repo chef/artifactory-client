@@ -97,36 +97,36 @@ module Artifactory
       end
 
       app.put("/api/storage/libs-properties-local/org/acme/artifact.deb") do
-        props = params['properties'].split(';').map { |e| [ e.split('=').first, e.split('=').last ] }.to_h
+        props = params["properties"].split(";").map { |e| [ e.split("=").first, e.split("=").last ] }.to_h
         artifact_properties.merge!(props)
 
         status 204
-        body ''
+        body ""
       end
 
       app.get("/api/storage/ext-release-local/org/acme/artifact.deb") do
-          content_type "application/vnd.org.jfrog.artifactory.storage.FileInfo+json"
-          JSON.fast_generate(
-            "uri"          => server_url.join("/api/storage/ext-release-local/org/acme/artifact.deb"),
-            "downloadUri"  => server_url.join("/artifactory/ext-release-local/org/acme/artifact.deb"),
-            "repo"         => "ext-release-local",
-            "path"         => "/org/acme/artifact.deb",
-            "created"      => Time.parse("1995-04-11 11:05am"),
-            "createdBy"    => "yzl",
-            "lastModified" => Time.parse("2013-11-10 10:10pm"),
-            "modifiedBy"   => "schisamo",
-            "lastUpdated"  => Time.parse("2014-02-02 2:00pm"),
-            "size"         => "1024",
-            "mimeType"     => "application/tgz",
-            "checksums"    => {
-              "md5" => "MD5789",
-              "sha" => "SHA101",
-            },
-            "originalChecksums" => {
-              "md5" => "MD5789",
-              "sha" => "SHA101",
-            }
-          )
+        content_type "application/vnd.org.jfrog.artifactory.storage.FileInfo+json"
+        JSON.fast_generate(
+          "uri"          => server_url.join("/api/storage/ext-release-local/org/acme/artifact.deb"),
+          "downloadUri"  => server_url.join("/artifactory/ext-release-local/org/acme/artifact.deb"),
+          "repo"         => "ext-release-local",
+          "path"         => "/org/acme/artifact.deb",
+          "created"      => Time.parse("1995-04-11 11:05am"),
+          "createdBy"    => "yzl",
+          "lastModified" => Time.parse("2013-11-10 10:10pm"),
+          "modifiedBy"   => "schisamo",
+          "lastUpdated"  => Time.parse("2014-02-02 2:00pm"),
+          "size"         => "1024",
+          "mimeType"     => "application/tgz",
+          "checksums"    => {
+            "md5" => "MD5789",
+            "sha" => "SHA101",
+          },
+          "originalChecksums" => {
+            "md5" => "MD5789",
+            "sha" => "SHA101",
+          }
+        )
       end
 
       app.get("/api/storage/bin-release-local/org/acme/artifact 1.0.0.msi") do

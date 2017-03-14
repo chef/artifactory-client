@@ -488,7 +488,7 @@ module Artifactory
       let(:artifact_uri) { File.join("http://33.33.33.11", relative_path) }
 
       let(:property_set_path) { "#{relative_path}?properties=author=J%C3%B6rg;status=public" }
-      let(:new_properties) { { author: 'Jörg', 'status' => 'public' } }
+      let(:new_properties) { { author: "Jörg", "status" => "public" } }
       let(:client) { double(put: nil ) }
 
       before do

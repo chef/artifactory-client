@@ -115,6 +115,8 @@ artifact #=> "#<Artifactory::Resource::Artifact md5: 'ABCD1234'>"
 # Get the properties of an artifact
 artifact.md5 #=> "ABCD1234"
 artifact.properties #=> { ... }
+# Set the properties of an artifact
+artifact.properties({prop1: 'value1', 'prop2': 'value2'}) #=> { ... }
 
 # Download the artifact to disk
 artifact.download #=> /tmp/folders-a38b0decf038201/package.deb

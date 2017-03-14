@@ -434,6 +434,8 @@ module Artifactory
     #
     # @example List all properties for an artifact
     #   artifact.properties #=> { 'licenses'=>['Apache-2.0'] }
+    #
+    # @example Set new properties for an artifact
     #   artifact.properties(maintainer: 'SuperStartup01') #=> { 'licenses'=>['Apache-2.0'], 'maintainer'=>'SuperStartup01' }
     #
     # @param [Hash<String, Object>] props (default: +nil+)
@@ -661,7 +663,7 @@ module Artifactory
     #   the parsed JSON response from the server
     #
     def set_properties(props)
-      safe_properties = props.map { |p, v| "#{url_safe(p)}=#{url_safe(v)}" }.join(';')
+      safe_properties = props.map { |p, v| "#{url_safe(p)}=#{url_safe(v)}" }.join(";")
       artifact_url_with_props = "#{File.join("/api/storage", relative_path)}?properties=#{safe_properties}"
 
       client.put(artifact_url_with_props, nil)
