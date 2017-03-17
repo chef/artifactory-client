@@ -1,6 +1,8 @@
 module Artifactory
   module APIServer::ArtifactEndpoints
     def self.registered(app)
+      artifact_properties = { "licenses" => [ "Apache 2" ] }
+
       app.get("/api/search/artifact") do
         content_type "application/vnd.org.jfrog.artifactory.search.ArtifactSearchResult+json"
         artifacts_for_conditions do
@@ -86,6 +88,22 @@ module Artifactory
         )
       end
 
+      app.get("/api/storage/libs-properties-local/org/acme/artifact.deb") do
+        content_type "application/vnd.org.jfrog.artifactory.storage.ItemProperties+json"
+        JSON.fast_generate(
+          "properties" => artifact_properties,
+          "uri" => server_url.join("/api/storage/libs-properties-local/org/acme/artifact.deb")
+        )
+      end
+
+      app.put("/api/storage/libs-properties-local/org/acme/artifact.deb") do
+        props = params["properties"].split(";").reject(&:empty?).map { |e| e.split("=") }.to_h
+        artifact_properties.merge!(props)
+
+        status 204
+        body ""
+      end
+
       app.get("/api/storage/ext-release-local/org/acme/artifact.deb") do
         content_type "application/vnd.org.jfrog.artifactory.storage.FileInfo+json"
         JSON.fast_generate(
@@ -143,6 +161,12 @@ module Artifactory
               JSON.fast_generate(
                 "results" => [
                   { "uri" => server_url.join("/api/storage/libs-release-local/org/acme/artifact.deb") },
+                ]
+              )
+            elsif params["repos"] == "libs-properties-local"
+              JSON.fast_generate(
+                "results" => [
+                  { "uri" => server_url.join("/api/storage/libs-properties-local/org/acme/artifact.deb") },
                 ]
               )
             else
