@@ -3,6 +3,10 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.8.0 (03-17-2017)
+-------------------
+- Include statuses in Build resource
+
 v2.7.0 (02-21-2017)
 -------------------
 - Include statuses in Build resource
