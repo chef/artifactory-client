@@ -656,17 +656,17 @@ module Artifactory
     # @example Set properties for an artifact
     #   artifact.set_properties({ prop1: 'value1', 'prop2' => 'value2' })
     #
-    # @param [Hash<String, Object>] props
+    # @param [Hash<String, Object>] properties
     #   A hash of properties and corresponding values to set for the artifact
     #
     # @return [Hash]
     #   the parsed JSON response from the server
     #
-    def set_properties(props)
-      safe_properties = props.map { |p, v| "#{url_safe(p)}=#{url_safe(v)}" }.join(";")
-      artifact_url_with_props = "#{File.join("/api/storage", relative_path)}?properties=#{safe_properties}"
+    def set_properties(properties)
+      matrix = to_matrix_properties(properties)
+      endpoint = File.join("/api/storage", relative_path) + "?properties=#{matrix}"
 
-      client.put(artifact_url_with_props, nil)
+      client.put(endpoint, nil)
     end
 
     #

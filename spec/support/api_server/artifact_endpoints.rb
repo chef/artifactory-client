@@ -97,7 +97,7 @@ module Artifactory
       end
 
       app.put("/api/storage/libs-properties-local/org/acme/artifact.deb") do
-        props = params["properties"].split(";").map { |e| [ e.split("=").first, e.split("=").last ] }.to_h
+        props = params["properties"].split(";").reject(&:empty?).map { |e| e.split("=") }.to_h
         artifact_properties.merge!(props)
 
         status 204
