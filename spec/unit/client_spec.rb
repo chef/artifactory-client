@@ -46,6 +46,13 @@ module Artifactory
         expect(subject).to receive(:request).with(:get, "/foo", {}, {})
         subject.get("/foo")
       end
+
+      context "called with a block" do
+        it "yields the response in chunks" do
+          expect(subject).to receive(:request).with(:get, "/foo", {}, {}) { |&block| block.call("Chunked Body") }
+          expect { |chunk| subject.get("/foo", &chunk) }.to yield_with_args("Chunked Body")
+        end
+      end
     end
 
     describe "#post" do
@@ -88,6 +95,16 @@ module Artifactory
 
         it "raises an HTTPError error" do
           expect { subject.request(:get, "/") }.to raise_error(Error::HTTPError)
+        end
+      end
+
+      context "called with a block" do
+        before { stub_request(:get, /.+/).to_return(status: 200, body: "Chunked Body") }
+
+        it "yields the response in chunks" do
+          subject.request(:get, "/foo") do |chunk|
+            expect(chunk).to eq("Chunked Body")
+          end
         end
       end
     end

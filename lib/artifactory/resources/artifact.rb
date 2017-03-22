@@ -502,7 +502,9 @@ module Artifactory
       destination = File.join(target, filename)
 
       File.open(destination, "wb") do |file|
-        file.write(client.get(download_uri))
+        client.get(download_uri) do |chunk|
+          file.write chunk
+        end
       end
 
       destination
