@@ -3,6 +3,10 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+v2.8.1 (03-21-2017)
+-------------------
+- Allow downloading of large files. Fixes #83.
+
 v2.8.0 (03-17-2017)
 -------------------
 - Include statuses in Build resource
