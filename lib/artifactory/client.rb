@@ -90,16 +90,21 @@ module Artifactory
     #
     # Make a HTTP GET request
     #
+    # If a block is provided the response body is yielded in chunks/fragments
+    # as it is read from the undelrying socket.
+    #
     # @param path (see Client#request)
     # @param [Hash] params
     #   the list of query params
     # @param headers (see Client#request)
     #
+    # @yield [chunk] Partial piece of response body
+    #
     # @raise (see Client#request)
     # @return (see Client#request)
     #
-    def get(path, params = {}, headers = {})
-      request(:get, path, params, headers)
+    def get(path, params = {}, headers = {}, &block)
+      request(:get, path, params, headers, &block)
     end
 
     #
@@ -162,7 +167,9 @@ module Artifactory
     #
     # Make an HTTP request with the given verb, data, params, and headers. If
     # the response has a return type of JSON, the JSON is automatically parsed
-    # and returned as a hash; otherwise it is returned as a string.
+    # and returned as a hash; otherwise it is returned as a string. If a block
+    # is provided the response body is yielded in chunks/fragments as it is
+    # read from the undelrying socket.
     #
     # @raise [Error::HTTPError]
     #   if the request is not an HTTP 200 OK
@@ -177,10 +184,12 @@ module Artifactory
     # @param [Hash] headers
     #   the list of headers to use
     #
+    # @yield [chunk] Partial piece of response body
+    #
     # @return [String, Hash]
     #   the response body
     #
-    def request(verb, path, data = {}, headers = {})
+    def request(verb, path, data = {}, headers = {}, &block)
       # Build the URI and request object from the given information
       uri = build_uri(verb, path, data)
       request = class_for_request(verb).new(uri.request_uri)
@@ -245,16 +254,25 @@ module Artifactory
       # Create a connection using the block form, which will ensure the socket
       # is properly closed in the event of an error.
       connection.start do |http|
-        response = http.request(request)
 
-        case response
-        when Net::HTTPRedirection
-          redirect = URI.parse(response["location"])
-          request(verb, redirect, data, headers)
-        when Net::HTTPSuccess
-          success(response)
+        if block_given?
+          http.request(request) do |response|
+            response.read_body do |chunk|
+              yield chunk
+            end
+          end
         else
-          error(response)
+          response = http.request(request)
+
+          case response
+          when Net::HTTPRedirection
+            redirect = URI.parse(response["location"])
+            request(verb, redirect, data, headers)
+          when Net::HTTPSuccess
+            success(response)
+          else
+            error(response)
+          end
         end
       end
     rescue SocketError, Errno::ECONNREFUSED, EOFError

@@ -560,6 +560,20 @@ module Artifactory
           expect(Dir.entries(tmpdir)).to include("foobar.deb")
         end
       end
+
+      it "writes the file in chunks" do
+        Dir.mktmpdir("artifact_download") do |tmpdir|
+          subject.download_uri = "/artifact.deb"
+
+          expect(client).to receive(:get).and_yield("some content")
+
+          file = double("file")
+          expect(File).to receive(:open).with(File.join(tmpdir, "artifact.deb"), "wb").and_yield(file)
+          expect(file).to receive(:write).with("some content")
+
+          subject.download(tmpdir)
+        end
+      end
     end
 
     describe "#relative_path" do
