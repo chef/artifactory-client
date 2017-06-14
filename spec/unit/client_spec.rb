@@ -107,6 +107,14 @@ module Artifactory
           end
         end
       end
+
+      context "application/json response with an empty body" do
+        before { stub_request(:get, /.+/).to_return(status: 200, headers: { "Content-Type" => "application/json" }, body: "") }
+
+        it "should not raise an error" do
+          expect { subject.request(:get, "/foo") }.to_not raise_error(TypeError)
+        end
+      end
     end
 
     describe "#to_query_string" do
