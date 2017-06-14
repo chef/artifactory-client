@@ -369,7 +369,7 @@ module Artifactory
     #
     def success(response)
       if (response.content_type || "").include?("json")
-        JSON.parse(response.body)
+        JSON.parse(response.body || "{}")
       else
         response.body
       end
