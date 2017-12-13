@@ -144,7 +144,7 @@ module Artifactory
       return true if string.eql?("true")
       return false if string.eql?("false")
       return string.to_i if numeric?(string)
-      return string
+      string
     end
 
     private
