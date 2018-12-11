@@ -3,9 +3,17 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
+<!-- latest_release -->
+<!-- latest_release -->
+
+<!-- release_rollup -->
+<!-- release_rollup -->
+
+<!-- latest_stable_release -->
 v2.8.2 (06-14-2017)
 -------------------
 - Properly parse empty response bodies
+<!-- latest_stable_release -->
 
 v2.8.1 (03-21-2017)
 -------------------
