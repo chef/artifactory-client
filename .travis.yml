@@ -1,3 +1,8 @@
+language: ruby
+cache: bundler
+dist: xenial
+sudo: false
+
 rvm:
   - 2.1
   - 2.2
