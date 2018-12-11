@@ -262,12 +262,14 @@ Important Notes:
 - **Tests are order independent.** The default RSpec configuration randomizes the test order, so this should not be a problem.
 
 
-License & Authors
------------------
-- Author: Seth Vargo <sethvargo@gmail.com>
+## Maintainer
+
+This project is maintained by Chef's Release Engineering Team (releng@chef.io)
+
+## License
 
 ```text
-Copyright 2013-2014 Chef Software, Inc.
+Copyright 2013-2018 Chef Software, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
