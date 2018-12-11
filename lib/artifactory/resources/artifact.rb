@@ -95,10 +95,10 @@ module Artifactory
       def gavc_search(options = {})
         client = extract_client!(options)
         options = Util.rename_keys(options,
-          :group      => :g,
-          :name       => :a,
-          :version    => :v,
-          :classifier => :c
+          group: :g,
+          name: :a,
+          version: :v,
+          classifier: :c
         )
         params = Util.slice(options, :g, :a, :v, :c, :repos)
         format_repos!(params)
@@ -291,9 +291,9 @@ module Artifactory
       def versions(options = {})
         client  = extract_client!(options)
         options = Util.rename_keys(options,
-          :group   => :g,
-          :name    => :a,
-          :version => :v
+          group: :g,
+          name: :a,
+          version: :v
         )
         params = Util.slice(options, :g, :a, :v, :repos)
         format_repos!(params)
@@ -342,9 +342,9 @@ module Artifactory
       def latest_version(options = {})
         client = extract_client!(options)
         options = Util.rename_keys(options,
-          :group   => :g,
-          :name    => :a,
-          :version => :v
+          group: :g,
+          name: :a,
+          version: :v
         )
         params = Util.slice(options, :g, :a, :v, :repos, :remote)
         format_repos!(params)
@@ -493,7 +493,7 @@ module Artifactory
       target = File.expand_path(target)
 
       # Make the directory if it doesn't yet exist
-      FileUtils.mkdir_p(target) unless File.exists?(target)
+      FileUtils.mkdir_p(target) unless File.exist?(target)
 
       # Use the server artifact's filename if one wasn't given
       filename = options[:filename] || File.basename(download_uri)

@@ -6,7 +6,7 @@ module Artifactory
       "n" => "annotate",
       "r" => "read",
       "w" => "deploy",
-    }
+    }.freeze
     class << self
       #
       # Get a list of all PermissionTargets in the system.

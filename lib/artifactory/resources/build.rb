@@ -20,7 +20,7 @@ module Artifactory
   class Resource::Build < Resource::Base
     BUILD_SCHEMA_VERSION = "1.0.1".freeze
     # valid build types as dictated by the Artifactory API
-    BUILD_TYPES = %w{ ANT IVY MAVEN GENERIC GRADLE }
+    BUILD_TYPES = %w{ ANT IVY MAVEN GENERIC GRADLE }.freeze
 
     class << self
       #

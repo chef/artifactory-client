@@ -1,0 +1,12 @@
+# these should all probably get resolved
+
+Lint/ShadowingOuterLocalVariable:
+  Exclude:
+    - 'lib/artifactory/resources/base.rb'
+
+Lint/UselessAssignment:
+  Exclude:
+    - 'lib/artifactory/resources/build_component.rb'
+    - 'lib/artifactory/resources/repository.rb'
+    - 'lib/artifactory/resources/user.rb'
+    - 'spec/integration/resources/artifact_spec.rb'
