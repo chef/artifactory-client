@@ -44,12 +44,12 @@ module Artifactory
     # A general connection error with a more informative message
     class InvalidBuildType < ArtifactoryError
       def initialize(given_type)
-        super <<-EOH
-'#{given_type}' is not a valid build type.
+        super <<~EOH
+          '#{given_type}' is not a valid build type.
 
-Valid build types include:
+          Valid build types include:
 
-    #{Resource::Build::BUILD_TYPES.join("\n    ")}"
+              #{Resource::Build::BUILD_TYPES.join("\n    ")}"
 
 EOH
       end

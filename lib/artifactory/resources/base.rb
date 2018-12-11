@@ -88,7 +88,7 @@ module Artifactory
       # @return [true, false]
       #
       def has_attribute?(key)
-        attributes.has_key?(key.to_sym)
+        attributes.key?(key.to_sym)
       end
 
       #
