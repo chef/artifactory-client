@@ -11,4 +11,5 @@ group :test do
   gem "rspec-mocks", "3.4.0"
   gem "simplecov"
   gem "simplecov-console"
+  gem "rake"
 end
