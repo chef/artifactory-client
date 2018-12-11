@@ -3,10 +3,18 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
-<!-- latest_release -->
+<!-- latest_release 2.8.3 -->
+## [v2.8.3](https://github.com/chef/artifactory-client/tree/v2.8.3) (2018-12-11)
+
+#### Merged Pull Requests
+- Require Ruby 2.3+ and update Travis / Appveyor config [#101](https://github.com/chef/artifactory-client/pull/101) ([tas50](https://github.com/tas50))
 <!-- latest_release -->
 
 <!-- release_rollup -->
+### Changes not yet released to rubygems.org
+
+#### Merged Pull Requests
+- Require Ruby 2.3+ and update Travis / Appveyor config [#101](https://github.com/chef/artifactory-client/pull/101) ([tas50](https://github.com/tas50)) <!-- 2.8.3 -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
