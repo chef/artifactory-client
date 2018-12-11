@@ -6,14 +6,14 @@ require "artifactory/version"
 Gem::Specification.new do |spec|
   spec.name          = "artifactory"
   spec.version       = Artifactory::VERSION
-  spec.author        = "Seth Vargo"
-  spec.email         = "sethvargo@gmail.com"
+  spec.author        = "Chef Release Engineering Team"
+  spec.email         = "releng@chef.io"
   spec.description   = "A Ruby client for Artifactory"
   spec.summary       = "Artifactory is a simple, lightweight Ruby client for " \
                        "interacting with the Artifactory and Artifactory Pro " \
                        "APIs."
-  spec.homepage      = "https://github.com/opscode/artifactory-client"
-  spec.license       = "Apache 2.0"
+  spec.homepage      = "https://github.com/chef/artifactory-client"
+  spec.license       = "Apache-2.0"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
