@@ -15,5 +15,5 @@
 #
 
 module Artifactory
-  VERSION = "2.8.6".freeze
+  VERSION = "3.0.0".freeze
 end
