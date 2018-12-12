@@ -3,17 +3,18 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
-<!-- latest_release 2.8.6 -->
-## [v2.8.6](https://github.com/chef/artifactory-client/tree/v2.8.6) (2018-12-12)
+<!-- latest_release unreleased -->
+## Unreleased
 
 #### Merged Pull Requests
-- Don&#39;t ship the test / development files in the gem artifact [#105](https://github.com/chef/artifactory-client/pull/105) ([tas50](https://github.com/tas50))
+- Bump copyrights and bump to 3.0 [#106](https://github.com/chef/artifactory-client/pull/106) ([tas50](https://github.com/tas50))
 <!-- latest_release -->
 
 <!-- release_rollup since=2.8.2 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- Bump copyrights and bump to 3.0 [#106](https://github.com/chef/artifactory-client/pull/106) ([tas50](https://github.com/tas50)) <!-- 3.0.0 -->
 - Don&#39;t ship the test / development files in the gem artifact [#105](https://github.com/chef/artifactory-client/pull/105) ([tas50](https://github.com/tas50)) <!-- 2.8.6 -->
 - Update the maintainer [#104](https://github.com/chef/artifactory-client/pull/104) ([tas50](https://github.com/tas50)) <!-- 2.8.5 -->
 - Add code of conduct and a contributing doc [#103](https://github.com/chef/artifactory-client/pull/103) ([tas50](https://github.com/tas50)) <!-- 2.8.4 -->
