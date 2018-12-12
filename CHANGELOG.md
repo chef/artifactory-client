@@ -10,22 +10,24 @@ Ruby client.
 - Bump copyrights and bump to 3.0 [#106](https://github.com/chef/artifactory-client/pull/106) ([tas50](https://github.com/tas50))
 <!-- latest_release -->
 
-<!-- release_rollup since=2.8.2 -->
+<!-- release_rollup since=3.0.0 -->
 ### Changes not yet released to rubygems.org
-
-#### Merged Pull Requests
-- Bump copyrights and bump to 3.0 [#106](https://github.com/chef/artifactory-client/pull/106) ([tas50](https://github.com/tas50)) <!-- 3.0.0 -->
-- Don&#39;t ship the test / development files in the gem artifact [#105](https://github.com/chef/artifactory-client/pull/105) ([tas50](https://github.com/tas50)) <!-- 2.8.6 -->
-- Update the maintainer [#104](https://github.com/chef/artifactory-client/pull/104) ([tas50](https://github.com/tas50)) <!-- 2.8.5 -->
-- Add code of conduct and a contributing doc [#103](https://github.com/chef/artifactory-client/pull/103) ([tas50](https://github.com/tas50)) <!-- 2.8.4 -->
-- Require Ruby 2.3+ and update Travis / Appveyor config [#101](https://github.com/chef/artifactory-client/pull/101) ([tas50](https://github.com/tas50)) <!-- 2.8.3 -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
+## [v3.0.0](https://github.com/chef/artifactory-client/tree/v3.0.0) (2018-12-12)
+
+#### Merged Pull Requests
+- Require Ruby 2.3+ and update Travis / Appveyor config [#101](https://github.com/chef/artifactory-client/pull/101) ([tas50](https://github.com/tas50))
+- Add code of conduct and a contributing doc [#103](https://github.com/chef/artifactory-client/pull/103) ([tas50](https://github.com/tas50))
+- Update the maintainer [#104](https://github.com/chef/artifactory-client/pull/104) ([tas50](https://github.com/tas50))
+- Don&#39;t ship the test / development files in the gem artifact [#105](https://github.com/chef/artifactory-client/pull/105) ([tas50](https://github.com/tas50))
+- Bump copyrights and bump to 3.0 [#106](https://github.com/chef/artifactory-client/pull/106) ([tas50](https://github.com/tas50))
+<!-- latest_stable_release -->
+
 v2.8.2 (06-14-2017)
 -------------------
 - Properly parse empty response bodies
-<!-- latest_stable_release -->
 
 v2.8.1 (03-21-2017)
 -------------------
