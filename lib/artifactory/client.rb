@@ -266,7 +266,7 @@ module Artifactory
 
           case response
           when Net::HTTPRedirection
-            redirect = URI.parse(response["location"])
+            redirect = response["location"]
             request(verb, redirect, data, headers)
           when Net::HTTPSuccess
             success(response)
