@@ -65,6 +65,7 @@ module Artifactory
           "yumRootDepth"                 => 3,
           "rclass"                       => "local",
           "url"                          => "someurl",
+          "respositories"                => [],
         }
       end
 
@@ -89,6 +90,7 @@ module Artifactory
         expect(instance.url).to eq("someurl")
         expect(instance.yum_root_depth).to eq(3)
         expect(instance.calculate_yum_metadata).to eq(false)
+        expect(instance.repositories).to eq([])
       end
     end
 
