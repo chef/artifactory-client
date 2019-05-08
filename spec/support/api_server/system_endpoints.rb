@@ -88,6 +88,20 @@ module Artifactory
         request.body.read
       end
 
+      app.get("/api/system/security/certificates") do
+        content_type "application/json"
+        JSON.fast_generate([
+          {
+            "certificateAlias" => "test",
+            "issuedTo"         => "An end user",
+            "issuedBy"         => "An authority",
+            "issuedOn"         => "2014-01-01 10:00 UTC",
+            "validUntil"       => "2014-01-01 11:00 UTC",
+            "fingerprint"      => "00:01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F",
+          },
+        ])
+      end
+
       app.get("/api/system/version") do
         content_type "application/vnd.org.jfrog.artifactory.system.Version+json"
         JSON.generate({
