@@ -84,6 +84,8 @@ module Artifactory
     attribute :url, ""
     attribute :yum_root_depth, 0
     attribute :calculate_yum_metadata, false
+    attribute :repositories, []
+    attribute :external_dependencies_enabled, false
 
     #
     # Creates or updates a repository configuration depending on if the
