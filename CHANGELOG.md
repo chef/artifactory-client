@@ -3,17 +3,18 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
-<!-- latest_release 3.0.2 -->
-## [v3.0.2](https://github.com/chef/artifactory-client/tree/v3.0.2) (2019-06-24)
+<!-- latest_release 3.0.3 -->
+## [v3.0.3](https://github.com/chef/artifactory-client/tree/v3.0.3) (2019-06-24)
 
 #### Merged Pull Requests
-- Setup PR verification with Buildkite [#113](https://github.com/chef/artifactory-client/pull/113) ([tas50](https://github.com/tas50))
+- Remove Travis CI pull request testing [#114](https://github.com/chef/artifactory-client/pull/114) ([tas50](https://github.com/tas50))
 <!-- latest_release -->
 
 <!-- release_rollup since=3.0.0 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- Remove Travis CI pull request testing [#114](https://github.com/chef/artifactory-client/pull/114) ([tas50](https://github.com/tas50)) <!-- 3.0.3 -->
 - Setup PR verification with Buildkite [#113](https://github.com/chef/artifactory-client/pull/113) ([tas50](https://github.com/tas50)) <!-- 3.0.2 -->
 - Virtual repos [#109](https://github.com/chef/artifactory-client/pull/109) ([jniesen](https://github.com/jniesen))
 - Fix handling of redirection [#107](https://github.com/chef/artifactory-client/pull/107) ([orgads](https://github.com/orgads))
