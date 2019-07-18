@@ -50,6 +50,7 @@ module Artifactory
 
     proxy Resource::Artifact
     proxy Resource::Backup
+    proxy Resource::Certificate
     proxy Resource::Layout
     proxy Resource::LDAPSetting
     proxy Resource::MailServer

@@ -67,6 +67,7 @@ module Artifactory
           "url"                          => "someurl",
           "respositories"                => [],
           "externalDependenciesEnabled"  => false,
+          "clientTlsCertificate"         => "test",
         }
       end
 
@@ -93,6 +94,7 @@ module Artifactory
         expect(instance.calculate_yum_metadata).to eq(false)
         expect(instance.repositories).to eq([])
         expect(instance.external_dependencies_enabled).to eq(false)
+        expect(instance.client_tls_certificate).to eq("test")
       end
     end
 

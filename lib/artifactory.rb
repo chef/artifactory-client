@@ -36,6 +36,7 @@ module Artifactory
     autoload :Base,             "artifactory/resources/base"
     autoload :Build,            "artifactory/resources/build"
     autoload :BuildComponent,   "artifactory/resources/build_component"
+    autoload :Certificate,      "artifactory/resources/certificate"
     autoload :Group,            "artifactory/resources/group"
     autoload :Layout,           "artifactory/resources/layout"
     autoload :LDAPSetting,      "artifactory/resources/ldap_setting"

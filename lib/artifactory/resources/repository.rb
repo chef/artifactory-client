@@ -86,6 +86,7 @@ module Artifactory
     attribute :calculate_yum_metadata, false
     attribute :repositories, []
     attribute :external_dependencies_enabled, false
+    attribute :client_tls_certificate, ""
 
     #
     # Creates or updates a repository configuration depending on if the
