@@ -2,7 +2,6 @@
 
 [![Build status](https://badge.buildkite.com/a5156457906e25cbde53c408598d233a202c675c670f4c768d.svg?branch=master)](https://buildkite.com/chef-oss/chef-artifactory-client-master-verify)
 [![Gem Version](http://img.shields.io/gem/v/artifactory.svg)][gem]
-[![AppVeyor Build Status](http://img.shields.io/appveyor/ci/chef/artifactory-client.svg?label=AppVeyor)][appveyor]
 
 A Ruby client and interface to the Artifactory API. **The majority of API endpoints are only exposed for Artifactory Pro customers!** As such, many of the resources and actions exposed by this gem also require Artifactory Pro.
 
