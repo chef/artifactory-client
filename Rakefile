@@ -8,11 +8,22 @@ RSpec::Core::RakeTask.new(:unit) do |t|
   t.rspec_opts = "--tag ~integration"
 end
 
-require "chefstyle"
-require "rubocop/rake_task"
-desc "Run ChefStyle"
-RuboCop::RakeTask.new(:chefstyle) do |task|
-  task.options << "--display-cop-names"
+begin
+  require "chefstyle"
+  require "rubocop/rake_task"
+  desc "Run Chefstyle tests"
+  RuboCop::RakeTask.new(:style) do |task|
+    task.options += ["--display-cop-names", "--no-color"]
+  end
+rescue LoadError
+  puts "chefstyle gem is not installed. bundle install first to make sure all dependencies are installed."
+end
+
+begin
+  require "yard"
+  YARD::Rake::YardocTask.new(:docs)
+rescue LoadError
+  puts "yard is not available. bundle install first to make sure all dependencies are installed."
 end
 
 desc "Generate coverage report"
@@ -20,9 +31,4 @@ RSpec::Core::RakeTask.new(:coverage) do |t|
   ENV["COVERAGE"] = "true"
 end
 
-namespace :travis do
-  desc "Run tests on Travis"
-  task ci: %w{chefstyle unit integration}
-end
-
-task default: %w{travis:ci}
+task default: %w{style unit integration}

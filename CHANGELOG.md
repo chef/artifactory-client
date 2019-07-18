@@ -3,20 +3,20 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
-<!-- latest_release 3.0.1 -->
-## [v3.0.1](https://github.com/chef/artifactory-client/tree/v3.0.1) (2019-05-10)
+<!-- latest_release 3.0.4 -->
+## [v3.0.4](https://github.com/chef/artifactory-client/tree/v3.0.4) (2019-07-18)
 
 #### Merged Pull Requests
-- Virtual repos [#109](https://github.com/chef/artifactory-client/pull/109) ([jniesen](https://github.com/jniesen))
-- Fix handling of redirection [#107](https://github.com/chef/artifactory-client/pull/107) ([orgads](https://github.com/orgads))
-- Added empty string if success response body is nil [#99](https://github.com/chef/artifactory-client/pull/99) ([APayden](https://github.com/APayden))
-
+- Replace AppVeyor with Buildkite as well [#115](https://github.com/chef/artifactory-client/pull/115) ([tas50](https://github.com/tas50))
 <!-- latest_release -->
 
 <!-- release_rollup since=3.0.0 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- Replace AppVeyor with Buildkite as well [#115](https://github.com/chef/artifactory-client/pull/115) ([tas50](https://github.com/tas50)) <!-- 3.0.4 -->
+- Remove Travis CI pull request testing [#114](https://github.com/chef/artifactory-client/pull/114) ([tas50](https://github.com/tas50)) <!-- 3.0.3 -->
+- Setup PR verification with Buildkite [#113](https://github.com/chef/artifactory-client/pull/113) ([tas50](https://github.com/tas50)) <!-- 3.0.2 -->
 - Virtual repos [#109](https://github.com/chef/artifactory-client/pull/109) ([jniesen](https://github.com/jniesen))
 - Fix handling of redirection [#107](https://github.com/chef/artifactory-client/pull/107) ([orgads](https://github.com/orgads))
 - Added empty string if success response body is nil [#99](https://github.com/chef/artifactory-client/pull/99) ([APayden](https://github.com/APayden)) <!-- 3.0.1 -->
