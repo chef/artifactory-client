@@ -3,27 +3,23 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
-<!-- latest_release 3.0.5 -->
-## [v3.0.5](https://github.com/chef/artifactory-client/tree/v3.0.5) (2019-07-18)
-
-#### Merged Pull Requests
-- Add support for managing SSL/TLS certificates [#110](https://github.com/chef/artifactory-client/pull/110) ([bodgit](https://github.com/bodgit))
+<!-- latest_release -->
 <!-- latest_release -->
 
-<!-- release_rollup since=3.0.0 -->
-### Changes not yet released to rubygems.org
-
-#### Merged Pull Requests
-- Add support for managing SSL/TLS certificates [#110](https://github.com/chef/artifactory-client/pull/110) ([bodgit](https://github.com/bodgit)) <!-- 3.0.5 -->
-- Replace AppVeyor with Buildkite as well [#115](https://github.com/chef/artifactory-client/pull/115) ([tas50](https://github.com/tas50)) <!-- 3.0.4 -->
-- Remove Travis CI pull request testing [#114](https://github.com/chef/artifactory-client/pull/114) ([tas50](https://github.com/tas50)) <!-- 3.0.3 -->
-- Setup PR verification with Buildkite [#113](https://github.com/chef/artifactory-client/pull/113) ([tas50](https://github.com/tas50)) <!-- 3.0.2 -->
-- Virtual repos [#109](https://github.com/chef/artifactory-client/pull/109) ([jniesen](https://github.com/jniesen))
-- Fix handling of redirection [#107](https://github.com/chef/artifactory-client/pull/107) ([orgads](https://github.com/orgads))
-- Added empty string if success response body is nil [#99](https://github.com/chef/artifactory-client/pull/99) ([APayden](https://github.com/APayden)) <!-- 3.0.1 -->
+<!-- release_rollup -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
+## [v3.0.5](https://github.com/chef/artifactory-client/tree/v3.0.5) (2019-07-25)
+
+#### Merged Pull Requests
+- Added empty string if success response body is nil [#99](https://github.com/chef/artifactory-client/pull/99) ([APayden](https://github.com/APayden))
+- Setup PR verification with Buildkite [#113](https://github.com/chef/artifactory-client/pull/113) ([tas50](https://github.com/tas50))
+- Remove Travis CI pull request testing [#114](https://github.com/chef/artifactory-client/pull/114) ([tas50](https://github.com/tas50))
+- Replace AppVeyor with Buildkite as well [#115](https://github.com/chef/artifactory-client/pull/115) ([tas50](https://github.com/tas50))
+- Add support for managing SSL/TLS certificates [#110](https://github.com/chef/artifactory-client/pull/110) ([bodgit](https://github.com/bodgit))
+<!-- latest_stable_release -->
+
 ## [v3.0.0](https://github.com/chef/artifactory-client/tree/v3.0.0) (2018-12-12)
 
 #### Merged Pull Requests
@@ -32,7 +28,6 @@ Ruby client.
 - Update the maintainer [#104](https://github.com/chef/artifactory-client/pull/104) ([tas50](https://github.com/tas50))
 - Don&#39;t ship the test / development files in the gem artifact [#105](https://github.com/chef/artifactory-client/pull/105) ([tas50](https://github.com/tas50))
 - Bump copyrights and bump to 3.0 [#106](https://github.com/chef/artifactory-client/pull/106) ([tas50](https://github.com/tas50))
-<!-- latest_stable_release -->
 
 v2.8.2 (06-14-2017)
 -------------------
