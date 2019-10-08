@@ -16,7 +16,7 @@ Install via Rubygems:
 or add it to your Gemfile if you're using Bundler:
 
 ```ruby
-gem 'artifactory', '~> 1.0'
+gem 'artifactory', '~> 3.0.5'
 ```
 
 In your library or project, you wil likely want to include the `Artifactory::Resource` namespace:
