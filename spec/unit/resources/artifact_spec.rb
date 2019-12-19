@@ -1,3 +1,4 @@
+# coding: utf-8
 require "spec_helper"
 
 module Artifactory
@@ -302,6 +303,26 @@ module Artifactory
 
       it "returns an array of objects" do
         expect(described_class.creation_search).to be_a(Array)
+      end
+    end
+
+    describe ".pattern_search" do
+      # JFrog munges this call a bit differently than others, the resulting :pattern differs
+      # a bit.
+      let(:response) { { "results" => [] } }
+
+      it "calls /api/search/pattern" do
+        expect(client).to receive(:get).with("/api/search/pattern", { :pattern => ":" }).once
+        described_class.pattern_search
+      end
+
+      it "slices the correct parameters" do
+        expect(client).to receive(:get).with("/api/search/pattern", { :pattern => "repo:*" }).once
+        described_class.pattern_search(pattern: "*", repo: "repo")
+      end
+
+      it "returns an array of objects" do
+        expect(described_class.pattern_search).to be_a(Array)
       end
     end
 
