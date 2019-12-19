@@ -310,7 +310,7 @@ module Artifactory
         #
         repo_uri = response["repoUri"]
         unless repo_uri.include?("/api/storage/")
-          repo_uri.sub!(%r(/#{params[:repo]}$), "/api/storage/#{params[:repo]}")
+          repo_uri.sub!(%r{/#{params[:repo]}$}, "/api/storage/#{params[:repo]}")
         end
         response["files"].map do |file_path|
           from_url("#{repo_uri}/#{file_path}", client: client)
