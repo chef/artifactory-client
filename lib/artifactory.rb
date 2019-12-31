@@ -15,7 +15,7 @@
 #
 
 require "pathname"
-require "artifactory/version"
+require_relative "artifactory/version"
 
 module Artifactory
   autoload :Client,       "artifactory/client"
