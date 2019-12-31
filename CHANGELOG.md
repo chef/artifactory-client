@@ -3,10 +3,18 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
-<!-- latest_release -->
+<!-- latest_release 3.0.6 -->
+## [v3.0.6](https://github.com/chef/artifactory-client/tree/v3.0.6) (2019-12-31)
+
+#### Merged Pull Requests
+- Update rspec-mocks requirement from 3.4.0 to 3.9.0 [#121](https://github.com/chef/artifactory-client/pull/121) ([dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
 <!-- latest_release -->
 
-<!-- release_rollup -->
+<!-- release_rollup since=3.0.5 -->
+### Changes not yet released to rubygems.org
+
+#### Merged Pull Requests
+- Update rspec-mocks requirement from 3.4.0 to 3.9.0 [#121](https://github.com/chef/artifactory-client/pull/121) ([dependabot-preview[bot]](https://github.com/dependabot-preview[bot])) <!-- 3.0.6 -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
