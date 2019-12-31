@@ -3,17 +3,18 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
-<!-- latest_release 3.0.10 -->
-## [v3.0.10](https://github.com/chef/artifactory-client/tree/v3.0.10) (2019-12-31)
+<!-- latest_release 3.0.11 -->
+## [v3.0.11](https://github.com/chef/artifactory-client/tree/v3.0.11) (2019-12-31)
 
 #### Merged Pull Requests
-- Test on Ruby 2.7 and use buster containers [#124](https://github.com/chef/artifactory-client/pull/124) ([tas50](https://github.com/tas50))
+- Resolve all chefstyle warnings [#125](https://github.com/chef/artifactory-client/pull/125) ([tas50](https://github.com/tas50))
 <!-- latest_release -->
 
 <!-- release_rollup since=3.0.5 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- Resolve all chefstyle warnings [#125](https://github.com/chef/artifactory-client/pull/125) ([tas50](https://github.com/tas50)) <!-- 3.0.11 -->
 - Test on Ruby 2.7 and use buster containers [#124](https://github.com/chef/artifactory-client/pull/124) ([tas50](https://github.com/tas50)) <!-- 3.0.10 -->
 - Use require_relative for link and remove appveyor links [#123](https://github.com/chef/artifactory-client/pull/123) ([tas50](https://github.com/tas50)) <!-- 3.0.9 -->
 - Update README.md [#117](https://github.com/chef/artifactory-client/pull/117) ([johnlabarge](https://github.com/johnlabarge)) <!-- 3.0.8 -->
