@@ -66,6 +66,7 @@ module Artifactory
         from_hash(response, client: client)
       rescue Error::HTTPError => e
         raise unless e.code == 404
+
         nil
       end
 
@@ -118,8 +119,9 @@ module Artifactory
       def abbreviate_permissions(array)
         inverse = VERBOSE_PERMS.invert
         if (inverse.keys & array).sort != array.sort
-          raise "One of your principals contains an invalid permission.  Valid permissions are #{inverse.keys.join(', ')}"
+          raise "One of your principals contains an invalid permission.  Valid permissions are #{inverse.keys.join(", ")}"
         end
+
         array.map { |elt| inverse[elt] }.sort
       end
 

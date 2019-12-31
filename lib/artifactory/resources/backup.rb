@@ -59,6 +59,7 @@ module Artifactory
         find_from_config("config/backups/backup/key[text()='#{key}']", config, options)
       rescue Error::HTTPError => e
         raise unless e.code == 404
+
         nil
       end
 
@@ -102,6 +103,7 @@ module Artifactory
       def find_from_config(xpath, config, options = {})
         name_node = REXML::XPath.match(config, xpath)
         return nil if name_node.empty?
+
         properties = Util.xml_to_hash(name_node[0].parent, "excludedRepositories", false)
         from_hash(properties, options)
       end

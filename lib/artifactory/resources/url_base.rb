@@ -59,6 +59,7 @@ module Artifactory
         find_from_config("config/urlBase[text()='#{url}']", config, options)
       rescue Error::HTTPError => e
         raise unless e.code == 404
+
         nil
       end
 

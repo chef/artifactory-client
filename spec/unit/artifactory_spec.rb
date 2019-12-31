@@ -34,7 +34,7 @@ describe Artifactory do
 
   describe ".configure" do
     Artifactory::Configurable.keys.each do |key|
-      it "sets the #{key.to_s.tr('_', ' ')}" do
+      it "sets the #{key.to_s.tr("_", " ")}" do
         Artifactory.configure do |config|
           config.send("#{key}=", key)
         end

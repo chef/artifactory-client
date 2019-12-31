@@ -1,8 +1,8 @@
 # these should all probably get resolved
 
-# when we get on a modern version of chefstyle this can go away
-Style/EndOfLine:
-  EnforcedStyle: lf
+Layout/AlignHash:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
 
 Lint/ShadowingOuterLocalVariable:
   Exclude:

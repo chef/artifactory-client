@@ -49,7 +49,7 @@ module Artifactory
     def delete
       client.delete(api_path)
       true
-    rescue Error::HTTPError => e
+    rescue Error::HTTPError
       false
     end
 
@@ -72,6 +72,7 @@ module Artifactory
       response = client.post(api_path, file, headers)
 
       return unless response.is_a?(Hash)
+
       self.class.all.select { |x| x.certificate_alias.eql?(certificate_alias) }.first
     end
 
