@@ -3,17 +3,18 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
-<!-- latest_release 3.0.8 -->
-## [v3.0.8](https://github.com/chef/artifactory-client/tree/v3.0.8) (2019-12-31)
+<!-- latest_release 3.0.9 -->
+## [v3.0.9](https://github.com/chef/artifactory-client/tree/v3.0.9) (2019-12-31)
 
 #### Merged Pull Requests
-- Update README.md [#117](https://github.com/chef/artifactory-client/pull/117) ([johnlabarge](https://github.com/johnlabarge))
+- Use require_relative for link and remove appveyor links [#123](https://github.com/chef/artifactory-client/pull/123) ([tas50](https://github.com/tas50))
 <!-- latest_release -->
 
 <!-- release_rollup since=3.0.5 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- Use require_relative for link and remove appveyor links [#123](https://github.com/chef/artifactory-client/pull/123) ([tas50](https://github.com/tas50)) <!-- 3.0.9 -->
 - Update README.md [#117](https://github.com/chef/artifactory-client/pull/117) ([johnlabarge](https://github.com/johnlabarge)) <!-- 3.0.8 -->
 - Update webmock requirement from ~&gt; 2.3 to ~&gt; 3.7 [#120](https://github.com/chef/artifactory-client/pull/120) ([dependabot-preview[bot]](https://github.com/dependabot-preview[bot])) <!-- 3.0.7 -->
 - Update rspec-mocks requirement from 3.4.0 to 3.9.0 [#121](https://github.com/chef/artifactory-client/pull/121) ([dependabot-preview[bot]](https://github.com/dependabot-preview[bot])) <!-- 3.0.6 -->
