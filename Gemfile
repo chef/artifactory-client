@@ -7,7 +7,6 @@ group :test do
   gem "rspec",   "~> 3.0"
   gem "webmock", "~> 3.7"
   gem "rainbow", "< 2.2.1"
-  # rspec-mocks 3.4.1 breaks tests with 'System level too deep' errors.
   gem "rspec-mocks", "3.9.0"
   gem "simplecov"
   gem "simplecov-console"
