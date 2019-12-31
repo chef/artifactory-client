@@ -98,8 +98,7 @@ module Artifactory
           group: :g,
           name: :a,
           version: :v,
-          classifier: :c
-        )
+          classifier: :c)
         params = Util.slice(options, :g, :a, :v, :c, :repos)
         format_repos!(params)
 
@@ -293,14 +292,14 @@ module Artifactory
         options = Util.rename_keys(options,
           group: :g,
           name: :a,
-          version: :v
-        )
+          version: :v)
         params = Util.slice(options, :g, :a, :v, :repos)
         format_repos!(params)
 
         client.get("/api/search/versions", params)["results"]
       rescue Error::HTTPError => e
         raise unless e.code == 404
+
         []
       end
 
@@ -344,8 +343,7 @@ module Artifactory
         options = Util.rename_keys(options,
           group: :g,
           name: :a,
-          version: :v
-        )
+          version: :v)
         params = Util.slice(options, :g, :a, :v, :repos, :remote)
         format_repos!(params)
 
@@ -356,6 +354,7 @@ module Artifactory
         client.get("/api/search/latestVersion", params)
       rescue Error::HTTPError => e
         raise unless e.code == 404
+
         nil
       end
 
@@ -555,6 +554,7 @@ module Artifactory
       response = client.put(endpoint, file, headers)
 
       return unless response.is_a?(Hash)
+
       self.class.from_hash(response)
     end
 
@@ -608,8 +608,7 @@ module Artifactory
     def upload_with_checksum(repo, remote_path, checksum, properties = {})
       upload(repo, remote_path, properties,
         "X-Checksum-Deploy" => true,
-        "X-Checksum-Sha1"   => checksum
-      )
+        "X-Checksum-Sha1"   => checksum)
     end
 
     #
@@ -626,8 +625,7 @@ module Artifactory
     #
     def upload_from_archive(repo, remote_path, properties = {})
       upload(repo, remote_path, properties,
-        "X-Explode-Archive" => true
-      )
+        "X-Explode-Archive" => true)
     end
 
     private

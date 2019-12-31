@@ -20,20 +20,20 @@ module Artifactory
 
       app.post("/api/build/rename/:name") do
         content_type "text/plain"
-        body "Build renaming of '#{params['name']}' to '#{params['to']}' was successfully started."
+        body "Build renaming of '#{params["name"]}' to '#{params["to"]}' was successfully started."
       end
 
       app.delete("/api/build/:name") do
         content_type "text/plain"
 
         if params["deleteAll"]
-          body "All '#{params['name']}' builds have been deleted successfully."
+          body "All '#{params["name"]}' builds have been deleted successfully."
         elsif params["buildNumbers"].nil?
           status 400
           body "Please provide at least one build number to delete."
         else
           message = params["buildNumbers"].split(",").map do |n|
-            "#{params['name']}##{n}"
+            "#{params["name"]}##{n}"
           end.join(", ")
 
           body "The following builds has been deleted successfully: #{message}."

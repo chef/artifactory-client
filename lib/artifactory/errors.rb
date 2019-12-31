@@ -51,7 +51,7 @@ module Artifactory
 
               #{Resource::Build::BUILD_TYPES.join("\n    ")}"
 
-EOH
+        EOH
       end
     end
   end

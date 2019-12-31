@@ -57,7 +57,7 @@ module Artifactory
     describe ".from_hash" do
       let(:hash) do
         {
-          "name" => "Test Remote",
+          "name"             => "Test Remote",
           "includes_pattern" => "**",
           "excludes_pattern" => "",
           "repositories"     => ["ANY REMOTE"],
@@ -104,7 +104,7 @@ module Artifactory
         subject.excludes_pattern = ""
         subject.repositories = ["ANY"]
         subject.principals = {
-          "users" => {
+          "users"  => {
             "anonymous_users" => ["read"],
           },
           "groups" => {
@@ -140,7 +140,7 @@ module Artifactory
         subject.client = client
         subject.name = "TestGetters"
         subject.principals = {
-          "users" => {
+          "users"  => {
             "anonymous" => ["read"],
           },
           "groups" => {
@@ -165,7 +165,7 @@ module Artifactory
         subject.client = client
         subject.name = "TestSetters"
         subject.principals = {
-          "users" => {
+          "users"  => {
             "anonymous" => ["read"],
           },
           "groups" => {

@@ -27,20 +27,20 @@ module Artifactory
       # @return [Array<Symbol>]
       #
       def keys
-        @keys ||= [
-          :endpoint,
-          :username,
-          :password,
-          :api_key,
-          :proxy_address,
-          :proxy_password,
-          :proxy_port,
-          :proxy_username,
-          :ssl_pem_file,
-          :ssl_verify,
-          :user_agent,
-          :read_timeout,
-        ]
+        @keys ||= %i{
+          endpoint
+          username
+          password
+          api_key
+          proxy_address
+          proxy_password
+          proxy_port
+          proxy_username
+          ssl_pem_file
+          ssl_verify
+          user_agent
+          read_timeout
+        }
       end
     end
 

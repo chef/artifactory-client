@@ -61,6 +61,7 @@ module Artifactory
         from_hash(response, client: client)
       rescue Error::HTTPError => e
         raise unless e.code == 404
+
         nil
       end
     end

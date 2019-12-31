@@ -41,6 +41,7 @@ module Artifactory
         # builds. Whoever decided that was a good idea clearly doesn't
         # understand the point of REST interfaces...
         raise unless e.code == 404
+
         []
       end
 

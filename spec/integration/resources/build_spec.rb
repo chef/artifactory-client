@@ -29,7 +29,8 @@ module Artifactory
           number: "1",
           properties: {
             "buildInfo.env.JAVA_HOME" => "/usr/jdk/latest",
-        })
+        }
+        )
 
         expect(build.save).to be_truthy
       end

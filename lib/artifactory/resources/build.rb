@@ -49,6 +49,7 @@ module Artifactory
         # builds. Whoever decided that was a good idea clearly doesn't
         # understand the point of REST interfaces...
         raise unless e.code == 404
+
         []
       end
 
@@ -78,6 +79,7 @@ module Artifactory
         from_hash(response["buildInfo"], client: client)
       rescue Error::HTTPError => e
         raise unless e.code == 404
+
         nil
       end
 
@@ -189,8 +191,7 @@ module Artifactory
 
       endpoint = "/api/build/promote/#{url_safe(name)}/#{url_safe(number)}"
       client.post(endpoint, JSON.fast_generate(request_body),
-        "Content-Type" => "application/json"
-      )
+        "Content-Type" => "application/json")
     end
 
     #
@@ -206,8 +207,7 @@ module Artifactory
       file.rewind
 
       client.put("/api/build", file,
-        "Content-Type" => "application/json"
-      )
+        "Content-Type" => "application/json")
       true
     ensure
       if file
