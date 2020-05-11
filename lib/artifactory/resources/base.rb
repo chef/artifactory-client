@@ -243,7 +243,8 @@ module Artifactory
       #   the URL-safe version of the string
       #
       def url_safe(value)
-        URI.escape(URI.unescape(value.to_s))
+        p = URI::Parser.new
+        p.escape(p.unescape(value.to_s))
       end
     end
 
