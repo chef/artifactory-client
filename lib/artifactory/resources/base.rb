@@ -243,7 +243,15 @@ module Artifactory
       #   the URL-safe version of the string
       #
       def url_safe(value)
-        URI.escape(URI.unescape(value.to_s))
+        uri_parser.escape(uri_parser.unescape(value.to_s))
+      end
+
+      #
+      # Generate a URI parser
+      #
+      # @return [URI::Parser]
+      def uri_parser
+        @uri_parser ||= URI::Parser.new
       end
     end
 
@@ -353,8 +361,8 @@ module Artifactory
     #
     def to_query_string_parameters(hash = {})
       properties = hash.map do |k, v|
-        key   = URI.escape(k.to_s)
-        value = URI.escape(v.to_s)
+        key   = self.class.uri_parser.escape(k.to_s)
+        value = self.class.uri_parser.escape(v.to_s)
 
         "#{key}=#{value}"
       end
