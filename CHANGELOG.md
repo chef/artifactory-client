@@ -3,10 +3,18 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
-<!-- latest_release -->
+<!-- latest_release 3.0.14 -->
+## [v3.0.14](https://github.com/chef/artifactory-client/tree/v3.0.14) (2020-05-29)
+
+#### Merged Pull Requests
+- Follow redirects in client.get [#132](https://github.com/chef/artifactory-client/pull/132) ([jgitlin-p21](https://github.com/jgitlin-p21))
 <!-- latest_release -->
 
-<!-- release_rollup -->
+<!-- release_rollup since=3.0.13 -->
+### Changes not yet released to rubygems.org
+
+#### Merged Pull Requests
+- Follow redirects in client.get [#132](https://github.com/chef/artifactory-client/pull/132) ([jgitlin-p21](https://github.com/jgitlin-p21)) <!-- 3.0.14 -->
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
