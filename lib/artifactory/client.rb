@@ -258,8 +258,16 @@ module Artifactory
 
         if block_given?
           http.request(request) do |response|
-            response.read_body do |chunk|
-              yield chunk
+            case response
+            when Net::HTTPRedirection
+              redirect = response["location"]
+              request(verb, redirect, data, headers, &block)
+            when Net::HTTPSuccess
+              response.read_body do |chunk|
+                yield chunk
+              end
+            else
+              error(response)
             end
           end
         else
