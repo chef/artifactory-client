@@ -232,12 +232,14 @@ module Artifactory
 
       it "slices the correct parameters" do
         expect(client).to receive(:get).with("/api/search/checksum",
-          md5:  "MD5123",
-          sha1: "SHA456").once
+          md5:    "MD5123",
+          sha1:   "SHA456",
+          sha256: "SHA789").once
         described_class.checksum_search(
-          md5:  "MD5123",
-          sha1: "SHA456",
-          fizz: "foo"
+          md5:    "MD5123",
+          sha1:   "SHA456",
+          sha256: "SHA789",
+          fizz:   "foo"
         )
       end
 
