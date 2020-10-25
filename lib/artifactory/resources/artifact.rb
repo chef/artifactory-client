@@ -169,6 +169,8 @@ module Artifactory
       #   the MD5 checksum of the artifact to search for
       # @option options [String] :sha1
       #   the SHA1 checksum of the artifact to search for
+      # @option options [String] :sha256
+      #   the SHA256 checksum of the artifact to search for
       # @option options [String, Array<String>] :repos
       #   the list of repos to search
       #
@@ -177,7 +179,7 @@ module Artifactory
       #
       def checksum_search(options = {})
         client = extract_client!(options)
-        params = Util.slice(options, :md5, :sha1, :repos)
+        params = Util.slice(options, :md5, :sha1, :sha256, :repos)
         format_repos!(params)
 
         client.get("/api/search/checksum", params)["results"].map do |artifact|
