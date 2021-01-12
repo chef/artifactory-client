@@ -60,11 +60,11 @@ module Artifactory
         response = client.get("/api/repositories/#{url_safe(name)}")
         case response['rclass']&.to_s&.downcase
         when "local"
-          Resource::Artifactory::LocalRepository.from_hash(response, client: client)
+          Resource::LocalRepository.from_hash(response, client: client)
         when "remote"
-          Resource::Artifactory::RemoteRepository.from_hash(response, client: client)
+          Resource::RemoteRepository.from_hash(response, client: client)
         when "virtual"
-          Resource::Artifactory::VirtualRepository.from_hash(response, client: client)
+          Resource::VirtualRepository.from_hash(response, client: client)
         else
           raise "Unknown Repository type `#{rclass}'!"
         end
