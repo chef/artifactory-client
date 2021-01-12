@@ -58,16 +58,7 @@ module Artifactory
         client = extract_client!(options)
 
         response = client.get("/api/repositories/#{url_safe(name)}")
-        case response['rclass']&.to_s&.downcase
-        when "local"
-          Resource::LocalRepository.from_hash(response, client: client)
-        when "remote"
-          Resource::RemoteRepository.from_hash(response, client: client)
-        when "virtual"
-          Resource::VirtualRepository.from_hash(response, client: client)
-        else
-          raise "Unknown Repository type `#{rclass}'!"
-        end
+        from_hash(response, client: client)
       rescue Error::HTTPError => e
         raise unless e.code == 400
 
@@ -88,7 +79,8 @@ module Artifactory
       # @return [Resource::LocalRepository, Resource::RemoteRepository, Resource::VirtualRepository]
       #
       def from_hash(hash, options = {})
-        instance = case hash['rclass']&.to_s&.downcase
+        rclass = hash['rclass']&.to_s&.downcase
+        instance = case rclass
                    when "local"
                      Resource::LocalRepository.new
                    when "remote"
