@@ -18,25 +18,25 @@ module Artifactory
   class Resource::LocalRepository < Resource::Repository
     attribute :rclass, 'local'
     attribute :archive_browsing_enabled
-    attribute :blacked_out, false
+    attribute :blacked_out
     attribute :block_pushing_schema1
     attribute :calculate_yum_metadata
     attribute :cdn_redirect
     attribute :checksum_policy_type
     attribute :debian_trivial_layout
-    attribute :docker_api_version, 'V2'
-    attribute :download_redirect, false
-    attribute :enable_file_lists_indexing, false
-    attribute :handle_releases, true
-    attribute :handle_snapshots, true
+    attribute :docker_api_version
+    attribute :download_redirect
+    attribute :enable_file_lists_indexing
+    attribute :handle_releases
+    attribute :handle_snapshots
     attribute :key_pair_ref
-    attribute :max_unique_snapshots, 0
-    attribute :max_unique_tags, 0
+    attribute :max_unique_snapshots
+    attribute :max_unique_tags
     attribute :optional_index_compression_formats
     attribute :property_sets
-    attribute :snapshot_version_behavior, 'non-unique'
-    attribute :suppress_pom_consistency_checks, false
-    attribute :xray_index, false
+    attribute :snapshot_version_behavior
+    attribute :suppress_pom_consistency_checks
+    attribute :xray_index
     attribute :yum_root_depth
 
     #

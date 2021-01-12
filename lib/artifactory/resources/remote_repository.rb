@@ -17,17 +17,52 @@
 module Artifactory
   class Resource::RemoteRepository < Resource::Repository
     attribute :rclass, 'remote'
-    attribute :archive_browsing_enabled
-    attribute :calculate_yum_metadata
-    attribute :checksum_policy_type
-    attribute :debian_trivial_layout
-    attribute :docker_api_version
-    attribute :enable_file_lists_indexing
-    attribute :key_pair_ref
-    attribute :max_unique_tags
-    attribute :optional_index_compression_formats
-    attribute :snapshot_version_behavior
-    attribute :yum_root_depth
+    attribute :allow_any_host_auth
+    attribute :assumed_offline_period_secs
+    attribute :blacked_out
+    attribute :block_mismatching_mime_types
+    attribute :block_pushing_schema1
+    attribute :bower_registry_url
+    attribute :bypass_head_requests
+    attribute :cdn_redirect
+    attribute :client_tls_certificate
+    attribute :composer_registry_url
+    attribute :content_synchronisation
+    attribute :download_context_path
+    attribute :download_redirect
+    attribute :enable_cookie_management
+    attribute :enable_token_authentication
+    attribute :external_dependencies_enabled
+    attribute :external_dependencies_patterns
+    attribute :feed_context_path
+    attribute :fetch_jars_eagerly
+    attribute :fetch_sources_eagerly
+    attribute :handle_releases
+    attribute :handle_snapshots
+    attribute :hard_fail
+    attribute :local_address
+    attribute :max_unique_snapshots
+    attribute :missed_retrieval_cache_period_secs
+    attribute :offline
+    attribute :password
+    attribute :property_sets
+    attribute :proxy
+    attribute :py_pi_registry_url
+    attribute :remote_repo_checksum_policy_type
+    attribute :retrieval_cache_period_secs
+    attribute :share_configuration
+    attribute :socket_timeout_millis
+    attribute :store_artifacts_locally
+    attribute :suppress_pom_consistency_checks
+    attribute :synchronize_properties
+    attribute :unused_artifacts_cleanup_period_hours
+    attribute :url
+    attribute :username
+    attribute :v3_feed_url
+    attribute :vcs_git_download_url
+    attribute :vcs_git_provider
+    attribute :vcs_type
+    attribute :xray_index
 
     #
     # Content-Type for repository

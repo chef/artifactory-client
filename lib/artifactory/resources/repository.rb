@@ -81,7 +81,7 @@ module Artifactory
     attribute :key, -> { raise "Key is missing!" }
     attribute :notes
     attribute :package_type, "generic"
-    attribute :rclass, "local"
+    attribute :rclass, -> { raise "Rclass is missing!" }
     attribute :repo_layout_ref, "maven-2-default"
 
     #
