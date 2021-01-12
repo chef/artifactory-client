@@ -16,6 +16,7 @@
 
 module Artifactory
   class Resource::VirtualRepository < Resource::Repository
+    attribute :rclass, 'virtual'
     attribute :artifactory_requests_can_retrieve_remote_artifacts
     attribute :debian_trivial_layout
     attribute :default_deployment_repo
