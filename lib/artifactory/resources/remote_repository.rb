@@ -56,7 +56,7 @@ module Artifactory
     attribute :suppress_pom_consistency_checks
     attribute :synchronize_properties
     attribute :unused_artifacts_cleanup_period_hours
-    attribute :url
+    attribute :url, -> { raise "You MUST set required attribute: url" }
     attribute :username
     attribute :v3_feed_url
     attribute :vcs_git_download_url
