@@ -185,6 +185,17 @@ module Artifactory
       false
     end
 
+    #
+    # @return [Boolean]
+    #
+    def ==(other)
+      if other.is_a?(Artifactory::Resource::Repository)
+        to_hash == other.to_hash
+      else
+        super
+      end
+    end
+
     private
 
     #
