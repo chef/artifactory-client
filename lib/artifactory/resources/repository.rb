@@ -79,7 +79,7 @@ module Artifactory
       # @return [Resource::LocalRepository, Resource::RemoteRepository, Resource::VirtualRepository]
       #
       def from_hash(hash, options = {})
-        rclass = hash['rclass']&.to_s&.downcase
+        rclass = hash["rclass"]&.to_s&.downcase
         instance = case rclass
                    when "local"
                      Resource::LocalRepository.new

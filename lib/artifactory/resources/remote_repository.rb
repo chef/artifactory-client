@@ -16,7 +16,7 @@
 
 module Artifactory
   class Resource::RemoteRepository < Resource::Repository
-    attribute :rclass, 'remote'
+    attribute :rclass, "remote"
     attribute :allow_any_host_auth
     attribute :assumed_offline_period_secs
     attribute :blacked_out

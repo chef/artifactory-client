@@ -16,7 +16,7 @@
 
 module Artifactory
   class Resource::LocalRepository < Resource::Repository
-    attribute :rclass, 'local'
+    attribute :rclass, "local"
     attribute :archive_browsing_enabled
     attribute :blacked_out
     attribute :block_pushing_schema1

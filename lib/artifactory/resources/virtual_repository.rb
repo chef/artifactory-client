@@ -16,7 +16,7 @@
 
 module Artifactory
   class Resource::VirtualRepository < Resource::Repository
-    attribute :rclass, 'virtual'
+    attribute :rclass, "virtual"
     attribute :artifactory_requests_can_retrieve_remote_artifacts
     attribute :debian_trivial_layout
     attribute :default_deployment_repo
@@ -25,7 +25,7 @@ module Artifactory
     attribute :external_dependencies_remote_repo
     attribute :key_pair
     attribute :key_pair_ref
-    attribute :pom_repository_references_cleanup_policy, 'discard_active_reference'
+    attribute :pom_repository_references_cleanup_policy, "discard_active_reference"
     attribute :repositories, []
 
     #
