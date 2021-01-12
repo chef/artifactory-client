@@ -73,6 +73,43 @@ module Artifactory
 
         nil
       end
+
+      #
+      # Construct a new object from the hash.
+      #
+      # @param [Hash] hash
+      #   the hash to create the object with
+      # @param [Hash] options
+      #   the list options
+      #
+      # @option options [Artifactory::Client] :client
+      #   the client object to make the request with
+      #
+      # @return [Resource::LocalRepository, Resource::RemoteRepository, Resource::VirtualRepository]
+      #
+      def from_hash(hash, options = {})
+        instance = case hash['rclass']&.to_s&.downcase
+                   when "local"
+                     Resource::LocalRepository.new
+                   when "remote"
+                     Resource::RemoteRepository.new
+                   when "virtual"
+                     Resource::VirtualRepository.new
+                   else
+                     raise "Unknown Repository type `#{rclass}'!"
+                   end
+        instance.client = extract_client!(options)
+
+        hash.inject(instance) do |instance, (key, value)|
+          method = :"#{Util.underscore(key)}="
+
+          if instance.respond_to?(method)
+            instance.send(method, value)
+          end
+
+          instance
+        end
+      end
     end
 
     attribute :description
