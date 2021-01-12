@@ -50,7 +50,7 @@ module Artifactory
       # @option options [Artifactory::Client] :client
       #   the client object to make the request with
       #
-      # @return [Resource::Repository, nil]
+      # @return [Resource::LocalRepository, Resource::RemoteRepository, Resource::VirtualRepository, nil]
       #   an instance of the repository that matches the given name, or +nil+
       #   if one does not exist
       #
@@ -58,7 +58,16 @@ module Artifactory
         client = extract_client!(options)
 
         response = client.get("/api/repositories/#{url_safe(name)}")
-        from_hash(response, client: client)
+        case response['rclass']&.to_s&.downcase
+        when "local"
+          Resource::Artifactory::LocalRepository.from_hash(response, client: client)
+        when "remote"
+          Resource::Artifactory::RemoteRepository.from_hash(response, client: client)
+        when "virtual"
+          Resource::Artifactory::VirtualRepository.from_hash(response, client: client)
+        else
+          raise "Unknown Repository type `#{rclass}'!"
+        end
       rescue Error::HTTPError => e
         raise unless e.code == 400
 
