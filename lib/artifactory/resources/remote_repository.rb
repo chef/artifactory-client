@@ -59,9 +59,9 @@ module Artifactory
     attribute :url, -> { raise "You MUST set required attribute: url" }
     attribute :username
     attribute :v3_feed_url
-    attribute :vcs_git_download_url, ""
-    attribute :vcs_git_provider, "GITHUB"
-    attribute :vcs_type, "GIT"
+    attribute :vcs_git_download_url
+    attribute :vcs_git_provider
+    attribute :vcs_type
     attribute :xray_index
 
     #
