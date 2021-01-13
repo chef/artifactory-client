@@ -24,7 +24,7 @@ module Artifactory
     attribute :block_pushing_schema1
     attribute :bower_registry_url
     attribute :bypass_head_requests
-    attribute :cdn_redirect
+    attribute :cdn_redirect, false
     attribute :client_tls_certificate
     attribute :composer_registry_url
     attribute :content_synchronisation
@@ -59,9 +59,9 @@ module Artifactory
     attribute :url, -> { raise "You MUST set required attribute: url" }
     attribute :username
     attribute :v3_feed_url
-    attribute :vcs_git_download_url
-    attribute :vcs_git_provider
-    attribute :vcs_type
+    attribute :vcs_git_download_url, ""
+    attribute :vcs_git_provider, "GITHUB"
+    attribute :vcs_type, "GIT"
     attribute :xray_index
 
     #

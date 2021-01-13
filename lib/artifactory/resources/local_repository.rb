@@ -21,7 +21,7 @@ module Artifactory
     attribute :blacked_out
     attribute :block_pushing_schema1
     attribute :calculate_yum_metadata
-    attribute :cdn_redirect
+    attribute :cdn_redirect, false
     attribute :checksum_policy_type
     attribute :debian_trivial_layout
     attribute :docker_api_version
