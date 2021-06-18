@@ -24,8 +24,8 @@ changelog:
   rollup_header: Changes not yet released to rubygems.org
 
 subscriptions:
+  # These actions are taken, in order they are specified, anytime a Pull Request is merged.
   - workload: pull_request_merged:{{github_repo}}:{{release_branch}}:*
-    # These actions are taken, in order they are specified, anytime a Pull Request is merged.
     actions:
       - built_in:bump_version:
           ignore_labels:
