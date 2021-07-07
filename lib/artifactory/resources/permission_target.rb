@@ -90,7 +90,7 @@ module Artifactory
       # Replace an array of permissions with one using verbose permission names
       #
       def verbose(array)
-        array.map { |elt| VERBOSE_PERMS[elt] }.sort
+        array.map { |elt| VERBOSE_PERMS[elt] || elt }.sort
       end
     end
 
@@ -129,6 +129,7 @@ module Artifactory
       # Replace a principal with verbose permissions with an equivalent one with abbreviated permissions.
       #
       def abbreviate_principal(principal_hash)
+        return if principal_hash.nil?
         Hash[principal_hash.map { |k, v| [k, abbreviate_permissions(v)] } ]
       end
     end

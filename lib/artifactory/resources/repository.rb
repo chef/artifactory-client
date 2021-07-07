@@ -50,7 +50,7 @@ module Artifactory
       # @option options [Artifactory::Client] :client
       #   the client object to make the request with
       #
-      # @return [Resource::Repository, nil]
+      # @return [Resource::LocalRepository, Resource::RemoteRepository, Resource::VirtualRepository, nil]
       #   an instance of the repository that matches the given name, or +nil+
       #   if one does not exist
       #
@@ -64,30 +64,54 @@ module Artifactory
 
         nil
       end
+
+      #
+      # Construct a new object from the hash.
+      #
+      # @param [Hash] hash
+      #   the hash to create the object with
+      # @param [Hash] options
+      #   the list options
+      #
+      # @option options [Artifactory::Client] :client
+      #   the client object to make the request with
+      #
+      # @return [Resource::LocalRepository, Resource::RemoteRepository, Resource::VirtualRepository]
+      #
+      def from_hash(hash, options = {})
+        rclass = hash["rclass"]&.to_s&.downcase
+        instance = case rclass
+                   when "local"
+                     Resource::LocalRepository.new
+                   when "remote"
+                     Resource::RemoteRepository.new
+                   when "virtual"
+                     Resource::VirtualRepository.new
+                   else
+                     raise "Unknown Repository type `#{rclass}'!"
+                   end
+        instance.client = extract_client!(options)
+
+        hash.inject(instance) do |instance, (key, value)|
+          method = :"#{Util.underscore(key)}="
+
+          if instance.respond_to?(method)
+            instance.send(method, value)
+          end
+
+          instance
+        end
+      end
     end
 
-    attribute :blacked_out, false
     attribute :description
-    attribute :checksum_policy_type, "client-checksums"
     attribute :excludes_pattern, ""
-    attribute :handle_releases, true
-    attribute :handle_snapshots, true
     attribute :includes_pattern, "**/*"
     attribute :key, -> { raise "Key is missing!" }
-    attribute :max_unique_snapshots, 0
     attribute :notes
     attribute :package_type, "generic"
-    attribute :property_sets, []
-    attribute :repo_layout_ref, "simple-default"
-    attribute :rclass, "local"
-    attribute :snapshot_version_behavior, "non-unique"
-    attribute :suppress_pom_consistency_checks, false
-    attribute :url, ""
-    attribute :yum_root_depth, 0
-    attribute :calculate_yum_metadata, false
-    attribute :repositories, []
-    attribute :external_dependencies_enabled, false
-    attribute :client_tls_certificate, ""
+    attribute :rclass, -> { raise "Rclass is missing!" }
+    attribute :repo_layout_ref, "maven-2-default"
 
     #
     # Creates or updates a repository configuration depending on if the
@@ -190,6 +214,17 @@ module Artifactory
       false
     end
 
+    #
+    # @return [Boolean]
+    #
+    def ==(other)
+      if other.is_a?(Artifactory::Resource::Repository)
+        to_hash == other.to_hash
+      else
+        super
+      end
+    end
+
     private
 
     #
@@ -213,22 +248,12 @@ module Artifactory
     end
 
     #
-    # The default Content-Type for this repository. It varies based on the
-    # repository type.
+    # Content-Type for repository
     #
     # @return [String]
     #
     def content_type
-      case rclass.to_s.downcase
-      when "local"
-        "application/vnd.org.jfrog.artifactory.repositories.LocalRepositoryConfiguration+json"
-      when "remote"
-        "application/vnd.org.jfrog.artifactory.repositories.RemoteRepositoryConfiguration+json"
-      when "virtual"
-        "application/vnd.org.jfrog.artifactory.repositories.VirtualRepositoryConfiguration+json"
-      else
-        raise "Unknown Repository type `#{rclass}'!"
-      end
+      raise NotImplementedError
     end
   end
 end
