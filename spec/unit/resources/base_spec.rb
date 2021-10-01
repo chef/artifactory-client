@@ -116,7 +116,7 @@ module Artifactory
       let(:string) { double(to_s: "string") }
 
       it "delegates to URI.escape" do
-        expect(URI).to receive(:escape).once
+        expect(described_class.uri_parser).to receive(:escape).once
         described_class.url_safe(string)
       end
 
