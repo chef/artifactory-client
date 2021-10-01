@@ -14,9 +14,9 @@
 # limitations under the License.
 #
 
-require "cgi"
-require "json"
-require "uri"
+require "cgi" unless defined?(CGI)
+require "json" unless defined?(JSON)
+require "uri" unless defined?(URI)
 
 module Artifactory
   class Resource::Base
