@@ -23,8 +23,7 @@ module Artifactory
       it "slices the correct parameters" do
         expect(client).to receive(:get).with("/api/search/artifact",
           name:  "name",
-          repos: "repo"
-        ).once
+          repos: "repo").once
         described_class.search(
           name:  "name",
           repos: "repo",
@@ -79,24 +78,21 @@ module Artifactory
 
           subject.upload("libs-release-local", "/remote/path",
             branch: "master",
-            user: "Seth"
-          )
+            user: "Seth")
         end
 
         it 'converts spaces to "+" characters' do
           expect(client).to receive(:put).with("libs-release-local;user=Seth+Vargo/remote/path", file, {})
 
           subject.upload("libs-release-local", "/remote/path",
-            user: "Seth Vargo"
-          )
+            user: "Seth Vargo")
         end
 
         it 'converts "+" to "%2B"' do
           expect(client).to receive(:put).with("libs-release-local;version=12.0.0-alpha.1%2B20140826080510.git.50.f5ff271/remote/path", file, {})
 
           subject.upload("libs-release-local", "/remote/path",
-            version: "12.0.0-alpha.1+20140826080510.git.50.f5ff271"
-          )
+            version: "12.0.0-alpha.1+20140826080510.git.50.f5ff271")
         end
       end
 
@@ -118,8 +114,8 @@ module Artifactory
         expect(Tempfile).to receive(:new).with("checksum.sha1") { tempfile }
         expect(tempfile).to receive(:write).with(value).once
         expect(client).to receive(:put).with(
-            "libs-release-local/remote/path.sha1",
-            tempfile
+          "libs-release-local/remote/path.sha1",
+          tempfile
         )
         subject.upload_checksum("libs-release-local", "/remote/path", "sha1", value)
       end
@@ -137,8 +133,7 @@ module Artifactory
           }
         )
         subject.upload_with_checksum("libs-release-local", "/remote/path", "ABCD1234",
-          { branch: "master" }
-        )
+          { branch: "master" })
       end
     end
 
@@ -157,9 +152,9 @@ module Artifactory
         file = double(File)
         allow(File).to receive(:new).and_return( file )
         expect(client).to receive(:put).with(
-            "libs-release-local/remote/path",
-            file,
-            { "X-Explode-Archive" => true }
+          "libs-release-local/remote/path",
+          file,
+          { "X-Explode-Archive" => true }
         )
         subject.local_path = "/local/path"
         subject.upload_from_archive("libs-release-local", "/remote/path")
@@ -180,8 +175,7 @@ module Artifactory
           g: "group",
           a: "name",
           v: "version",
-          c: "classifier"
-        ).once
+          c: "classifier").once
         described_class.gavc_search(
           group:      "group",
           name:       "name",
@@ -193,8 +187,7 @@ module Artifactory
       it "slices the correct parameters" do
         expect(client).to receive(:get).with("/api/search/gavc",
           g: "group",
-          a: "name"
-        ).once
+          a: "name").once
         described_class.gavc_search(
           group: "group",
           name: "name",
@@ -218,8 +211,7 @@ module Artifactory
       it "passes all the parameters" do
         expect(client).to receive(:get).with("/api/search/prop",
           p1: "v1",
-          p2: "v2"
-        ).once
+          p2: "v2").once
         described_class.property_search(
           p1: "v1",
           p2: "v2"
@@ -242,8 +234,7 @@ module Artifactory
       it "slices the correct parameters" do
         expect(client).to receive(:get).with("/api/search/checksum",
           md5:  "MD5123",
-          sha1: "SHA456"
-        ).once
+          sha1: "SHA456").once
         described_class.checksum_search(
           md5:  "MD5123",
           sha1: "SHA456",
@@ -267,8 +258,7 @@ module Artifactory
       it "slices the correct parameters" do
         expect(client).to receive(:get).with("/api/search/usage",
           notUsedSince:  1414800000000,
-          createdBefore: 1414871200000
-        ).once
+          createdBefore: 1414871200000).once
         described_class.usage_search(
           notUsedSince:  1414800000000,
           createdBefore: 1414871200000,
@@ -292,8 +282,7 @@ module Artifactory
       it "slices the correct parameters" do
         expect(client).to receive(:get).with("/api/search/creation",
           from:  1414800000000,
-          to: 1414871200000
-        ).once
+          to: 1414871200000).once
         described_class.creation_search(
           from:  1414800000000,
           to: 1414871200000,
@@ -338,8 +327,7 @@ module Artifactory
         expect(client).to receive(:get).with("/api/search/versions",
           g: "group",
           a: "name",
-          v: "version"
-        ).once
+          v: "version").once
         described_class.versions(
           group:      "group",
           name:       "name",
@@ -350,8 +338,7 @@ module Artifactory
       it "slices the correct parameters" do
         expect(client).to receive(:get).with("/api/search/versions",
           g: "group",
-          a: "name"
-        ).once
+          a: "name").once
         described_class.versions(
           group: "group",
           name: "name",
@@ -384,8 +371,7 @@ module Artifactory
         expect(client).to receive(:get).with("/api/search/latestVersion",
           g: "group",
           a: "name",
-          v: "version"
-        ).once
+          v: "version").once
         described_class.latest_version(
           group:      "group",
           name:       "name",
@@ -396,8 +382,7 @@ module Artifactory
       it "slices the correct parameters" do
         expect(client).to receive(:get).with("/api/search/latestVersion",
           g: "group",
-          a: "name"
-        ).once
+          a: "name").once
         described_class.latest_version(
           group: "group",
           name: "name",
@@ -429,19 +414,19 @@ module Artifactory
     describe ".from_hash" do
       let(:hash) do
         {
-          "uri"              => "http://localhost:8080/artifactory/api/storage/libs-release-local/org/acme/lib/ver/lib-ver.pom",
-          "downloadUri"      => "http://localhost:8080/artifactory/libs-release-local/org/acme/lib/ver/lib-ver.pom",
-          "repo"             => "libs-release-local",
-          "path"             => "/org/acme/lib/ver/lib-ver.pom",
-          "remoteUrl"        => "http://some-remote-repo/mvn/org/acme/lib/ver/lib-ver.pom",
-          "created"          => "2014-01-01 10:00 UTC",
-          "createdBy"        => "userY",
-          "lastModified"     => "2014-01-01 11:00 UTC",
-          "modifiedBy"       => "userX",
-          "lastUpdated"      => "2014-01-01 12:00 UTC",
-          "size"             => "1024",
-          "mimeType"         => "application/pom+xml",
-          "checksums"        => { "md5" => "MD5123", "sha1" => "SHA456" },
+          "uri"               => "http://localhost:8080/artifactory/api/storage/libs-release-local/org/acme/lib/ver/lib-ver.pom",
+          "downloadUri"       => "http://localhost:8080/artifactory/libs-release-local/org/acme/lib/ver/lib-ver.pom",
+          "repo"              => "libs-release-local",
+          "path"              => "/org/acme/lib/ver/lib-ver.pom",
+          "remoteUrl"         => "http://some-remote-repo/mvn/org/acme/lib/ver/lib-ver.pom",
+          "created"           => "2014-01-01 10:00 UTC",
+          "createdBy"         => "userY",
+          "lastModified"      => "2014-01-01 11:00 UTC",
+          "modifiedBy"        => "userX",
+          "lastUpdated"       => "2014-01-01 12:00 UTC",
+          "size"              => "1024",
+          "mimeType"          => "application/pom+xml",
+          "checksums"         => { "md5" => "MD5123", "sha1" => "SHA456" },
           "originalChecksums" => { "md5" => "MD5123", "sha1" => "SHA456" },
         }
       end
@@ -464,7 +449,7 @@ module Artifactory
 
     describe "#copy" do
       let(:destination) { "/to/here" }
-      let(:options)     { Hash.new }
+      let(:options)     { {} }
       before { allow(subject).to receive(:copy_or_move) }
 
       it "delegates to #copy_or_move" do
@@ -487,7 +472,7 @@ module Artifactory
 
     describe "#move" do
       let(:destination) { "/to/here" }
-      let(:options)     { Hash.new }
+      let(:options)     { {} }
       before { allow(subject).to receive(:copy_or_move) }
 
       it "delegates to #copy_or_move" do

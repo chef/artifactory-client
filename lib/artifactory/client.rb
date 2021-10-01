@@ -208,7 +208,7 @@ module Artifactory
       end
 
       # Setup PATCH/POST/PUT
-      if [:patch, :post, :put].include?(verb)
+      if %i{patch post put}.include?(verb)
         if data.respond_to?(:read)
           request.content_length = data.size
           request.body_stream = data
@@ -258,8 +258,16 @@ module Artifactory
 
         if block_given?
           http.request(request) do |response|
-            response.read_body do |chunk|
-              yield chunk
+            case response
+            when Net::HTTPRedirection
+              redirect = response["location"]
+              request(verb, redirect, data, headers, &block)
+            when Net::HTTPSuccess
+              response.read_body do |chunk|
+                yield chunk
+              end
+            else
+              error(response)
             end
           end
         else
@@ -314,7 +322,7 @@ module Artifactory
     #
     def build_uri(verb, path, params = {})
       # Add any query string parameters
-      if [:delete, :get].include?(verb)
+      if %i{delete get}.include?(verb)
         path = [path, to_query_string(params)].compact.join("?")
       end
 

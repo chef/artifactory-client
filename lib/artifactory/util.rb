@@ -49,7 +49,7 @@ module Artifactory
       result = string
         .to_s
         .split("_")
-        .map { |e| e.capitalize }
+        .map(&:capitalize)
         .join
 
       if lowercase
@@ -144,6 +144,7 @@ module Artifactory
       return true if string.eql?("true")
       return false if string.eql?("false")
       return string.to_i if numeric?(string)
+
       string
     end
 

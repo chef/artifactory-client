@@ -2,34 +2,48 @@ steps:
 
 - label: run-lint-and-specs-ruby-2.4
   command:
-    - bundle install --jobs=7 --retry=3 --without docs debug
+    - bundle config set --local without docs debug
+    - bundle install --jobs=7 --retry=3
     - bundle exec rake
   expeditor:
     executor:
       docker:
-        image: ruby:2.4-stretch
+        image: ruby:2.4-buster
 
 - label: run-lint-and-specs-ruby-2.5
   command:
-    - bundle install --jobs=7 --retry=3 --without docs debug
+    - bundle config set --local without docs debug
+    - bundle install --jobs=7 --retry=3
     - bundle exec rake
   expeditor:
     executor:
       docker:
-        image: ruby:2.5-stretch
+        image: ruby:2.5-buster
 
 - label: run-lint-and-specs-ruby-2.6
   command:
-    - bundle install --jobs=7 --retry=3 --without docs debug
+    - bundle config set --local without docs debug
+    - bundle install --jobs=7 --retry=3
     - bundle exec rake
   expeditor:
     executor:
       docker:
-        image: ruby:2.6-stretch
+        image: ruby:2.6-buster
+
+- label: run-lint-and-specs-ruby-2.7
+  command:
+    - bundle config set --local without docs debug
+    - bundle install --jobs=7 --retry=3
+    - bundle exec rake
+  expeditor:
+    executor:
+      docker:
+        image: ruby:2.7-buster
 
 - label: run-lint-and-specs-windows
   command:
-    - bundle install --jobs=7 --retry=3 --without docs debug
+    - bundle config set --local without docs debug
+    - bundle install --jobs=7 --retry=3
     - bundle exec rake
   expeditor:
     executor:

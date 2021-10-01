@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require "artifactory/version"
+require_relative "version"
 
 module Artifactory
   module Defaults

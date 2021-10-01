@@ -16,7 +16,7 @@ Install via Rubygems:
 or add it to your Gemfile if you're using Bundler:
 
 ```ruby
-gem 'artifactory', '~> 1.0'
+gem 'artifactory', '~> 3.0.5'
 ```
 
 In your library or project, you wil likely want to include the `Artifactory::Resource` namespace:
@@ -245,7 +245,6 @@ client.all_plugins #=> [...]
 
 This pattern is slightly less eye-appealing, but it will ensure that your code is threadsafe.
 
-
 Development
 -----------
 1. Clone the project on GitHub
@@ -260,7 +259,6 @@ Important Notes:
 - **The tests must be be idempotent.** The HTTP calls made during a test should be able to be run over and over.
 - **Tests are order independent.** The default RSpec configuration randomizes the test order, so this should not be a problem.
 
-
 ## Maintainer
 
 This project is maintained by Chef's Release Engineering Team (releng@chef.io).
@@ -268,7 +266,7 @@ This project is maintained by Chef's Release Engineering Team (releng@chef.io).
 ## License
 
 ```text
-Copyright 2013-2018 Chef Software, Inc.
+Copyright 2013-2019 Chef Software, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -283,5 +281,4 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
-[appveyor]: https://ci.appveyor.com/project/chef/artifactory-client
 [gem]: https://rubygems.org/gems/artifactory

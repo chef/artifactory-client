@@ -105,9 +105,9 @@ module Artifactory
       app.get("/api/system/version") do
         content_type "application/vnd.org.jfrog.artifactory.system.Version+json"
         JSON.generate({
-          "version" => "3.1.0",
+          "version"  => "3.1.0",
           "revision" => "30062",
-          "addons" => %w{
+          "addons"   => %w{
 ldap
 license
 yum},

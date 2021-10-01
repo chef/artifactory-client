@@ -10,6 +10,28 @@ Ruby client.
 <!-- release_rollup -->
 
 <!-- latest_stable_release -->
+## [v3.0.15](https://github.com/chef/artifactory-client/tree/v3.0.15) (2020-05-29)
+
+#### Merged Pull Requests
+- Follow redirects in client.get [#132](https://github.com/chef/artifactory-client/pull/132) ([jgitlin-p21](https://github.com/jgitlin-p21))
+<!-- latest_stable_release -->
+
+## [v3.0.13](https://github.com/chef/artifactory-client/tree/v3.0.13) (2020-05-15)
+
+#### Merged Pull Requests
+- Update Rubocop and fix deprecated URI methods [#130](https://github.com/chef/artifactory-client/pull/130) ([tduffield](https://github.com/tduffield))
+
+## [v3.0.12](https://github.com/chef/artifactory-client/tree/v3.0.12) (2019-12-31)
+
+#### Merged Pull Requests
+- Update rspec-mocks requirement from 3.4.0 to 3.9.0 [#121](https://github.com/chef/artifactory-client/pull/121) ([dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- Update webmock requirement from ~&gt; 2.3 to ~&gt; 3.7 [#120](https://github.com/chef/artifactory-client/pull/120) ([dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- Update README.md [#117](https://github.com/chef/artifactory-client/pull/117) ([johnlabarge](https://github.com/johnlabarge))
+- Use require_relative for link and remove appveyor links [#123](https://github.com/chef/artifactory-client/pull/123) ([tas50](https://github.com/tas50))
+- Test on Ruby 2.7 and use buster containers [#124](https://github.com/chef/artifactory-client/pull/124) ([tas50](https://github.com/tas50))
+- Resolve all chefstyle warnings [#125](https://github.com/chef/artifactory-client/pull/125) ([tas50](https://github.com/tas50))
+- Remove rainbow test constraint in the gemfile [#126](https://github.com/chef/artifactory-client/pull/126) ([tas50](https://github.com/tas50))
+
 ## [v3.0.5](https://github.com/chef/artifactory-client/tree/v3.0.5) (2019-07-25)
 
 #### Merged Pull Requests
@@ -18,7 +40,6 @@ Ruby client.
 - Remove Travis CI pull request testing [#114](https://github.com/chef/artifactory-client/pull/114) ([tas50](https://github.com/tas50))
 - Replace AppVeyor with Buildkite as well [#115](https://github.com/chef/artifactory-client/pull/115) ([tas50](https://github.com/tas50))
 - Add support for managing SSL/TLS certificates [#110](https://github.com/chef/artifactory-client/pull/110) ([bodgit](https://github.com/bodgit))
-<!-- latest_stable_release -->
 
 ## [v3.0.0](https://github.com/chef/artifactory-client/tree/v3.0.0) (2018-12-12)
 

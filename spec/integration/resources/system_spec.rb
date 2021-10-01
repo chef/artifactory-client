@@ -45,9 +45,9 @@ module Artifactory
     describe ".version" do
       it "gets the version information" do
         expect(described_class.version).to eq({
-          "version" => "3.1.0",
+          "version"  => "3.1.0",
           "revision" => "30062",
-          "addons" => %w{
+          "addons"   => %w{
 ldap
 license
 yum},
