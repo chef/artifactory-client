@@ -10,4 +10,5 @@ group :test do
   gem "simplecov"
   gem "simplecov-console"
   gem "rake"
+  gem "parallel","~> 1.20.1"  # Pin until we drop ruby support 2.4
 end
