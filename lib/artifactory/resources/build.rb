@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require "time"
+require "time" unless defined?(Time.zone_offset)
 
 module Artifactory
   class Resource::Build < Resource::Base

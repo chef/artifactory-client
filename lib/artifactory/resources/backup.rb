@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require "rexml/document"
+require "rexml/document" unless defined?(REXML::Document)
 
 module Artifactory
   class Resource::Backup < Resource::Base

@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require "pathname"
+require "pathname" unless defined?(Pathname)
 require_relative "artifactory/version"
 
 module Artifactory
@@ -59,7 +59,7 @@ module Artifactory
     # @return [Pathname]
     #
     def root
-      @root ||= Pathname.new(File.expand_path("../../", __FILE__))
+      @root ||= Pathname.new(File.expand_path("..", __dir__))
     end
 
     #
