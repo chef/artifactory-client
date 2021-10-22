@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 
-require "tempfile"
-require "time"
+require "tempfile" unless defined?(Tempfile)
+require "time" unless defined?(Time.zone_offset)
 
 module Artifactory
   class Resource::Artifact < Resource::Base
