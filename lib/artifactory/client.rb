@@ -14,10 +14,10 @@
 # limitations under the License.
 #
 
-require "cgi"
-require "json"
-require "net/http"
-require "uri"
+require "cgi" unless defined?(CGI)
+require "json" unless defined?(JSON)
+require "net/http" unless defined?(Net::HTTP)
+require "uri" unless defined?(URI)
 
 module Artifactory
   #
@@ -232,7 +232,8 @@ module Artifactory
 
       # Apply SSL, if applicable
       if uri.scheme == "https"
-        require "net/https" unless defined?(Net::HTTPS)
+        require "net/http" unless defined?(Net::HTTP)
+        require "openssl" unless defined?(Net::HTTPS)
 
         # Turn on SSL
         connection.use_ssl = true

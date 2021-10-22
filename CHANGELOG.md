@@ -3,17 +3,18 @@ Artifactory Client CHANGELOG
 This file is used to document the changes between releases of the Artifactory
 Ruby client.
 
-<!-- latest_release 3.0.16 -->
-## [v3.0.16](https://github.com/chef/artifactory-client/tree/v3.0.16) (2021-10-01)
+<!-- latest_release 3.0.17 -->
+## [v3.0.17](https://github.com/chef/artifactory-client/tree/v3.0.17) (2021-10-07)
 
 #### Merged Pull Requests
-- Upgrade to GitHub-native Dependabot [#140](https://github.com/chef/artifactory-client/pull/140) ([dependabot-preview[bot]](https://github.com/dependabot-preview[bot]))
+- Fix verify pipeline [#145](https://github.com/chef/artifactory-client/pull/145) ([jayashrig158](https://github.com/jayashrig158))
 <!-- latest_release -->
 
 <!-- release_rollup since=3.0.15 -->
 ### Changes not yet released to rubygems.org
 
 #### Merged Pull Requests
+- Fix verify pipeline [#145](https://github.com/chef/artifactory-client/pull/145) ([jayashrig158](https://github.com/jayashrig158)) <!-- 3.0.17 -->
 - Upgrade to GitHub-native Dependabot [#140](https://github.com/chef/artifactory-client/pull/140) ([dependabot-preview[bot]](https://github.com/dependabot-preview[bot])) <!-- 3.0.16 -->
 <!-- release_rollup -->
 
