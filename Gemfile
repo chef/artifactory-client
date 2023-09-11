@@ -10,7 +10,7 @@ group :test do
   gem "simplecov", "~> 0.18.5" # Pin until we drop ruby support 2.4
   gem "simplecov-console"
   gem "rake"
-  gem "parallel", "~> 1.20.1"  # Pin until we drop ruby support 2.4
+  gem "parallel", "~> 1.23.0"  # Pin until we drop ruby support 2.4
   gem "rubocop-ast", "= 1.4.1" # Pin until we drop ruby support 2.4
   gem "docile", "= 1.3.5"  # Pin until we drop ruby support 2.4
 end
