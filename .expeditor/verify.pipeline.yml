@@ -1,5 +1,15 @@
 steps:
 
+- label: run-lint-and-specs-ruby-2.7
+  command:
+    - bundle config set --local without docs debug
+    - bundle install --jobs=7 --retry=3
+    - bundle exec rake
+  expeditor:
+    executor:
+      docker:
+        image: ruby:2.7-buster
+
 - label: run-lint-and-specs-ruby-3.0
   command:
     - bundle config set --local without docs debug
