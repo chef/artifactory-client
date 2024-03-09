@@ -17,5 +17,7 @@ Gem::Specification.new do |spec|
   spec.files         = %w{LICENSE} + Dir.glob("lib/**/*")
   spec.require_paths = ["lib"]
 
+  spec.add_runtime_dependency("rexml")
+
   spec.required_ruby_version = ">= 2.3"
 end
