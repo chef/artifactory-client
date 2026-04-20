@@ -68,26 +68,26 @@ module Artifactory
 
     attribute :blacked_out, false
     attribute :description
-    attribute :checksum_policy_type, "client-checksums"
-    attribute :excludes_pattern, ""
+    attribute :checksum_policy_type, "client-checksums".freeze
+    attribute :excludes_pattern, "".freeze
     attribute :handle_releases, true
     attribute :handle_snapshots, true
-    attribute :includes_pattern, "**/*"
+    attribute :includes_pattern, "**/*".freeze
     attribute :key, -> { raise "Key is missing!" }
     attribute :max_unique_snapshots, 0
     attribute :notes
-    attribute :package_type, "generic"
-    attribute :property_sets, []
-    attribute :repo_layout_ref, "simple-default"
-    attribute :rclass, "local"
-    attribute :snapshot_version_behavior, "non-unique"
+    attribute :package_type, "generic".freeze
+    attribute :property_sets, [].freeze
+    attribute :repo_layout_ref, "simple-default".freeze
+    attribute :rclass, "local".freeze
+    attribute :snapshot_version_behavior, "non-unique".freeze
     attribute :suppress_pom_consistency_checks, false
-    attribute :url, ""
+    attribute :url, "".freeze
     attribute :yum_root_depth, 0
     attribute :calculate_yum_metadata, false
-    attribute :repositories, []
+    attribute :repositories, [].freeze
     attribute :external_dependencies_enabled, false
-    attribute :client_tls_certificate, ""
+    attribute :client_tls_certificate, "".freeze
 
     #
     # Creates or updates a repository configuration depending on if the

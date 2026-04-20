@@ -61,5 +61,10 @@ module Artifactory
         expect(described_class.find("viridian-ldap").key).to eq("viridian-ldap")
       end
     end
+    describe "attribute defaults" do
+      it "#email_attribute modifying the default return value produces an error" do
+        expect { subject.email_attribute.downcase! }.to raise_error(FrozenError)
+      end
+    end
   end
 end

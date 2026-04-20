@@ -343,5 +343,43 @@ module Artifactory
         end
       end
     end
+    describe "attribute defaults" do
+      it "#properties modifying the default return value produces an error" do
+        expect { subject.properties["key"] = "value" }.to raise_error(FrozenError)
+      end
+
+      it "#type modifying the default return value produces an error" do
+        expect { subject.type.downcase! }.to raise_error(FrozenError)
+      end
+
+      it "#build_agent modifying the default return value produces an error" do
+        expect { subject.build_agent["key"] = "value" }.to raise_error(FrozenError)
+      end
+
+      it "#agent modifying the default return value produces an error" do
+        expect { subject.agent["key"] = "value" }.to raise_error(FrozenError)
+      end
+
+      it "#started modifying the default return value produces an error" do
+        expect { subject.started.downcase! }.to raise_error(FrozenError)
+      end
+
+      it "#license_control modifying the default return value produces an error" do
+        expect { subject.license_control["key"] = "value" }.to raise_error(FrozenError)
+      end
+
+      it "#build_retention modifying the default return value produces an error" do
+        expect { subject.build_retention["key"] = "value" }.to raise_error(FrozenError)
+      end
+
+      it "#modules modifying the default return value produces an error" do
+        expect { subject.modules << "value" }.to raise_error(FrozenError)
+      end
+
+      it "#statuses modifying the default return value produces an error" do
+        expect { subject.statuses << "value" }.to raise_error(FrozenError)
+      end
+
+    end
   end
 end

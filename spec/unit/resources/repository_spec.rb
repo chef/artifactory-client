@@ -215,5 +215,51 @@ module Artifactory
         subject.upload_from_archive("/local/path", "/remote/path", { properties: :foobar })
       end
     end
+
+    describe "attribute defaults" do
+      it "#checksum_policy_type modifying the default return value produces an error" do
+        expect { subject.checksum_policy_type.downcase! }.to raise_error(FrozenError)
+      end
+
+      it "#excludes_pattern modifying the default return value produces an error" do
+        expect { subject.excludes_pattern.downcase! }.to raise_error(FrozenError)
+      end
+
+      it "#includes_pattern modifying the default return value produces an error" do
+        expect { subject.includes_pattern.downcase! }.to raise_error(FrozenError)
+      end
+
+      it "#package_type modifying the default return value produces an error" do
+        expect { subject.package_type.downcase! }.to raise_error(FrozenError)
+      end
+
+      it "#property_sets modifying the default return value produces an error" do
+        expect { subject.property_sets << "value" }.to raise_error(FrozenError)
+      end
+
+      it "#repo_layout_ref modifying the default return value produces an error" do
+        expect { subject.repo_layout_ref.downcase! }.to raise_error(FrozenError)
+      end
+
+      it "#rclass modifying the default return value produces an error" do
+        expect { subject.rclass.downcase! }.to raise_error(FrozenError)
+      end
+
+      it "#snapshot_version_behavior modifying the default return value produces an error" do
+        expect { subject.snapshot_version_behavior.downcase! }.to raise_error(FrozenError)
+      end
+
+      it "#url modifying the default return value produces an error" do
+        expect { subject.url.downcase! }.to raise_error(FrozenError)
+      end
+
+      it "#repositories modifying the default return value produces an error" do
+        expect { subject.repositories << "value" }.to raise_error(FrozenError)
+      end
+
+      it "#client_tls_certificate modifying the default return value produces an error" do
+        expect { subject.client_tls_certificate.downcase! }.to raise_error(FrozenError)
+      end
+    end
   end
 end

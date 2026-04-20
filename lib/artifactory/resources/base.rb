@@ -44,6 +44,16 @@ module Artifactory
       #
       def attribute(key, default = nil)
         key = key.to_sym unless key.is_a?(Symbol)
+        case default
+        when NilClass, Integer, Float, Symbol, TrueClass, FalseClass, Proc
+          # Immutable primitive data types OK
+        when String
+          raise "Mutable String must not be used as a default attribute value. (Frozen OK)" unless default.frozen?
+        when Hash, Array
+          raise "Mutable or non-empty #{default.class} must not be used as a default attribute value. (Frozen empty #{default.class} OK)" unless default.frozen? && default.empty?
+        else
+          raise "Mutable type #{default.class} must not be used as a default attribute value"
+        end
 
         # Set this attribute in the top-level hash
         attributes[key] = nil

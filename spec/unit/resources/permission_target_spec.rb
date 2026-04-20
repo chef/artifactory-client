@@ -185,5 +185,24 @@ module Artifactory
         expect(subject.groups).to eq({ "beatles" => %w{delete deploy} })
       end
     end
+    describe "attribute defaults" do
+      it "#includes_pattern modifying the default return value produces an error" do
+        expect { subject.includes_pattern.gsub!(/^\*\*$/, "path/**") }.to raise_error(FrozenError)
+      end
+
+      it "#excludes_pattern modifying the default return value produces an error" do
+        expect { subject.excludes_pattern.replace("path/**") }.to raise_error(FrozenError)
+      end
+
+      it "#users modifying the return value doesn't modify the default" do
+        subject.users["a_user"] = ["read"]
+        expect(described_class.new.users).to eq({})
+      end
+
+      it "#groups modifying the return value doesn't modify the default" do
+        subject.groups["a_group"] = ["read"]
+        expect(described_class.new.groups).to eq({})
+      end
+    end
   end
 end

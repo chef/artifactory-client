@@ -134,10 +134,10 @@ module Artifactory
     end
 
     attribute :name, -> { raise "Name missing!" }
-    attribute :includes_pattern, "**"
-    attribute :excludes_pattern, ""
+    attribute :includes_pattern, "**".freeze
+    attribute :excludes_pattern, "".freeze
     attribute :repositories
-    attribute :principals, { "users" => {}, "groups" => {} }
+    attribute :principals, -> { { "users" => {}, "groups" => {} } }
 
     def client_principal
       @client_principal ||= Principal.new(principals["users"], principals["groups"])

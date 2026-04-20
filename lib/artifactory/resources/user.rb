@@ -68,7 +68,7 @@ module Artifactory
 
     attribute :admin, false
     attribute :email
-    attribute :groups, []
+    attribute :groups, [].freeze
     attribute :internal_password_disabled, false
     attribute :last_logged_in
     attribute :name, -> { raise "Name missing" }

@@ -119,6 +119,6 @@ module Artifactory
     attribute :manager_dn
     attribute :manager_password
     attribute :auto_create_user
-    attribute :email_attribute, "mail"
+    attribute :email_attribute, "mail".freeze
   end
 end

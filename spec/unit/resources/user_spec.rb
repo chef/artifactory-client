@@ -111,5 +111,11 @@ module Artifactory
         end
       end
     end
+
+    describe "attribute defaults" do
+      it "#groups modifying the default return value produces an error" do
+        expect { subject.groups << "value" }.to raise_error(FrozenError)
+      end
+    end
   end
 end

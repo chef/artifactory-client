@@ -95,24 +95,24 @@ module Artifactory
     end
 
     # Based on https://github.com/JFrogDev/build-info/blob/master/README.md#build-info-json-format
-    attribute :properties, {}
+    attribute :properties, {}.freeze
     attribute :version, BUILD_SCHEMA_VERSION
     attribute :name, -> { raise "Build component missing!" }
     attribute :number, -> { raise "Build number missing!" }
-    attribute :type, "GENERIC"
-    attribute :build_agent, {}
-    attribute :agent, {}
-    attribute :started, Time.now.utc.iso8601(3)
+    attribute :type, "GENERIC".freeze
+    attribute :build_agent, {}.freeze
+    attribute :agent, {}.freeze
+    attribute :started, Time.now.utc.iso8601(3).freeze
     attribute :duration_millis
     attribute :artifactory_principal
     attribute :url
     attribute :vcs_revision
     attribute :vcs_url
-    attribute :license_control, {}
-    attribute :build_retention, {}
-    attribute :modules, []
+    attribute :license_control, {}.freeze
+    attribute :build_retention, {}.freeze
+    attribute :modules, [].freeze
     attribute :governance
-    attribute :statuses, []
+    attribute :statuses, [].freeze
 
     #
     # Compare a build artifacts/dependencies/environment with an older
