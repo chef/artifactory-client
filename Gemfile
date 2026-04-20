@@ -3,7 +3,7 @@ gemspec
 
 group :test do
   gem "chefstyle"
-  gem "sinatra", "~> 1.4"
+  gem "sinatra", "~> 2.0"
   gem "rspec",   "~> 3.0"
   gem "webmock", "~> 3.7"
   gem "rspec-mocks", "3.9.0"
