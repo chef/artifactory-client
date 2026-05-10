@@ -266,7 +266,6 @@ This project is maintained by Chef's Release Engineering Team (releng@chef.io).
 ## License
 
 ```text
-Copyright 2013-2019 Chef Software, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -282,3 +281,6 @@ limitations under the License.
 ```
 
 [gem]: https://rubygems.org/gems/artifactory
+
+# Copyright
+See [COPYRIGHT.md](./COPYRIGHT.md).
